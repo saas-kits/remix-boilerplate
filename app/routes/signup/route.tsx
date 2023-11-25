@@ -1,6 +1,11 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Form, NavLink } from "@remix-run/react";
-import React from "react";
+import {
+  json,
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
+import { parse } from "@conform-to/zod";
 import { Button } from "~/components /ui/button";
 import { Input } from "~/components /ui/input";
 import { brandConfig } from "~/lib/brand/config";
@@ -8,6 +13,11 @@ import { BRAND_ASSETS } from "~/lib/brand/assets";
 import { authenticator } from "~/services/auth.server";
 import { Label } from "~/components /ui/label";
 import { Checkbox } from "~/components /ui/checkbox";
+import { z } from "zod";
+import type { FieldConfig } from "@conform-to/react";
+import { conform, useForm, useInputEvent } from "@conform-to/react";
+import { useId, useRef } from "react";
+import { prisma } from "~/services/db/db.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /dashboard directly
@@ -16,22 +26,81 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 }
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const user = await authenticator.authenticate("user-pass", request, {
-    successRedirect: "/",
+const schema = z
+  .object({
+    email: z
+      .string({ required_error: "Email is required" })
+      .email("Email is invalid"),
+    fullName: z.string({ required_error: "Full name is required" }),
+    password: z.string().min(8, "min check failed"),
+    confirmPassword: z.string().min(8, "min check failed"),
+    tocAccepted: z.literal("on", {
+      errorMap: () => ({ message: "You must accept the terms & conditions" }),
+    }),
+    // tocAccepted: z.string({
+    //   required_error: "You must accept the terms & conditions",
+    // }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
   });
-  console.log({ user });
-  return user;
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const clonedRequest = request.clone();
+  const formData = await clonedRequest.formData();
+
+  const submission = await parse(formData, {
+    schema: schema.superRefine(async (data, ctx) => {
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          email: data.email,
+        },
+        select: { id: true },
+      });
+
+      if (existingUser) {
+        ctx.addIssue({
+          path: ["email"],
+          code: z.ZodIssueCode.custom,
+          message: "A user already exists with this email",
+        });
+        return;
+      }
+    }),
+    async: true,
+  });
+
+  if (!submission.value || submission.intent !== "submit") {
+    return json(submission);
+  }
+
+  return authenticator.authenticate("user-pass", request, {
+    successRedirect: "/",
+    throwOnError: true,
+    context: { ...submission.value, type: "signup", tocAccepted: true },
+  });
 };
 
 export default function Signup() {
+  const navigation = useNavigation();
+  const isFormSubmitting = navigation.state === "submitting";
+  const lastSubmission = useActionData<typeof action>();
+  const id = useId();
+
+  const [form, { email, fullName, password, confirmPassword, tocAccepted }] =
+    useForm({
+      id,
+      lastSubmission,
+      shouldValidate: "onBlur",
+      shouldRevalidate: "onInput",
+      onValidate({ formData }) {
+        return parse(formData, { schema });
+      },
+    });
+
   return (
-    <Form className="h-full">
-      {/* <Form className="space-y-4 max-w-sm mx-auto py-10" method="POST">
-        <Input type="email" name="email" />
-        <Input type="password" name="password" />
-        <Button>Login</Button>
-      </Form> */}
+    <Form className="h-full" {...form.props} method="post">
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm flex justify-center flex-col items-center">
           {BRAND_ASSETS[brandConfig.default_logo]}
@@ -41,22 +110,28 @@ export default function Signup() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <div className="space-y-6">
             <div>
               <Label htmlFor="fullName">Full Name</Label>
               <div className="mt-2">
-                <Input id="fullName" name="fullName" type="text" required />
+                <Input
+                  error={fullName.error}
+                  id="fullName"
+                  type="text"
+                  required
+                  {...conform.input(fullName, { type: "text" })}
+                />
               </div>
             </div>
             <div>
               <Label htmlFor="email">Email address</Label>
               <div className="mt-2">
                 <Input
+                  error={email.error}
                   id="email"
-                  name="email"
                   type="email"
                   autoComplete="email"
-                  required
+                  {...conform.input(email, { type: "email" })}
                 />
               </div>
             </div>
@@ -67,11 +142,11 @@ export default function Signup() {
               </div>
               <div className="mt-2">
                 <Input
+                  error={password.error}
                   id="password"
-                  name="password"
                   type="password"
                   autoComplete="current-password"
-                  required
+                  {...conform.input(password, { type: "password" })}
                 />
               </div>
             </div>
@@ -82,30 +157,48 @@ export default function Signup() {
               </div>
               <div className="mt-2">
                 <Input
+                  error={confirmPassword.error}
                   id="confirmPassword"
-                  name="confirmPassword"
                   type="password"
-                  required
+                  {...conform.input(confirmPassword, { type: "password" })}
                 />
               </div>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Checkbox id="terms" name="tocAccepted" />
-              <label
-                htmlFor="terms"
-                className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Accept terms and conditions
-              </label>
+            <div>
+              <div className="flex items-center space-x-2">
+                <CustomCheckbox
+                  id="terms"
+                  {...conform.input(tocAccepted, { type: "checkbox" })}
+                />
+                {/* <input
+                  id="terms"
+                  type="checkbox"
+                  {...conform.input(tocAccepted, { type: "checkbox" })}
+                /> */}
+                <label
+                  htmlFor="terms"
+                  className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Accept terms and conditions
+                </label>
+              </div>
+              <div className="text-error text-sm mt-1">{tocAccepted.error}</div>
             </div>
 
             <div className="space-y-4">
-              <Button className="w-full" type="submit">
+              <Button
+                disabled={isFormSubmitting}
+                className="w-full"
+                type="submit"
+              >
+                {isFormSubmitting && (
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 Sign up
               </Button>
             </div>
-          </form>
+          </div>
 
           <div className="mt-5 flex justify-center">
             <p className="text-sm text-gray-500 flex-grow text-center">
@@ -120,5 +213,33 @@ export default function Signup() {
         </div>
       </div>
     </Form>
+  );
+}
+
+function CustomCheckbox({ ...config }: FieldConfig<string>) {
+  const shadowInputRef = useRef<HTMLInputElement>(null);
+  const control = useInputEvent({
+    ref: shadowInputRef,
+  });
+  // The type of the ref might be different depends on the UI library
+  const customInputRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <>
+      <Checkbox
+        ref={customInputRef}
+        defaultValue={config.defaultValue}
+        onCheckedChange={control.change}
+        onBlur={control.blur}
+      />
+      <input
+        ref={shadowInputRef}
+        {...conform.input(config, {
+          hidden: true,
+          type: "checkbox",
+        })}
+        onFocus={() => customInputRef.current?.focus()}
+      />
+    </>
   );
 }
