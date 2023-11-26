@@ -51,6 +51,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 
   if (user) {
+    console.log(user.id);
     const token = await generatePasswordResetToken(user?.id);
 
     if (process.env.NODE_ENV === "development") {

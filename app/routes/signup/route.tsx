@@ -76,7 +76,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   return authenticator.authenticate("user-pass", request, {
-    successRedirect: "/",
+    successRedirect: "/verify-email",
     throwOnError: true,
     context: { ...submission.value, type: "signup", tocAccepted: true },
   });

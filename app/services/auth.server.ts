@@ -6,6 +6,7 @@ import { z } from "zod";
 import { sessionStorage } from "~/services/session.server";
 import { prisma } from "./db/db.server";
 import type { User } from "@prisma/client";
+import { generateRandomString } from "~/lib/server/auth-utils.sever";
 
 const payloadSchema = z.object({
   email: z.string(),
@@ -50,6 +51,35 @@ export const compare = async (
   });
 };
 
+export const sendVerificationCode = async (user: User) => {
+  const code = generateRandomString(8, "0123456789");
+
+  await prisma.$transaction(async (trx) => {
+    await trx.verificationCode
+      .deleteMany({
+        where: {
+          userId: user.id,
+        },
+      })
+      .catch();
+
+    await trx.verificationCode.create({
+      data: {
+        code,
+        userId: user.id,
+        expires: Date.now() + 1000 * 60 * 20, // 10 minutes
+      },
+    });
+  });
+
+  if (process.env.NODE_ENV === "development") {
+    console.log(`verification for ${user.email} code is: ${code}`);
+    // TODO: drive port number using env variable
+  } else {
+    // TODO: add handling for sending mails
+  }
+};
+
 authenticator.use(
   new FormStrategy(async ({ form, context }) => {
     const parsedData = payloadSchema.safeParse(context);
@@ -88,6 +118,9 @@ authenticator.use(
             fullName: "test",
           },
         });
+
+        sendVerificationCode(user);
+
         return user;
       }
     } else {

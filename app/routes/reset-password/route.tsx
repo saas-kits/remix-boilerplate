@@ -65,7 +65,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 
   if (resetToken) {
-    console.log({ resetToken });
     try {
       const userId = await validatePasswordResetToken(resetToken?.token);
 
