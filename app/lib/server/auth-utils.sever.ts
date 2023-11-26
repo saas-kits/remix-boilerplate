@@ -66,7 +66,7 @@ export const validatePasswordResetToken = async (token: string) => {
 
     await trx.passwordResetToken.delete({
       where: {
-        id: token,
+        token,
       },
     });
 
