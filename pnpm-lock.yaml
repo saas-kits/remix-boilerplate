@@ -53,6 +53,9 @@ dependencies:
   lucide-react:
     specifier: ^0.293.0
     version: 0.293.0(react@18.2.0)
+  prisma:
+    specifier: ^5.6.0
+    version: 5.6.0
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -94,9 +97,6 @@ devDependencies:
   eslint:
     specifier: ^8.38.0
     version: 8.38.0
-  prisma:
-    specifier: ^5.6.0
-    version: 5.6.0
   tailwindcss:
     specifier: ^3.3.5
     version: 3.3.5
@@ -1173,6 +1173,7 @@ packages:
   /@prisma/engines@5.6.0:
     resolution: {integrity: sha512-Mt2q+GNJpU2vFn6kif24oRSBQv1KOkYaterQsi0k2/lA+dLvhRX6Lm26gon6PYHwUM8/h8KRgXIUMU0PCLB6bw==}
     requiresBuild: true
+    dev: false
 
   /@radix-ui/primitive@1.0.1:
     resolution: {integrity: sha512-yQ8oGX2GVsEYMWGxcovu1uGWPCxV5BFfeeYxqPmuAzUyLT9qmaMXSAhXpb0WrspIeqYzdJpkh2vHModJPgRIaw==}
@@ -5520,6 +5521,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@prisma/engines': 5.6.0
+    dev: false
 
   /proc-log@3.0.0:
     resolution: {integrity: sha512-++Vn7NS4Xf9NacaU9Xq3URUuqZETPsf8L4j5/ckhaRYsfPeRyzGw+iDjFhV/Jr3uNmTvvddEJFWh5R1gRgUH8A==}
