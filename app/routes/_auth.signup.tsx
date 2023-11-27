@@ -10,10 +10,10 @@ import {
 import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
 import { useId, useRef } from "react";
 import { z } from "zod";
-import { Button } from "~/components /ui/button";
-import { Checkbox } from "~/components /ui/checkbox";
-import { Input } from "~/components /ui/input";
-import { Label } from "~/components /ui/label";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import { authenticator } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
 

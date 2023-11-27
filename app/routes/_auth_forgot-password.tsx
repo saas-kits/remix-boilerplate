@@ -9,10 +9,10 @@ import {
 import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { useId } from "react";
 import { z } from "zod";
-import { Alert, AlertDescription, AlertTitle } from "~/components /ui/alert";
-import { Button } from "~/components /ui/button";
-import { Input } from "~/components /ui/input";
-import { Label } from "~/components /ui/label";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import { generatePasswordResetToken } from "~/lib/server/auth-utils.sever";
 import { authenticator } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
