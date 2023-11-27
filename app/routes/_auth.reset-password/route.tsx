@@ -8,14 +8,12 @@ import {
 } from "@remix-run/node";
 import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
 import { AlertCircle } from "lucide-react";
-import { useId, useMemo } from "react";
+import { useId } from "react";
 import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "~/components /ui/alert";
 import { Button } from "~/components /ui/button";
 import { Input } from "~/components /ui/input";
 import { Label } from "~/components /ui/label";
-import { BRAND_ASSETS } from "~/lib/brand/assets";
-import { brandConfig } from "~/lib/brand/config";
 import { validatePasswordResetToken } from "~/lib/server/auth-utils.sever";
 import { authenticator, hash } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
@@ -105,9 +103,12 @@ export default function ForgotPassword() {
     },
   });
 
-  const renderContent = useMemo(() => {
-    if (lastSubmission?.isLinkExpired) {
-      return (
+  if (lastSubmission?.isLinkExpired) {
+    return (
+      <>
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          Reset Link expired
+        </h2>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
@@ -120,10 +121,15 @@ export default function ForgotPassword() {
             </AlertDescription>
           </Alert>
         </div>
-      );
-    }
-    if (!lastSubmission?.isLinkExpired && !lastSubmission?.resetSuccess) {
-      return (
+      </>
+    );
+  }
+  if (!lastSubmission?.isLinkExpired && !lastSubmission?.resetSuccess) {
+    return (
+      <>
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          Reset password
+        </h2>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <Form className="space-y-6" method="post" {...form.props}>
             <div>
@@ -162,11 +168,16 @@ export default function ForgotPassword() {
             </div>
           </Form>
         </div>
-      );
-    }
+      </>
+    );
+  }
 
-    if (lastSubmission?.resetSuccess) {
-      return (
+  if (lastSubmission?.resetSuccess) {
+    return (
+      <>
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          Reset Successful
+        </h2>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
           <Alert variant="default">
             <AlertCircle className="h-4 w-4" />
@@ -179,27 +190,7 @@ export default function ForgotPassword() {
             </AlertDescription>
           </Alert>
         </div>
-      );
-    }
-  }, [
-    confirmPassword,
-    form.props,
-    isFormSubmitting,
-    lastSubmission?.isLinkExpired,
-    lastSubmission?.resetSuccess,
-    password,
-  ]);
-
-  return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm flex justify-center flex-col items-center">
-        {BRAND_ASSETS[brandConfig.default_logo]}
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Reset Password
-        </h2>
-      </div>
-
-      {renderContent}
-    </div>
-  );
+      </>
+    );
+  }
 }

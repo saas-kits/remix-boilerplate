@@ -15,8 +15,6 @@ import { Alert, AlertDescription, AlertTitle } from "~/components /ui/alert";
 import { Button } from "~/components /ui/button";
 import { Input } from "~/components /ui/input";
 import { Label } from "~/components /ui/label";
-import { BRAND_ASSETS } from "~/lib/brand/assets";
-import { brandConfig } from "~/lib/brand/config";
 import { isWithinExpiration } from "~/lib/server/auth-utils.sever";
 import { authenticator, sendVerificationCode } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
@@ -161,20 +159,20 @@ export default function VerifyEmail() {
 
   if (actionData?.verified) {
     return (
-      <Alert>
-        <AlertTitle>Link sent successfully!</AlertTitle>
-        <AlertDescription>
-          Password reset link has been sent to your email. Please check spam
-          folder as well
-        </AlertDescription>
-      </Alert>
+      <div className="mt-10">
+        <Alert>
+          <AlertTitle>Email successfully!</AlertTitle>
+          <AlertDescription>
+            Email has been verified successfully!
+          </AlertDescription>
+        </Alert>
+      </div>
     );
   }
 
-  return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm flex justify-center flex-col items-center">
-        {BRAND_ASSETS[brandConfig.default_logo]}
+  if (data.codeAvailableWithUser) {
+    return (
+      <>
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Enter a verification code
         </h2>
@@ -183,9 +181,6 @@ export default function VerifyEmail() {
             You must have recieved and email verification code on {data?.email}
           </p>
         )}
-      </div>
-
-      {data.codeAvailableWithUser && (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <Form className="space-y-6" method="post">
             <input type="text" name="intent" defaultValue="verifyCode" hidden />
@@ -236,47 +231,49 @@ export default function VerifyEmail() {
             </p>
           </div>
         </div>
-      )}
+      </>
+    );
+  }
 
-      {!data.codeAvailableWithUser && (
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <Form className="space-y-6" method="post">
-            <div>
-              <input
-                type="text"
-                name="intent"
-                defaultValue="requestCode"
-                hidden
+  if (!data.codeAvailableWithUser) {
+    return (
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <Form className="space-y-6" method="post">
+          <div>
+            <input
+              type="text"
+              name="intent"
+              defaultValue="requestCode"
+              hidden
+            />
+            <Label htmlFor="email">Email</Label>
+            <div className="mt-2">
+              <Input
+                defaultValue={data.email}
+                id="email"
+                type="email"
+                name="email"
+                autoComplete="email"
+                readOnly
+                className="cursor-none pointer-events-none"
               />
-              <Label htmlFor="email">Email</Label>
-              <div className="mt-2">
-                <Input
-                  defaultValue={data.email}
-                  id="email"
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  readOnly
-                  className="cursor-none pointer-events-none"
-                />
-              </div>
             </div>
+          </div>
 
-            <div className="space-y-4">
-              <Button
-                disabled={isFormSubmitting}
-                className="w-full"
-                type="submit"
-              >
-                {isFormSubmitting && (
-                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                Request Verification code
-              </Button>
-            </div>
-          </Form>
-        </div>
-      )}
-    </div>
-  );
+          <div className="space-y-4">
+            <Button
+              disabled={isFormSubmitting}
+              className="w-full"
+              type="submit"
+            >
+              {isFormSubmitting && (
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Request Verification code
+            </Button>
+          </div>
+        </Form>
+      </div>
+    );
+  }
 }

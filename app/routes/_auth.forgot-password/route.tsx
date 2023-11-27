@@ -13,8 +13,6 @@ import { Alert, AlertDescription, AlertTitle } from "~/components /ui/alert";
 import { Button } from "~/components /ui/button";
 import { Input } from "~/components /ui/input";
 import { Label } from "~/components /ui/label";
-import { BRAND_ASSETS } from "~/lib/brand/assets";
-import { brandConfig } from "~/lib/brand/config";
 import { generatePasswordResetToken } from "~/lib/server/auth-utils.sever";
 import { authenticator } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
@@ -84,14 +82,10 @@ export default function ForgotPassword() {
   });
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm flex justify-center flex-col items-center">
-        {BRAND_ASSETS[brandConfig.default_logo]}
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Get password reset link
-        </h2>
-      </div>
-
+    <>
+      <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        Get password reset link
+      </h2>
       {!lastSubmission?.emailSent ? (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <Form className="space-y-6" method="post" {...form.props}>
@@ -133,6 +127,6 @@ export default function ForgotPassword() {
           </Alert>
         </div>
       )}
-    </div>
+    </>
   );
 }

@@ -1,22 +1,20 @@
+import { conform, useForm } from "@conform-to/react";
+import { parse } from "@conform-to/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import {
   json,
+  redirect,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
-  redirect,
 } from "@remix-run/node";
 import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
+import { useId } from "react";
+import { z } from "zod";
 import { Button } from "~/components /ui/button";
 import { Input } from "~/components /ui/input";
-import { brandConfig } from "~/lib/brand/config";
-import { BRAND_ASSETS } from "~/lib/brand/assets";
-import { authenticator } from "~/services/auth.server";
 import { Label } from "~/components /ui/label";
-import { z } from "zod";
-import { parse } from "@conform-to/zod";
+import { authenticator } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
-import { conform, useForm } from "@conform-to/react";
-import { useId } from "react";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import { commitSession, getSession } from "~/services/session.server";
 
 const schema = z.object({
@@ -113,14 +111,10 @@ export default function Login() {
     },
   });
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm flex justify-center flex-col items-center">
-        {BRAND_ASSETS[brandConfig.default_logo]}
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
-        </h2>
-      </div>
-
+    <>
+      <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        Sign in to your account
+      </h2>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <Form className="space-y-6" method="post" {...form.props}>
           <div>
@@ -181,6 +175,6 @@ export default function Login() {
           </NavLink>
         </div>
       </div>
-    </div>
+    </>
   );
 }
