@@ -17,10 +17,12 @@ model User {
   password           String
   emailVerified      Boolean              @default(false)
   createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
   verificationCodeId String?              @db.ObjectId
+  stripeCustomerId   String?
   PasswordResetToken PasswordResetToken[]
   VerificationCode   VerificationCode[]
+  Subscription       Subscription[]
 }
 
 model PasswordResetToken {
@@ -38,3 +40,66 @@ model VerificationCode {
   userId  String @db.ObjectId
   user    User   @relation(fields: [userId], references: [id])
 }
+
+// Prisma schema for stripe plan, price, subscription
+
+model Plan {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  prices      Price[]
+  subcriptions Subscription[]
+  isActive    Boolean
+  limits      PlanLimit[]
+  listOfFeatures String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PlanLimit {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  plan    Plan   @relation(fields: [planId], references: [id])
+  planId  String @db.ObjectId
+
+  allowedUsersCount Int
+  allowedProjectsCount Int
+  allowedStorageSize Int
+}
+
+model Price {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  active        Boolean
+  currency      String
+  interval      String
+  nickname      String?
+  amount        Int
+  planId        String    @db.ObjectId
+  plan          Plan      @relation(fields: [planId], references: [id])
+  subscriptions Subscription[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subscription {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  isActive  Boolean
+  status    String
+  cancelAtPeriodEnd Boolean
+  currentPeriodEnd BigInt
+  currentPeriodStart BigInt
+  interval  String
+  stripeCustomerId String
+  stripeSubscriptionId String
+  planId    String    @db.ObjectId
+  plan      Plan     @relation(fields: [planId], references: [id])
+  userId    String    @db.ObjectId
+  user      User      @relation(fields: [userId], references: [id])
+  priceId   String    @db.ObjectId
+  price     Price     @relation(fields: [priceId], references: [id])
+}
+
+
+
+
