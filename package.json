@@ -40,6 +40,7 @@
     "remix-auth-google": "^2.0.0",
     "remix-themes": "^1.2.2",
     "resend": "^2.0.0",
+    "stripe": "^14.5.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"
