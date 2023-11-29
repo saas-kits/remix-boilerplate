@@ -13,7 +13,7 @@ import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { authenticator } from "~/services/auth.server";
+import { authenticator, sendVerificationCode } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
 import { commitSession, getSession } from "~/services/session.server";
 
@@ -80,8 +80,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     let headers = new Headers({ "Set-Cookie": await commitSession(session) });
 
-    // Todo: make redirect config driven
-    return redirect("/", { headers });
+    // Todo: make redirect config driven e.g add login success route
+    if (user.emailVerified) {
+      return redirect("/", { headers });
+    }
+    await sendVerificationCode(user);
+    return redirect("/verify-email", { headers });
   } catch (error) {
     // TODO: fix type here
     const typedError = error as any;

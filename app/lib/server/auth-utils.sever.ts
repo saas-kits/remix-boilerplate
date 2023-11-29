@@ -1,5 +1,8 @@
 import { prisma } from "~/services/db/db.server";
 import * as crypto from "crypto";
+import { resend } from "~/services/email/resend.server";
+import type { User } from "@prisma/client";
+import ResetPasswordEmailTemplate from "~/components/email/reset-password-template";
 
 const EXPIRES_IN = 1000 * 60 * 60 * 2; // 2 hours
 
@@ -26,32 +29,48 @@ export const isWithinExpiration = (expiresInMs: number | bigint): boolean => {
   return true;
 };
 
-export const generatePasswordResetToken = async (userId: string) => {
-  console.log("heyyy");
+// TODO: decide where this util should reside here or auth.server.ts
+export const sendResetPasswordLink = async (user: User) => {
+  async function emailResetLink(code: string) {
+    // TODO: user env variable for url of reset link
+    const url = process.env.VERCEL_URL
+      ? `http://${process.env.VERCEL_URL}/reset-password?code=${code}`
+      : `http://localhost:3000/reset-password?code=${code}`;
+    resend.emails.send({
+      from: "team@remixkits.com",
+      to: user.email,
+      // Todo: drive company name from config
+      subject: "Password reset - RemixKits",
+      react: ResetPasswordEmailTemplate({ resetLink: url }),
+    });
+  }
+
   const storedUserTokens = await prisma.passwordResetToken.findMany({
     where: {
-      userId,
+      userId: user.id,
     },
   });
-  console.log({ storedUserTokens });
   if (storedUserTokens.length > 0) {
     const reusableStoredToken = storedUserTokens.find((token) => {
       // check if expiration is within 1 hour
       // and reuse the token if true
       return isWithinExpiration(Number(token.expires) - EXPIRES_IN / 2);
     });
-    if (reusableStoredToken) return reusableStoredToken.token;
+    if (reusableStoredToken) {
+      await emailResetLink(reusableStoredToken.token);
+      return;
+    }
   }
   const token = generateRandomString(63);
   await prisma.passwordResetToken.create({
     data: {
       token,
       expires: new Date().getTime() + EXPIRES_IN,
-      userId: userId,
+      userId: user.id,
     },
   });
 
-  return token;
+  await emailResetLink(token);
 };
 
 export const validatePasswordResetToken = async (token: string) => {

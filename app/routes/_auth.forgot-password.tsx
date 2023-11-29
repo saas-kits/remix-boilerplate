@@ -13,7 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { generatePasswordResetToken } from "~/lib/server/auth-utils.sever";
+import { sendResetPasswordLink } from "~/lib/server/auth-utils.sever";
 import { authenticator } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
 
@@ -49,19 +49,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 
   if (user) {
-    console.log(user.id);
-    const token = await generatePasswordResetToken(user?.id);
-
-    if (process.env.NODE_ENV === "development") {
-      // TODO: pick port number from env and configure it in remix config
-      console.log({
-        resetUrl: `http://localhost:3000/reset-password?code=${token}`,
-      });
-
-      return json({ ...submission, emailSent: true } as const);
-    } else {
-      // integrate email sending with resend here
-    }
+    await sendResetPasswordLink(user);
+    return json({ ...submission, emailSent: true } as const);
   }
 };
 
