@@ -4,7 +4,7 @@ name: Deploy to Fly
 on: [push]
 jobs:
   deploy:
-    name: Deploy proxy
+    name: Deploy to Fly
     runs-on: ubuntu-latest
     steps:
       # This step checks out a copy of your repository.
