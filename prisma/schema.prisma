@@ -52,7 +52,7 @@ model Plan {
   subcriptions Subscription[]
   isActive    Boolean
   limits      PlanLimit[]
-  listOfFeatures String[]
+  listOfFeatures Json[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
