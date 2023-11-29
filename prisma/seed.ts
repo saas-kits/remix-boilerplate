@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { DEFAULT_PLANS } from "~/services/stripe/plans.config";
-import { createPrice, createProduct, setupStripeCustomerPortal } from "~/services/stripe/stripe.server";
+import { createStripePrice, createStripeProduct, setupStripeCustomerPortal } from "~/services/stripe/stripe.server";
 
 import type { Stripe } from 'stripe'
 
@@ -28,7 +28,7 @@ const seed = async () => {
       }
     );
 
-    await createProduct({
+    await createStripeProduct({
       id: id,
       name,
       description,
@@ -36,7 +36,7 @@ const seed = async () => {
 
     const stripePrices = await Promise.all(
       pricesByInterval.map((price) =>
-        createPrice(id, {
+        createStripePrice(id, {
           ...price,
           amount: price.amount * 100,
           nickname: name,
@@ -50,7 +50,7 @@ const seed = async () => {
         name,
         description,
         isActive,
-        listOfFeatures,
+        listOfFeatures: listOfFeatures as any,
         limits: {
           create: limits,
         },
