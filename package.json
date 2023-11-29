@@ -36,6 +36,7 @@
     "remix-auth-form": "^1.4.0",
     "remix-auth-google": "^2.0.0",
     "resend": "^2.0.0",
+    "remix-utils": "^7.3.0",
     "stripe": "^14.5.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
