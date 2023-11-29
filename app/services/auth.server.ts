@@ -2,6 +2,7 @@
 import { Authenticator } from "remix-auth";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { FormStrategy } from "remix-auth-form";
+import { GoogleStrategy } from "remix-auth-google";
 import { z } from "zod";
 import { sessionStorage } from "~/services/session.server";
 import { prisma } from "./db/db.server";
@@ -92,56 +93,79 @@ export const sendVerificationCode = async (user: User) => {
   }
 };
 
-authenticator.use(
-  new FormStrategy(async ({ form, context }) => {
-    const parsedData = payloadSchema.safeParse(context);
+const formStrategy = new FormStrategy(async ({ form, context }) => {
+  const parsedData = payloadSchema.safeParse(context);
 
-    if (parsedData.success) {
-      const { email, password, type } = parsedData.data;
+  if (parsedData.success) {
+    const { email, password, type } = parsedData.data;
 
-      if (type === "login") {
-        // let user = await login(email, password);
-        // the type of this user must match the type you pass to the Authenticator
-        // the strategy will automatically inherit the type if you instantiate
-        // directly inside the `use` method
-        const user = await prisma.user.findFirst({
-          where: {
-            email,
-          },
-        });
+    if (type === "login") {
+      // let user = await login(email, password);
+      // the type of this user must match the type you pass to the Authenticator
+      // the strategy will automatically inherit the type if you instantiate
+      // directly inside the `use` method
+      const user = await prisma.user.findFirst({
+        where: {
+          email,
+        },
+      });
 
-        if (user) {
-          const isPasswordCorrect = await compare(password, user?.password);
-          if (isPasswordCorrect) {
-            return user;
-          } else {
-            // TODO: type errors well
-            throw new Error("INVALID_PASSWORD");
-          }
+      if (user) {
+        const isPasswordCorrect = await compare(password, user?.password || "");
+        if (isPasswordCorrect) {
+          return user;
+        } else {
+          // TODO: type errors well
+          throw new Error("INVALID_PASSWORD");
         }
-      } else {
-        // TODO: hash password
-
-        const hashedPassword = await hash(password);
-        const user = await prisma.user.create({
-          data: {
-            email: email,
-            password: hashedPassword,
-            fullName: "test",
-          },
-        });
-
-        sendVerificationCode(user);
-
-        return user;
       }
     } else {
-      console.log(parsedData.error.flatten(), "flatten ");
-      throw new Error("Parsing Failed", { cause: parsedData.error.flatten() });
+      // TODO: hash password
+
+      const hashedPassword = await hash(password);
+      const user = await prisma.user.create({
+        data: {
+          email: email,
+          password: hashedPassword,
+          fullName: "test",
+        },
+      });
+
+      sendVerificationCode(user);
+
+      return user;
     }
+  } else {
+    console.log(parsedData.error.flatten(), "flatten ");
+    throw new Error("Parsing Failed", { cause: parsedData.error.flatten() });
+  }
 
-    throw new Error("Login failed");
-  }),
+  throw new Error("Login failed");
+});
 
-  "user-pass"
+const googleStrategy = new GoogleStrategy(
+  {
+    // TODO: add checks for env if not present throw error in console
+    clientID: process.env.GOOGLE_CLIENT_ID || "",
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    callbackURL: "https://example.com/auth/google/callback",
+  },
+  async ({ accessToken, refreshToken, extraParams, profile }) => {
+    // Get the user data from your DB or API using the tokens and profile
+    // return User.findOrCreate({ email: profile.emails[0].value });
+    return await prisma.user.upsert({
+      where: {
+        email: profile.emails[0].value,
+      },
+      create: {
+        email: profile.emails[0].value,
+        emailVerified: true,
+        fullName: profile.displayName,
+        isGoogleSignUp: true,
+      },
+      update: {},
+    });
+  }
 );
+
+authenticator.use(formStrategy, "user-pass").use(googleStrategy, "google");

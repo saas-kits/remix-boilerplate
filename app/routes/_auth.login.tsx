@@ -160,6 +160,19 @@ export default function Login() {
               )}
               Sign in
             </Button>
+            <Form action="/auth/google" method="post">
+              <Button
+                disabled={isFormSubmitting}
+                className="w-full"
+                type="submit"
+                variant="outline"
+              >
+                {isFormSubmitting && (
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Sign in with Google
+              </Button>
+            </Form>
           </div>
         </Form>
 

@@ -12,9 +12,10 @@ datasource db {
 
 model User {
   id                 String               @id @default(auto()) @map("_id") @db.ObjectId
-  email              String
+  email              String               @unique
   fullName           String
-  password           String
+  password           String?
+  isGoogleSignUp     Boolean              @default(false)
   emailVerified      Boolean              @default(false)
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @default(now())

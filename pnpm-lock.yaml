@@ -74,6 +74,9 @@ dependencies:
   remix-auth-form:
     specifier: ^1.4.0
     version: 1.4.0(@remix-run/server-runtime@2.3.1)(remix-auth@3.6.0)
+  remix-auth-google:
+    specifier: ^2.0.0
+    version: 2.0.0(@remix-run/server-runtime@2.3.1)(remix-auth@3.6.0)
   resend:
     specifier: ^2.0.0
     version: 2.0.0
@@ -3230,7 +3233,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: true
 
   /decode-named-character-reference@1.0.2:
     resolution: {integrity: sha512-O8x12RzrUF8xyVcY0KJowWsmaJxQbmy0/EtnNtHRpsOcT7dFk5W598coHqBVpmWo1oQQfsCqfCmkZN5DJrZVdg==}
@@ -5940,7 +5942,6 @@ packages:
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
-    dev: true
 
   /ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -6889,6 +6890,32 @@ packages:
     dependencies:
       '@remix-run/server-runtime': 2.3.1(typescript@5.1.6)
       remix-auth: 3.6.0(@remix-run/react@2.3.1)(@remix-run/server-runtime@2.3.1)
+    dev: false
+
+  /remix-auth-google@2.0.0(@remix-run/server-runtime@2.3.1)(remix-auth@3.6.0):
+    resolution: {integrity: sha512-qP38N1ZJADz+HlH2lrEn/rSL6m5Dwcnz8xUFDhbHecDMl9FU/UpkUx3w8jj5XhNSnkSue/GWT+p7OEkatgbXNA==}
+    peerDependencies:
+      '@remix-run/server-runtime': ^2.0.1
+      remix-auth: ^3.2.1
+    dependencies:
+      '@remix-run/server-runtime': 2.3.1(typescript@5.1.6)
+      remix-auth: 3.6.0(@remix-run/react@2.3.1)(@remix-run/server-runtime@2.3.1)
+      remix-auth-oauth2: 1.11.0(@remix-run/server-runtime@2.3.1)(remix-auth@3.6.0)
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /remix-auth-oauth2@1.11.0(@remix-run/server-runtime@2.3.1)(remix-auth@3.6.0):
+    resolution: {integrity: sha512-Yf1LF6NLYPFa7X2Rax/VEhXmYXFjZOi/q+7DmbMeoMHjAfkpqxbvzqqYSKIKDGR51z5TXR5na4to4380mir5bg==}
+    peerDependencies:
+      '@remix-run/server-runtime': ^1.0.0 || ^2.0.0
+      remix-auth: ^3.6.0
+    dependencies:
+      '@remix-run/server-runtime': 2.3.1(typescript@5.1.6)
+      debug: 4.3.4
+      remix-auth: 3.6.0(@remix-run/react@2.3.1)(@remix-run/server-runtime@2.3.1)
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /remix-auth@3.6.0(@remix-run/react@2.3.1)(@remix-run/server-runtime@2.3.1):
