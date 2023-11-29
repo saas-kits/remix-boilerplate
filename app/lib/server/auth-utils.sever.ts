@@ -33,8 +33,8 @@ export const isWithinExpiration = (expiresInMs: number | bigint): boolean => {
 export const sendResetPasswordLink = async (user: User) => {
   async function emailResetLink(code: string) {
     // TODO: user env variable for url of reset link
-    const url = process.env.VERCEL_URL
-      ? `http://${process.env.VERCEL_URL}/reset-password?code=${code}`
+    const url = process.env.HOST_URL
+      ? `http://${process.env.HOST_URL}/reset-password?code=${code}`
       : `http://localhost:3000/reset-password?code=${code}`;
     resend.emails.send({
       from: "team@remixkits.com",
