@@ -36,11 +36,19 @@ export const DEFAULT_PLANS: {
         name: 'Free',
         description: 'Free plan',
         isActive: true,
-        listOfFeatures: [
-            '1 user',
-            '1 project',
-            '1GB storage',
-        ],
+        listOfFeatures: [{
+            name: '1 user',
+            isAvailable: true,
+            inProgress: false,
+        }, {
+            name: '1 project',
+            isAvailable: true,
+            inProgress: false,
+        }, {
+            name: '1GB storage',
+            isAvailable: true,
+            inProgress: false,
+        }],
         limits: {
             allowedUsersCount: 1,
             allowedProjectsCount: 1,
@@ -65,9 +73,19 @@ export const DEFAULT_PLANS: {
         description: 'Basic plan',
         isActive: true,
         listOfFeatures: [
-            '5 users',
-            '5 projects',
-            '5GB storage',
+            {
+                name: '5 users',
+                isAvailable: true,
+                inProgress: false,
+            }, {
+                name: '5 projects',
+                isAvailable: true,
+                inProgress: false,
+            }, {
+                name: '5GB storage',
+                isAvailable: true,
+                inProgress: false,
+            }
         ],
         limits: {
             allowedUsersCount: 5,
@@ -93,9 +111,19 @@ export const DEFAULT_PLANS: {
         description: 'Pro plan',
         isActive: true,
         listOfFeatures: [
-            '10 users',
-            '10 projects',
-            '10GB storage',
+            {
+                name: '10 users',
+                isAvailable: true,
+                inProgress: false,
+            }, {
+                name: '10 projects',
+                isAvailable: true,
+                inProgress: false,
+            }, {
+                name: '10GB storage',
+                isAvailable: true,
+                inProgress: false,
+            }
         ],
         limits: {
             allowedUsersCount: 10,

@@ -4,7 +4,7 @@ import { stripe } from "./setup.server";
 import { PLAN_TYPES, type PLAN_INTERVALS } from "./plans.config";
 import { brandConfig } from "~/lib/brand/config";
 
-export const createProduct = async (plan: Partial<Plan>) => {
+export const createStripeProduct = async (plan: Partial<Plan>) => {
   const product = await stripe.products.create({
     id: plan.id,
     name: plan.name || "",
@@ -14,7 +14,7 @@ export const createProduct = async (plan: Partial<Plan>) => {
   return product;
 };
 
-export const createPrice = async (id: Plan["id"], price: Partial<Price>) => {
+export const createStripePrice = async (id: Plan["id"], price: Partial<Price>) => {
   return await stripe.prices.create({
     ...price,
     nickname: price.nickname || undefined,
@@ -28,22 +28,25 @@ export const createPrice = async (id: Plan["id"], price: Partial<Price>) => {
   });
 };
 
-export const createCustomer = async ({ email, fullName }: Partial<User>) => {
+export const createStripeCustomer = async ({ email, fullName }: Partial<User>,
+  metadata: Stripe.MetadataParam
+  ) => {
   return await stripe.customers.create({
     email,
     name: fullName,
+    metadata: metadata,
   });
 };
 
-export const createSubscription = async (
-  stripeCustomerId: User["stripeCustomerId"],
+export const createStripeSubscription = async (
+  customerId: User["customerId"],
   priceId: Price["id"]
 ) => {
-  if (!stripeCustomerId) {
+  if (!customerId) {
     throw new Error("Stripe Customer ID is required");
   }
   return await stripe.subscriptions.create({
-    customer: stripeCustomerId,
+    customer: customerId,
     items: [
       {
         price: priceId,
