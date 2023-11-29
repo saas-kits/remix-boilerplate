@@ -3,6 +3,7 @@ import {
   json,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
+  redirect,
 } from "@remix-run/node";
 import {
   Form,
@@ -66,6 +67,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
       email: user.email,
     });
   }
+
+  return redirect("/login");
 }
 
 type FormDataType = {
