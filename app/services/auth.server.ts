@@ -148,7 +148,8 @@ const googleStrategy = new GoogleStrategy(
     // TODO: add checks for env if not present throw error in console
     clientID: process.env.GOOGLE_CLIENT_ID || "",
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    callbackURL: "https://example.com/auth/google/callback",
+    // TODO: update call back url using env
+    callbackURL: "http://localhost:3000/auth/google/callback",
   },
   async ({ accessToken, refreshToken, extraParams, profile }) => {
     // Get the user data from your DB or API using the tokens and profile
