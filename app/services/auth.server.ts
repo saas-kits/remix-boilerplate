@@ -7,6 +7,8 @@ import { sessionStorage } from "~/services/session.server";
 import { prisma } from "./db/db.server";
 import type { User } from "@prisma/client";
 import { generateRandomString } from "~/lib/server/auth-utils.sever";
+import { resend } from "./email/resend.server";
+import VerificationEmailTemplate from "~/components/email/verify-email-template";
 
 const payloadSchema = z.object({
   email: z.string(),
@@ -69,6 +71,16 @@ export const sendVerificationCode = async (user: User) => {
         userId: user.id,
         expires: Date.now() + 1000 * 60 * 20, // 10 minutes
       },
+    });
+
+    console.log({ code });
+
+    // TODO: use email service for this
+    await resend.emails.send({
+      from: "team@remixkits.com",
+      to: user.email,
+      subject: "Verification code - RemixKits",
+      react: VerificationEmailTemplate({ validationCode: code }),
     });
   });
 
