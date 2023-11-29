@@ -47,13 +47,13 @@ model VerificationCode {
 // Prisma schema for stripe plan, price, subscription
 
 model Plan {
-  id             String         @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  description    String?
-  prices         Price[]
-  subcriptions   Subscription[]
-  isActive       Boolean
-  limits         PlanLimit[]
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  prices      Price[]
+  subcriptions Subscription[]
+  isActive    Boolean
+  limits      PlanLimit[]
   listOfFeatures Json[]
 
   createdAt DateTime @default(now())
