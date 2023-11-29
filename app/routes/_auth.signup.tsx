@@ -1,22 +1,20 @@
+import type { FieldConfig } from "@conform-to/react";
+import { conform, useForm, useInputEvent } from "@conform-to/react";
+import { parse } from "@conform-to/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import {
   json,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "@remix-run/node";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
-import { parse } from "@conform-to/zod";
-import { Button } from "~/components /ui/button";
-import { Input } from "~/components /ui/input";
-import { brandConfig } from "~/lib/brand/config";
-import { BRAND_ASSETS } from "~/lib/brand/assets";
-import { authenticator } from "~/services/auth.server";
-import { Label } from "~/components /ui/label";
-import { Checkbox } from "~/components /ui/checkbox";
-import { z } from "zod";
-import type { FieldConfig } from "@conform-to/react";
-import { conform, useForm, useInputEvent } from "@conform-to/react";
 import { useId, useRef } from "react";
+import { z } from "zod";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { authenticator } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -100,16 +98,12 @@ export default function Signup() {
     });
 
   return (
-    <Form className="h-full" {...form.props} method="post">
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm flex justify-center flex-col items-center">
-          {BRAND_ASSETS[brandConfig.default_logo]}
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
-          </h2>
-        </div>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <>
+      <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        Create new account
+      </h2>
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <Form className="h-full" {...form.props} method="post">
           <div className="space-y-6">
             <div>
               <Label htmlFor="fullName">Full Name</Label>
@@ -199,20 +193,20 @@ export default function Signup() {
               </Button>
             </div>
           </div>
+        </Form>
 
-          <div className="mt-5 flex justify-center">
-            <p className="text-sm text-gray-500 flex-grow text-center">
-              Already a member?{" "}
-              <NavLink to="/login">
-                <Button size="sm" variant="link" className="px-1">
-                  Sign in
-                </Button>
-              </NavLink>
-            </p>
-          </div>
+        <div className="mt-5 flex justify-center">
+          <p className="text-sm text-gray-500 flex-grow text-center">
+            Already a member?{" "}
+            <NavLink to="/login">
+              <Button size="sm" variant="link" className="px-1">
+                Sign in
+              </Button>
+            </NavLink>
+          </p>
         </div>
       </div>
-    </Form>
+    </>
   );
 }
 
