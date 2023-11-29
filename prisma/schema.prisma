@@ -20,19 +20,12 @@ model User {
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
   verificationCodeId String?              @db.ObjectId
-<<<<<<< HEAD
   customerId   String?
   PasswordResetToken PasswordResetToken[]
   VerificationCode   VerificationCode[]
   Subscription       Subscription[]
 
   @@index([customerId], name: "customerId")
-=======
-  stripeCustomerId   String?
-  PasswordResetToken PasswordResetToken[]
-  VerificationCode   VerificationCode[]
-  Subscription       Subscription[]
->>>>>>> b88ddd4 (add: Stripe setup, seed script and billing schema)
 }
 
 model PasswordResetToken {
@@ -54,13 +47,13 @@ model VerificationCode {
 // Prisma schema for stripe plan, price, subscription
 
 model Plan {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String?
-  prices      Price[]
-  subcriptions Subscription[]
-  isActive    Boolean
-  limits      PlanLimit[]
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  description    String?
+  prices         Price[]
+  subcriptions   Subscription[]
+  isActive       Boolean
+  limits         PlanLimit[]
   listOfFeatures Json[]
 
   createdAt DateTime @default(now())
