@@ -1,7 +1,7 @@
 import { prisma } from "~/services/db/db.server";
 import * as crypto from "crypto";
 import { resend } from "~/services/email/resend.server";
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 import ResetPasswordEmailTemplate from "~/components/email/reset-password-template";
 
 const EXPIRES_IN = 1000 * 60 * 60 * 2; // 2 hours
