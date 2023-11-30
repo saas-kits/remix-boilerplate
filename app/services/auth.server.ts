@@ -111,6 +111,10 @@ const formStrategy = new FormStrategy(async ({ form, context }) => {
       });
 
       if (user) {
+        if (user.isGoogleSignUp) {
+          throw new Error("GOOGLE_SIGNUP");
+        }
+
         const isPasswordCorrect = await compare(password, user?.password || "");
         if (isPasswordCorrect) {
           return user;
@@ -154,6 +158,7 @@ const googleStrategy = new GoogleStrategy(
   async ({ accessToken, refreshToken, extraParams, profile }) => {
     // Get the user data from your DB or API using the tokens and profile
     // return User.findOrCreate({ email: profile.emails[0].value });
+
     return await prisma.user.upsert({
       where: {
         email: profile.emails[0].value,

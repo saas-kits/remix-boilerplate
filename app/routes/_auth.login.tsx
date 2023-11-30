@@ -13,6 +13,7 @@ import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import GoogleLogo from "~/lib/assets/logos/google";
 import { authenticator, sendVerificationCode } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
 import { commitSession, getSession } from "~/services/session.server";
@@ -88,13 +89,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return redirect("/verify-email", { headers });
   } catch (error) {
     // TODO: fix type here
+    // TODO: create constant for message type of auth errors
     const typedError = error as any;
 
-    if (typedError?.message === "INVALID_PASSWORD") {
-      return {
-        ...submission,
-        error: { email: ["Email and passwords dont match"] },
-      };
+    switch (typedError.message) {
+      case "INVALID_PASSWORD":
+        return {
+          ...submission,
+          error: { email: ["Email and passwords dont match"] },
+        };
+      case "GOOGLE_SIGNUP":
+        return {
+          ...submission,
+          error: {
+            email: [
+              "You signed up with google sign in please use same method to login",
+            ],
+          },
+        };
+      default:
+        return null;
     }
   }
 };
@@ -167,10 +181,9 @@ export default function Login() {
                 type="submit"
                 variant="outline"
               >
-                {isFormSubmitting && (
-                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                Sign in with Google
+                <span className="flex space-x-2 items-center">
+                  <GoogleLogo height={18} /> <span>Sign in with Google</span>
+                </span>
               </Button>
             </Form>
           </div>

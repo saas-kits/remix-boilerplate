@@ -14,6 +14,7 @@ import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import GoogleLogo from "~/lib/assets/logos/google";
 import { authenticator } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
 
@@ -191,6 +192,18 @@ export default function Signup() {
                 )}
                 Sign up
               </Button>
+              <Form action="/auth/google" method="post">
+                <Button
+                  disabled={isFormSubmitting}
+                  className="w-full"
+                  type="submit"
+                  variant="outline"
+                >
+                  <span className="flex space-x-2 items-center">
+                    <GoogleLogo height={18} /> <span>Sign up with Google</span>
+                  </span>
+                </Button>
+              </Form>
             </div>
           </div>
         </Form>
