@@ -6,7 +6,6 @@ import {
   Hr,
   Html,
   Preview,
-  Text,
 } from "@react-email/components";
 
 interface VerificationEmailProps {
@@ -22,9 +21,6 @@ export const VerificationEmailTemplate = ({
     <Body style={main}>
       <Container style={container}>
         <Heading style={heading}>Your verification code for RemixKits</Heading>
-        <Text style={paragraph}>
-          This link and code will only be valid for the next 10 minutes.
-        </Text>
         <code style={code}>{validationCode}</code>
         <Hr style={hr} />
       </Container>
@@ -53,13 +49,6 @@ const heading = {
   fontWeight: "400",
   color: "#484848",
   padding: "17px 0 0",
-};
-
-const paragraph = {
-  margin: "0 0 15px",
-  fontSize: "15px",
-  lineHeight: "1.4",
-  color: "#3c4149",
 };
 
 const hr = {

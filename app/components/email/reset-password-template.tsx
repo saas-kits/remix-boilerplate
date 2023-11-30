@@ -3,10 +3,10 @@ import {
   Container,
   Head,
   Heading,
+  Hr,
   Html,
   Link,
   Preview,
-  Section,
   Text,
 } from "@react-email/components";
 
@@ -20,56 +20,24 @@ export const ResetPasswordEmailTemplate = ({
 }: ResetpasswordEmailProps) => (
   <Html>
     <Head />
-    <Preview>Log in with this magic link.</Preview>
+    <Preview>Your verification code for RemixKits</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={heading}>Password reset link</Heading>
-        <Section style={body}>
-          <Text style={paragraph}>
-            <Link style={link} href={resetLink}>
-              👉 Click here to reset password in 👈
-            </Link>
-          </Text>
-          <Text style={paragraph}>
-            If you didn't request this, please ignore this email.
-          </Text>
-        </Section>
-        <Text style={footer}>RemixKits Inc.</Text>
+        <Heading style={heading}>Your verification code for RemixKits</Heading>
+        <Text style={paragraph}>
+          This link will only be valid for the next 20 minutes.
+        </Text>
+        <Link style={link} href={resetLink}>
+          👉 Click here to reset password in 👈
+        </Link>
+        <Hr style={hr} />
       </Container>
     </Body>
+    <Preview>Log in with this magic link.</Preview>
   </Html>
 );
 
 export default ResetPasswordEmailTemplate;
-
-const main = {
-  backgroundColor: "#ffffff",
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
-};
-
-const container = {
-  margin: "0 auto",
-  padding: "20px 25px 48px",
-  backgroundImage: 'url("/assets/raycast-bg.png")',
-  backgroundPosition: "bottom",
-  backgroundRepeat: "no-repeat, no-repeat",
-};
-
-const heading = {
-  fontSize: "28px",
-  fontWeight: "bold",
-  marginTop: "48px",
-};
-
-const body = {
-  margin: "24px 0",
-};
-
-const paragraph = {
-  fontSize: "16px",
-  lineHeight: "26px",
-};
 
 const link = {
   color: "#2754C5",
@@ -79,8 +47,35 @@ const link = {
   textDecoration: "underline",
 };
 
-const footer = {
-  color: "#8898aa",
-  fontSize: "12px",
-  marginLeft: "4px",
+const main = {
+  backgroundColor: "#ffffff",
+  fontFamily:
+    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
+};
+
+const container = {
+  margin: "0 auto",
+  padding: "20px 0 48px",
+  width: "560px",
+};
+
+const heading = {
+  fontSize: "24px",
+  letterSpacing: "-0.5px",
+  lineHeight: "1.3",
+  fontWeight: "400",
+  color: "#484848",
+  padding: "17px 0 0",
+};
+
+const paragraph = {
+  margin: "0 0 15px",
+  fontSize: "15px",
+  lineHeight: "1.4",
+  color: "#3c4149",
+};
+
+const hr = {
+  borderColor: "#dfe1e4",
+  margin: "42px 0 26px",
 };
