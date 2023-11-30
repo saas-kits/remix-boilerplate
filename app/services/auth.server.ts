@@ -1,15 +1,13 @@
 // app/services/auth.server.ts
+import type { User } from "@prisma/client";
+import { randomBytes, scrypt, timingSafeEqual } from "crypto";
 import { Authenticator } from "remix-auth";
-import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { FormStrategy } from "remix-auth-form";
 import { GoogleStrategy } from "remix-auth-google";
 import { z } from "zod";
+import { sendVerificationCode } from "~/lib/server/auth-utils.sever";
 import { sessionStorage } from "~/services/session.server";
 import { prisma } from "./db/db.server";
-import type { User } from "@prisma/client";
-import { generateRandomString } from "~/lib/server/auth-utils.sever";
-import { resend } from "./email/resend.server";
-import VerificationEmailTemplate from "~/components/email/verify-email-template";
 
 const payloadSchema = z.object({
   email: z.string(),
@@ -54,45 +52,6 @@ export const compare = async (
   });
 };
 
-export const sendVerificationCode = async (user: User) => {
-  const code = generateRandomString(8, "0123456789");
-
-  await prisma.$transaction(async (trx) => {
-    await trx.verificationCode
-      .deleteMany({
-        where: {
-          userId: user.id,
-        },
-      })
-      .catch();
-
-    await trx.verificationCode.create({
-      data: {
-        code,
-        userId: user.id,
-        expires: Date.now() + 1000 * 60 * 20, // 10 minutes
-      },
-    });
-
-    console.log({ code });
-
-    // TODO: use email service for this
-    await resend.emails.send({
-      from: "team@remixkits.com",
-      to: user.email,
-      subject: "Verification code - RemixKits",
-      react: VerificationEmailTemplate({ validationCode: code }),
-    });
-  });
-
-  if (process.env.NODE_ENV === "development") {
-    console.log(`verification for ${user.email} code is: ${code}`);
-    // TODO: drive port number using env variable
-  } else {
-    // TODO: add handling for sending mails
-  }
-};
-
 const formStrategy = new FormStrategy(async ({ form, context }) => {
   const parsedData = payloadSchema.safeParse(context);
 
@@ -124,8 +83,6 @@ const formStrategy = new FormStrategy(async ({ form, context }) => {
         }
       }
     } else {
-      // TODO: hash password
-
       const hashedPassword = await hash(password);
       const user = await prisma.user.create({
         data: {

@@ -3,8 +3,9 @@ import * as crypto from "crypto";
 import { resend } from "~/services/email/resend.server";
 import type { User } from "@prisma/client";
 import ResetPasswordEmailTemplate from "~/components/email/reset-password-template";
+import VerificationEmailTemplate from "~/components/email/verify-email-template";
 
-const EXPIRES_IN = 1000 * 60 * 60 * 2; // 2 hours
+const EXPIRES_IN = 1000 * 60 * 20; // 20 mins
 
 const DEFAULT_ALPHABET = "abcdefghijklmnopqrstuvwxyz1234567890";
 
@@ -71,6 +72,43 @@ export const sendResetPasswordLink = async (user: User) => {
   });
 
   await emailResetLink(token);
+};
+
+export const sendVerificationCode = async (user: User) => {
+  const code = generateRandomString(8, "0123456789");
+
+  await prisma.$transaction(async (trx) => {
+    await trx.verificationCode
+      .deleteMany({
+        where: {
+          userId: user.id,
+        },
+      })
+      .catch();
+
+    await trx.verificationCode.create({
+      data: {
+        code,
+        userId: user.id,
+        expires: Date.now() + 1000 * 60 * 20, // 10 minutes
+      },
+    });
+
+    // TODO: use email service for this
+    await resend.emails.send({
+      from: "team@remixkits.com",
+      to: user.email,
+      subject: "Verification code - RemixKits",
+      react: VerificationEmailTemplate({ validationCode: code }),
+    });
+  });
+
+  if (process.env.NODE_ENV === "development") {
+    console.log(`verification for ${user.email} code is: ${code}`);
+    // TODO: drive port number using env variable
+  } else {
+    // TODO: add handling for sending mails
+  }
 };
 
 export const validatePasswordResetToken = async (token: string) => {
