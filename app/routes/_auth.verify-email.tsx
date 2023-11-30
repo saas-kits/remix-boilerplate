@@ -16,8 +16,11 @@ import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { isWithinExpiration } from "~/lib/server/auth-utils.sever";
-import { authenticator, sendVerificationCode } from "~/services/auth.server";
+import {
+  isWithinExpiration,
+  sendVerificationCode,
+} from "~/lib/server/auth-utils.sever";
+import { authenticator } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
 
 const requestCodeSchema = z.object({
