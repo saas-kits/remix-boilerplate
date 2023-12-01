@@ -14,7 +14,10 @@ export const createStripeProduct = async (plan: Partial<Plan>) => {
   return product;
 };
 
-export const createStripePrice = async (id: Plan["id"], price: Partial<Price>) => {
+export const createStripePrice = async (
+  id: Plan["id"],
+  price: Partial<Price>
+) => {
   return await stripe.prices.create({
     ...price,
     nickname: price.nickname || undefined,
@@ -23,14 +26,15 @@ export const createStripePrice = async (id: Plan["id"], price: Partial<Price>) =
     unit_amount: price.amount || 0,
     tax_behavior: "inclusive",
     recurring: {
-      interval: (price.interval as PLAN_INTERVALS) ?? "month",
+      interval: (price.interval as PLAN_INTERVALS) || "month",
     },
   });
 };
 
-export const createStripeCustomer = async ({ email, fullName }: Partial<User>,
+export const createStripeCustomer = async (
+  { email, fullName }: Partial<User>,
   metadata: Stripe.MetadataParam
-  ) => {
+) => {
   return await stripe.customers.create({
     email,
     name: fullName,
@@ -90,3 +94,62 @@ export const setupStripeCustomerPortal = async (
 
   return portal;
 };
+
+export const createStripeCheckoutSession = async (
+  customerId: User["customerId"],
+  priceId: Price["id"],
+  successUrl: string,
+  cancelUrl: string
+) => {
+  const session = await stripe.checkout.sessions.create({
+    customer: customerId as string,
+    payment_method_types: ["card"],
+    mode: "subscription",
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1,
+      },
+    ],
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+  });
+
+  return session;
+};
+
+export const createStripeCustomerPortalSession = async (
+  customerId: User["customerId"],
+  returnUrl: string
+) => {
+  const session = await stripe.billingPortal.sessions.create({
+    customer: customerId as string,
+    return_url: returnUrl,
+  });
+
+  return session;
+}
+
+
+export const createSingleStripeCheckoutSession = async (
+  customerId: User["customerId"],
+  priceId: Price["id"],
+  successUrl: string,
+  cancelUrl: string
+) => {
+  const session = await stripe.checkout.sessions.create({
+    customer: customerId as string,
+    payment_method_types: ["card"],
+    mode: "payment",
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1,
+      },
+    ],
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+  });
+
+  return session;
+}
