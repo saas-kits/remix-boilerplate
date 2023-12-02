@@ -1,5 +1,6 @@
 // app/services/session.server.ts
 import { createCookieSessionStorage } from "@remix-run/node";
+import { createThemeSessionResolver } from "remix-themes";
 
 // export the whole sessionStorage object
 export let sessionStorage = createCookieSessionStorage({
@@ -15,3 +16,5 @@ export let sessionStorage = createCookieSessionStorage({
 
 // you can also export the methods individually for your own usage
 export let { getSession, commitSession, destroySession } = sessionStorage;
+
+export const themeSessionResolver = createThemeSessionResolver(sessionStorage);

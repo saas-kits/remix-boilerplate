@@ -1,20 +1,30 @@
-// import { BRAND_ASSETS } from "~/lib/brand/assets";
-// import { brandConfig } from "~/lib/brand/config";
+import { Button } from "~/components/ui/button";
 import { Sidebar } from "./sidebar";
+import { UserNav } from "./user-nav";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
-export function Shell() {
+type Props = {
+  children: React.ReactNode;
+};
+
+export function Shell({ children }: Props) {
   return (
     <div className="h-full">
       <div className="flex h-full">
-        {/* <div className="w-72 h-full bg-zinc-800">
-          {BRAND_ASSETS[brandConfig.default_logo]}
-        </div> */}
-
-        <div className="bg-background w-72 border-r">
+        <div className="bg-background w-72 border-r hidden md:block">
           <Sidebar />
         </div>
         <div className="flex-grow">
-          <div className="h-14 border-b w-full"></div>
+          <div className="h-14 border-b w-full flex justify-between md:justify-end px-4 items-center">
+            <Button variant="ghost">
+              <HamburgerMenuIcon />
+            </Button>
+
+            <UserNav />
+          </div>
+
+          {/* content */}
+          <div>{children}</div>
         </div>
       </div>
     </div>
