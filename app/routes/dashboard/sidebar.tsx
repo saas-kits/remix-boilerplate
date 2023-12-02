@@ -3,8 +3,14 @@ import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { ThemeToggle } from "./theme-toggle";
 import { NavLink } from "@remix-run/react";
+import { useContext } from "react";
+import { SidebarContext } from "./sidebar.context";
 
-export function Sidebar({ className }: { className?: string }) {
+type SidebarProps = {
+  className?: string;
+};
+
+export function Sidebar({ className }: SidebarProps) {
   return (
     <div className={cn("relative pb-12 h-full", className)}>
       <div className="h-14 flex px-5 space-x-2 items-center">
@@ -43,7 +49,7 @@ export function Sidebar({ className }: { className?: string }) {
               </svg>
               Dashboard
             </NavigationLink>
-            <NavigationLink to="/reports">
+            <NavigationLink to="test">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -177,8 +183,16 @@ type NavigationLinkProps = {
 };
 
 const NavigationLink = ({ to, children }: NavigationLinkProps) => {
+  const { onNavLinkClick } = useContext(SidebarContext);
   return (
-    <NavLink to={to} className="block">
+    <NavLink
+      to={to}
+      className="block"
+      end
+      onClick={() => {
+        onNavLinkClick?.();
+      }}
+    >
       {({ isActive }) => (
         <Button
           variant="ghost"
