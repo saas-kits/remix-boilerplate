@@ -70,7 +70,7 @@ const formStrategy = new FormStrategy(async ({ form, context }) => {
       });
 
       if (user) {
-        if (user.isGoogleSignUp) {
+        if (user.isGoogleSignUp && !user.password) {
           throw new Error("GOOGLE_SIGNUP");
         }
 
