@@ -192,7 +192,7 @@ export default function Login() {
         </Form>
 
         <div className="mt-5 flex justify-between">
-          <p className="text-sm text-gray-500 flex-grow">
+          <p className="text-sm text-muted-foreground flex-grow">
             Not a member?{" "}
             <NavLink to="/signup">
               <Button size="sm" variant="link" className="px-1">

@@ -100,7 +100,7 @@ export default function Signup() {
 
   return (
     <>
-      <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+      <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight ">
         Create new account
       </h2>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -209,7 +209,7 @@ export default function Signup() {
         </Form>
 
         <div className="mt-5 flex justify-center">
-          <p className="text-sm text-gray-500 flex-grow text-center">
+          <p className="text-sm text-muted-foreground flex-grow text-center">
             Already a member?{" "}
             <NavLink to="/login">
               <Button size="sm" variant="link" className="px-1">
