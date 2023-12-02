@@ -106,7 +106,7 @@ export default function ForgotPassword() {
   if (lastSubmission?.isLinkExpired) {
     return (
       <>
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
           Reset Link expired
         </h2>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
@@ -127,7 +127,7 @@ export default function ForgotPassword() {
   if (!lastSubmission?.isLinkExpired && !lastSubmission?.resetSuccess) {
     return (
       <>
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight ">
           Reset password
         </h2>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -175,7 +175,7 @@ export default function ForgotPassword() {
   if (lastSubmission?.resetSuccess) {
     return (
       <>
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
           Reset Successful
         </h2>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
