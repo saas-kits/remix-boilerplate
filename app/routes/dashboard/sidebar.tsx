@@ -14,6 +14,7 @@ export function Sidebar({ className }: SidebarProps) {
   return (
     <div className={cn("relative pb-12 h-full", className)}>
       <div className="h-14 flex px-5 space-x-2 items-center">
+        {/* TODO: drive this logo using brand config */}
         <svg
           id="logo-36"
           className="h-5 w-5"
