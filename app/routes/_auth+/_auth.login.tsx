@@ -84,7 +84,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     // Todo: make redirect config driven e.g add login success route
     if (user.emailVerified) {
-      return redirect("/", { headers });
+      return redirect("/dashboard", { headers });
     }
     await sendVerificationCode(user);
     return redirect("/verify-email", { headers });

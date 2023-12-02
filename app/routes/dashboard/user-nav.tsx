@@ -1,4 +1,4 @@
-import { useRouteLoaderData } from "@remix-run/react";
+import { useFetcher, useRouteLoaderData } from "@remix-run/react";
 import { type loader as dashboardLoader } from "./route";
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -13,6 +13,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 
 export function UserNav() {
+  const fetcher = useFetcher();
   const data = useRouteLoaderData<typeof dashboardLoader>(
     "routes/dashboard/route"
   );
@@ -46,7 +47,14 @@ export function UserNav() {
             <DropdownMenuItem>Settings</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Log out</DropdownMenuItem>
+
+          <DropdownMenuItem
+            onClick={() =>
+              fetcher.submit({}, { method: "post", action: "/auth/logout" })
+            }
+          >
+            Log out
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
