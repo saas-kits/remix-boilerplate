@@ -106,16 +106,13 @@ const formStrategy = new FormStrategy(async ({ form, context }) => {
 
 const googleStrategy = new GoogleStrategy(
   {
-    // TODO: add checks for env if not present throw error in console
     clientID: process.env.GOOGLE_CLIENT_ID || "",
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    // TODO: update call back url using env
-    callbackURL: "http://localhost:3000/google/callback",
+    callbackURL: process.env.HOST_URL
+      ? `http://${process.env.HOST_URL}/google/callback`
+      : "http://localhost:3000/google/callback",
   },
   async ({ accessToken, refreshToken, extraParams, profile }) => {
-    // Get the user data from your DB or API using the tokens and profile
-    // return User.findOrCreate({ email: profile.emails[0].value });
-
     return await prisma.user.upsert({
       where: {
         email: profile.emails[0].value,
