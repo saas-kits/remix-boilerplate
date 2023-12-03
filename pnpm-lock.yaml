@@ -89,9 +89,6 @@ dependencies:
   remix-themes:
     specifier: ^1.2.2
     version: 1.2.2(@remix-run/react@2.3.1)(@remix-run/server-runtime@2.3.1)
-  resend:
-    specifier: ^2.0.0
-    version: 2.0.0
   remix-utils:
     specifier: ^7.3.0
     version: 7.3.0(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(react@18.2.0)(zod@3.22.4)
@@ -7482,7 +7479,6 @@ packages:
       uuid: 8.3.2
     dev: false
 
-<<<<<<< HEAD
   /remix-flat-routes@0.6.2(@remix-run/dev@2.3.1):
     resolution: {integrity: sha512-TiwRSjBFcX1snHDg7wpV+/nbTf4DILBfzTiC5useN/SymKBL876hds3eZln4Y22fuqjfWCnqf2bvWUrmT2ZoFQ==}
     hasBin: true
@@ -7494,12 +7490,17 @@ packages:
       fs-extra: 11.1.1
       minimatch: 5.1.6
     dev: true
-<<<<<<< HEAD
-=======
->>>>>>> 6d2c4bb (add: stripe webhook and db calls)
-=======
 
->>>>>>> 8a09c76 (add: stripe changes)
+  /remix-themes@1.2.2(@remix-run/react@2.3.1)(@remix-run/server-runtime@2.3.1):
+    resolution: {integrity: sha512-G+1e2I62PI8JUR9xkkhByHljw73CIO42dEQMXo2UI+d+ZZwO+v/xwLAW++FkHA3rVXWuo4vu+DiAy2nCZMk70g==}
+    peerDependencies:
+      '@remix-run/react': '>= 1'
+      '@remix-run/server-runtime': '>= 1'
+    dependencies:
+      '@remix-run/react': 2.3.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.1.6)
+      '@remix-run/server-runtime': 2.3.1(typescript@5.1.6)
+    dev: false
+
   /remix-utils@7.3.0(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(react@18.2.0)(zod@3.22.4):
     resolution: {integrity: sha512-Ea5eNL04Ke4YYKI79ZR5doWtULe3ABkYkqhaP7mKiYcNVYAg6pA0PMuFYR2uyJYCGW43+/WlTfr3D4X5A0PsUA==}
     engines: {node: '>=18.0.0'}
@@ -7543,19 +7544,6 @@ packages:
       zod: 3.22.4
     dev: false
 
-<<<<<<< HEAD
-  /remix-themes@1.2.2(@remix-run/react@2.3.1)(@remix-run/server-runtime@2.3.1):
-    resolution: {integrity: sha512-G+1e2I62PI8JUR9xkkhByHljw73CIO42dEQMXo2UI+d+ZZwO+v/xwLAW++FkHA3rVXWuo4vu+DiAy2nCZMk70g==}
-    peerDependencies:
-      '@remix-run/react': '>= 1'
-      '@remix-run/server-runtime': '>= 1'
-    dependencies:
-      '@remix-run/react': 2.3.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.1.6)
-      '@remix-run/server-runtime': 2.3.1(typescript@5.1.6)
-    dev: false
-
-=======
->>>>>>> 6d2c4bb (add: stripe webhook and db calls)
   /require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
@@ -8304,17 +8292,11 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-<<<<<<< HEAD
   /type-fest@0.6.0:
     resolution: {integrity: sha512-q+MB8nYR1KDLrgr4G5yemftpMC7/QLqVndBmEEdqzmNj5dcFOO4Oo8qlwZE3ULT3+Zim1F8Kq4cBnikNhlCMlg==}
     engines: {node: '>=8'}
-<<<<<<< HEAD
-=======
->>>>>>> 6d2c4bb (add: stripe webhook and db calls)
-=======
     dev: false
 
->>>>>>> 8a09c76 (add: stripe changes)
   /type-fest@4.8.2:
     resolution: {integrity: sha512-mcvrCjixA5166hSrUoJgGb9gBQN4loMYyj9zxuMs/66ibHNEFd5JXMw37YVDx58L4/QID9jIzdTBB4mDwDJ6KQ==}
     engines: {node: '>=16'}
