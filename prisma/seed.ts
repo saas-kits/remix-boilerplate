@@ -33,7 +33,9 @@ const seed = async () => {
       name,
       description,
     });
+    console.log(JSON.stringify(pricesByInterval, null, 2));
 
+      
     const stripePrices = await Promise.all(
       pricesByInterval.map((price) =>
         createStripePrice(id, {
@@ -46,7 +48,6 @@ const seed = async () => {
 
     await prisma.plan.create({
       data: {
-        id,
         name,
         description,
         isActive,
@@ -60,8 +61,8 @@ const seed = async () => {
             currency: price.currency,
             amount: price.unit_amount || 0,
             nickname: price.nickname,
-            stripeId: price.id,
-            active: true,
+            isActive: true,
+            stripePriceId: price.id,
           })),
         },
       },
@@ -77,7 +78,7 @@ const seed = async () => {
 
   console.log(products);
 
-  await setupStripeCustomerPortal(products);
+  //await setupStripeCustomerPortal(products);
 
 
 };

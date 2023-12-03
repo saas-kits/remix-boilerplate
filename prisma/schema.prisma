@@ -72,11 +72,12 @@ model PlanLimit {
 
 model Price {
   id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  active        Boolean
+  isActive        Boolean
   currency      String
   interval      String
   nickname      String?
   amount        Int
+  stripePriceId String
   planId        String         @db.ObjectId
   plan          Plan           @relation(fields: [planId], references: [id])
   subscriptions Subscription[]
