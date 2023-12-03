@@ -19,7 +19,6 @@ export const createStripePrice = async (
   price: Partial<Price>
 ) => {
   return await stripe.prices.create({
-    ...price,
     nickname: price.nickname || undefined,
     product: id,
     currency: price.currency || "usd",
