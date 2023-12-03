@@ -6,7 +6,6 @@ import { brandConfig } from "~/lib/brand/config";
 
 export const createStripeProduct = async (plan: Partial<Plan>) => {
   const product = await stripe.products.create({
-    id: plan.id,
     name: plan.name || "",
     description: plan.description || undefined,
   });

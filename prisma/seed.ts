@@ -15,7 +15,7 @@ const seed = async () => {
   }
 
   const planPromises  = Object.values(DEFAULT_PLANS).map(async (plan) => {
-    const { limits, prices, name, description, isActive, listOfFeatures, id } =
+    const { limits, prices, name, description, isActive, listOfFeatures, } =
       plan;
 
     const pricesByInterval = Object.entries(prices).flatMap(
@@ -28,8 +28,7 @@ const seed = async () => {
       }
     );
 
-    await createStripeProduct({
-      id: id,
+    const stripeProduct = await createStripeProduct({
       name,
       description,
     });
@@ -38,7 +37,7 @@ const seed = async () => {
       
     const stripePrices = await Promise.all(
       pricesByInterval.map((price) =>
-        createStripePrice(id, {
+        createStripePrice(stripeProduct.id, {
           ...price,
           amount: price.amount * 100,
           nickname: name,
@@ -55,6 +54,7 @@ const seed = async () => {
         limits: {
           create: limits,
         },
+        stripePlanId: stripeProduct.id,
         prices: {
           create: stripePrices.map((price) => ({
             interval: price?.recurring?.interval || "month",
@@ -69,7 +69,7 @@ const seed = async () => {
     });
 
     return {
-      product: id,
+      product: stripeProduct.id,
       prices: stripePrices.map((price) => price.id),
     }
   });

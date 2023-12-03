@@ -13,3 +13,11 @@ export const updateUserById = async (id: User["id"], data: Partial<User>) => {
     data,
   });
 };
+
+export const getUserByStripeCustomerId = async (
+  customerId: User["customerId"]
+) => {
+  return await prisma.user.findFirst({
+    where: { customerId },
+  });
+}

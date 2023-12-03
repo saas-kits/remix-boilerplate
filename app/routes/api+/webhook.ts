@@ -2,12 +2,14 @@
 
 import type { Subscription } from "@prisma/client";
 import { json, type ActionFunctionArgs } from "@remix-run/node";
+import { getPlanByStripeId } from "~/models/plan";
 import {
   deleteSubscriptionByCustomerId,
+  getSubscriptionByStripeId,
   getSubscriptionById,
   updateSubscription,
 } from "~/models/subscription";
-import { getUserById } from "~/models/user";
+import { getUserByStripeCustomerId } from "~/models/user";
 import { stripe } from "~/services/stripe/setup.server";
 
 const getStripeWebhookEvent = async (request: Request) => {
@@ -26,8 +28,8 @@ const getStripeWebhookEvent = async (request: Request) => {
   }
 };
 
-const sendPlanEndNotification = async (subscriptionId: Subscription["id"]) => {
-  const subscription = await getSubscriptionById(subscriptionId, {
+const sendPlanEndNotification = async (id: Subscription["id"]) => {
+  const subscription = await getSubscriptionById(id, {
     user: true,
     plan: true,
     price: true,
@@ -52,19 +54,43 @@ export async function action({ request }: ActionFunctionArgs) {
     case "customer.subscription.updated":
       // Update subscription in database.
       const stripeSubscription = event.data.object;
-      const userId = stripeSubscription.metadata.userId;
+      const customerId = stripeSubscription.customer;
 
-      if (!userId) return new Response("Success", { status: 200 });
+      console.log(stripeSubscription, customerId);
 
-      const user = await getUserById(userId);
+      if (!customerId) return new Response("Success", { status: 200 });
+
+      const user = await getUserByStripeCustomerId(customerId as string);
+      console.log(user);
 
       if (!user) return new Response("Success", { status: 200 });
 
-      await updateSubscription(stripeSubscription.id, {
-        isActive: stripeSubscription.status === "active",
+      const subscriptionByStripeId = await getSubscriptionByStripeId(
+        stripeSubscription.id
+      );
+
+      console.log(subscriptionByStripeId);
+
+      if (!subscriptionByStripeId?.id) return json({}, { status: 200 });
+
+      const dbPlan = await getPlanByStripeId(
+        stripeSubscription.items.data[0].plan.product as string
+      );
+      const dbPrice = dbPlan?.prices.find(
+        (price) =>
+          price.stripePriceId === stripeSubscription.items.data[0].price.id
+      );
+
+      console.log(dbPlan);
+      console.log(dbPrice);
+
+      await updateSubscription(subscriptionByStripeId.id, {
+        isActive:
+          stripeSubscription.status === "active" ||
+          stripeSubscription.status === "trialing",
         status: stripeSubscription.status,
-        planId: String(stripeSubscription.items.data[0].plan.product),
-        priceId: String(stripeSubscription.items.data[0].price.id),
+        planId: dbPlan?.id,
+        priceId: dbPrice?.id,
         interval: String(stripeSubscription.items.data[0].plan.interval),
         currentPeriodStart: stripeSubscription.current_period_start,
         currentPeriodEnd: stripeSubscription.current_period_end,
@@ -75,12 +101,18 @@ export async function action({ request }: ActionFunctionArgs) {
     case "customer.subscription.deleted":
       // Delete subscription from database.
       const subscriptionId = event.data.object.id;
-      await sendPlanEndNotification(subscriptionId);
+      const subscription = await getSubscriptionByStripeId(subscriptionId);
+      if (!subscription) return json({}, { status: 200 });
+      await sendPlanEndNotification(subscription.id);
 
       await deleteSubscriptionByCustomerId(
         event.data.object.customer.toString()
       );
       break;
+    default:
+      // Unexpected event type
+      console.log(`Unhandled event type ${event.type}`);
+      return json({}, { status: 200 });
   }
 
   return json({}, { status: 200 });

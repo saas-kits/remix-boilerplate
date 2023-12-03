@@ -1,12 +1,18 @@
 import type { Prisma, Subscription, User } from "@prisma/client";
 import { prisma } from "~/services/db/db.server";
 
-export const getSubscriptionById = async (subscriptionId: Subscription["id"], 
+export const getSubscriptionById = async (id: Subscription["id"], 
   options?: Prisma.SubscriptionInclude
 ) => {
   return await prisma.subscription.findUnique({
-    where: { id: subscriptionId },
+    where: { id },
     include: options,
+  });
+}
+
+export const getSubscriptionByStripeId = async (subscriptionId: Subscription["subscriptionId"]) => {
+  return await prisma.subscription.findFirst({
+    where: { subscriptionId },
   });
 }
 
@@ -25,11 +31,11 @@ export const createSubscription = async (
 };
 
 export const updateSubscription = async (
-  subscriptionId: Subscription["id"],
+  id: Subscription["id"],
   data: Prisma.SubscriptionUncheckedUpdateInput
 ) => {
   return await prisma.subscription.update({
-    where: { id: subscriptionId },
+    where: { id: id },
     data,
   });
 };

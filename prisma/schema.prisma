@@ -53,6 +53,7 @@ model Plan {
   prices         Price[]
   subcriptions   Subscription[]
   isActive       Boolean
+  stripePlanId   String
   limits         PlanLimit[]
   listOfFeatures Json[]
 
@@ -94,7 +95,8 @@ model Subscription {
   currentPeriodEnd     BigInt
   currentPeriodStart   BigInt
   interval             String
-  customerId            String
+  customerId           String
+  subscriptionId       String
   planId               String  @db.ObjectId
   plan                 Plan    @relation(fields: [planId], references: [id])
   userId               String  @db.ObjectId
@@ -103,4 +105,5 @@ model Subscription {
   price                Price   @relation(fields: [priceId], references: [id])
 
   @@index([customerId], name: "customerId")
+  @@index([subscriptionId], name: "subscriptionId")
 }

@@ -28,6 +28,7 @@
     "@remix-run/serve": "^2.3.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "intl-parse-accept-language": "^1.0.0",
     "invariant": "^2.2.4",
     "isbot": "^3.6.8",
     "lucide-react": "^0.293.0",
@@ -39,8 +40,8 @@
     "remix-auth-form": "^1.4.0",
     "remix-auth-google": "^2.0.0",
     "remix-themes": "^1.2.2",
-    "resend": "^2.0.0",
     "remix-utils": "^7.3.0",
+    "resend": "^2.0.0",
     "stripe": "^14.5.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
@@ -56,13 +57,13 @@
     "eslint": "^8.38.0",
     "remix-flat-routes": "^0.6.2",
     "tailwindcss": "^3.3.5",
-    "ts-node": "^10.9.1",
+    "tsx": "^4.6.2",
     "typescript": "^5.1.6"
   },
   "engines": {
     "node": ">=18.0.0"
   },
   "prisma": {
-    "seed": "node prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   }
 }
