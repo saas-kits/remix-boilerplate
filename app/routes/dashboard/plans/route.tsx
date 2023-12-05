@@ -1,6 +1,6 @@
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
@@ -223,14 +223,25 @@ export default function PlansPage() {
                     />
                   ))}
                 </ul>
+                <Form method="post">
+                  <input type="hidden" name="planId" value={plan.id} />
+                  <input type="hidden" name="interval" value={interval} />
+                  <input
+                    type="hidden"
+                    name="currency"
+                    value={defaultCurrency}
+                  />
+                  
                 <Button
                   className="w-full mt-8"
                   disabled={subscription?.planId === plan.id}
+                  type="submit"
                 >
                   {subscription?.planId === plan.id
                     ? "Current Plan"
                     : "Choose Plan"}
                 </Button>
+                </Form>
               </Card>
             </>
           ))}
