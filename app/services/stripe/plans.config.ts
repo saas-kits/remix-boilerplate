@@ -36,6 +36,7 @@ export const DEFAULT_PLANS: {
         name: 'Free',
         description: 'Free plan',
         isActive: true,
+        stripePlanId: 'free',
         listOfFeatures: [{
             name: '1 user',
             isAvailable: true,
@@ -72,6 +73,7 @@ export const DEFAULT_PLANS: {
         name: 'Basic',
         description: 'Basic plan',
         isActive: true,
+        stripePlanId: 'basic',
         listOfFeatures: [
             {
                 name: '5 users',
@@ -110,6 +112,7 @@ export const DEFAULT_PLANS: {
         name: 'Pro',
         description: 'Pro plan',
         isActive: true,
+        stripePlanId: 'pro',
         listOfFeatures: [
             {
                 name: '10 users',

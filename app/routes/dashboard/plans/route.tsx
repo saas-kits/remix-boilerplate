@@ -1,6 +1,12 @@
+import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import clsx from "clsx";
+import { useState } from "react";
 import { Button } from "~/components/ui/button";
+import { Card } from "~/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { cn } from "~/lib/utils";
 import { createCheckoutSession } from "~/models/checkout";
 import { getAllPlans, getPlanByIdWithPrices } from "~/models/plan";
 import { getSubscriptionByUserId } from "~/models/subscription";
@@ -9,14 +15,20 @@ import { authenticator } from "~/services/auth.server";
 import { getUserCurrencyFromRequest } from "~/utils/currency";
 
 declare global {
-    interface BigInt {
-      toJSON(): string
-    }
+  interface BigInt {
+    toJSON(): string;
   }
+}
 
 BigInt.prototype.toJSON = function () {
-    return this.toString()
-    }
+  return this.toString();
+};
+
+type Feature = {
+  name: string;
+  isAvailable: boolean;
+  inProgress: boolean;
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const session = await authenticator.isAuthenticated(request, {
@@ -29,17 +41,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   let plans = await getAllPlans();
 
-  plans = plans.map((plan) => {
-    return {
-      ...plan,
-      prices: plan.prices.filter((price) => price.currency === defaultCurrency).map(
-        (price) => ({
-          ...price,
-          amount: price.amount/100,
-        })
-      ),
-    };
-  });
+  plans = plans
+    .map((plan) => {
+      return {
+        ...plan,
+        prices: plan.prices
+          .filter((price) => price.currency === defaultCurrency)
+          .map((price) => ({
+            ...price,
+            amount: price.amount / 100,
+          })),
+      };
+    })
+    .sort((a, b) => a.prices[0].amount - b.prices[0].amount);
 
   return {
     plans,
@@ -92,53 +106,135 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   return redirect(checkout.url as string);
 };
 
+type PricingSwitchProps = {
+  onSwitch: (value: string) => void;
+};
+
+const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
+  <Tabs defaultValue="0" className="w-40 mx-auto" onValueChange={onSwitch}>
+    <TabsList className="py-6 px-2">
+      <TabsTrigger value="0" className="text-base">
+        Monthly
+      </TabsTrigger>
+      <TabsTrigger value="1" className="text-base">
+        Yearly
+      </TabsTrigger>
+    </TabsList>
+  </Tabs>
+);
+
+const Feature = ({ name, isAvailable, inProgress }: Feature) => (
+  <li className={clsx(inProgress && "text-muted-foreground", "flex gap-x-3")}>
+    {/* If in progress return disabled */}
+    {!isAvailable ? (
+      <Cross2Icon
+        className={clsx("text-gray-400", "h-6 w-5 flex-none")}
+        aria-hidden="true"
+      />
+    ) : (
+      <CheckIcon
+        className={clsx("text-gray-400", "h-6 w-5 flex-none")}
+        aria-hidden="true"
+      />
+    )}
+    {name}{" "}
+    {inProgress && (
+      <span className="text-xs font-semibold leading-6 text-muted-foreground">
+        (Coming Soon)
+      </span>
+    )}
+  </li>
+);
+
 export default function PlansPage() {
   const { plans, subscription, defaultCurrency } =
     useLoaderData<typeof loader>();
+  const [interval, setInterval] = useState<"month" | "year">("month");
   // render shadcn ui pricing table using Card
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-3xl font-bold">Plans</h1>
-      <div className="flex flex-wrap justify-center max-w-4xl mt-6 sm:w-full">
-        {plans.map((plan) => (
-          <div
-            key={plan.id}
-            className="flex flex-col justify-between w-full px-4 py-8 mx-2 my-4 bg-white rounded-lg shadow sm:w-96"
-          >
-            <div className="flex flex-col items-center">
-              <h2 className="text-2xl font-bold">{plan.name}</h2>
-              <p className="mt-2 text-gray-600">{plan.description}</p>
-              <p className="mt-2 text-gray-600">
-                {plan.prices.map((price) => (
-                  <span key={price.id}>
-                    {price.currency.toUpperCase()}{" "}
-                    {price.amount.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: price.currency,
-                    })}{" "}
-                    / {price.interval}
+    <div>
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl text-center">
+          <h1 className="mt-16 text-4xl font-medium tracking-tight sm:text-5xl text-center wrap-balance bg-gradient-to-br from-white to-[hsla(0,0%,100%,.5)] bg-clip-text text-transparent">
+            Plans & Pricing
+          </h1>
+        </div>
+        <p className="mt-6 text-lg leading-7 font-light text-gray-400 text-center wrap-balance">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum
+          quisquam, iusto voluptatem dolore voluptas non laboriosam soluta quos
+          quod eos! Sapiente archit
+        </p>
+        <div className="mt-16 flex justify-center"></div>
+        <PricingSwitch
+          onSwitch={(value) => setInterval(value === "0" ? "month" : "year")}
+        />
+        <div className="isolate mx-auto mt-10 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          {plans.map((plan) => (
+            <>
+              <Card key={plan.id} className="p-6">
+                <div className="flex items-center justify-between">
+                <h3 className="text-base font-semibold leading-8">
+                  {plan.name}
+                </h3>
+                {
+                  interval === "year" && plan.prices[0].amount !== 0 ?
+                  <div
+                  className={cn(
+                    "px-2.5 rounded-xl h-fit text-sm py-1 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white",
+                    {
+                      "bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black ":
+                        subscription?.planId === plan.id,
+                    }
+                  )}
+                >
+                  Save ${plan.prices[0].amount * 12 - plan.prices[1].amount}
+                </div> : null 
+                }
+                </div>
+                <p className="mt-4 text-sm leading-5 font-light text-gray-400 wrap-balance">
+                  {plan.description}
+                </p>
+                <h5 className="text-4xl font-bold tracking-tight mt-6">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: defaultCurrency,
+                  }).format(
+                    plan.prices.find(
+                      (p) =>
+                        p.currency === defaultCurrency && p.interval == interval
+                    )?.amount as number
+                  )}
+                  <span className="text-sm font-semibold leading-6 text-muted-foreground">
+                    /{interval}
                   </span>
-                ))}
-              </p>
-            </div>
-            <form
-              action="/dashboard/plans"
-              method="post"
-              className="flex flex-col items-center w-full mt-4"
-            >
-              <input type="hidden" name="planId" value={plan.id} />
-              <input type="hidden" name="interval" value="month" />
-              <input type="hidden" name="currency" value={defaultCurrency} />
-              <Button
-                type="submit"
-                className="px-4 py-2 mt-4 font-bold text-white bg-blue-500 rounded hover:bg-blue-600"
-                disabled={subscription?.planId === plan.id}
-              >
-                {subscription?.planId === plan.id ? "Current Plan" : "Subscribe"}
-              </Button>
-            </form>
-          </div>
-        ))}
+                </h5>
+                <ul
+                  className={clsx(
+                    "text-gray-400",
+                    "mt-8 space-y-3 text-sm leading-6 xl:mt-10"
+                  )}
+                >
+                  {(plan.listOfFeatures as Feature[]).map((feature, index) => (
+                    <Feature
+                      key={index}
+                      name={feature.name}
+                      isAvailable={feature.isAvailable}
+                      inProgress={feature.inProgress}
+                    />
+                  ))}
+                </ul>
+                <Button
+                  className="w-full mt-8"
+                  disabled={subscription?.planId === plan.id}
+                >
+                  {subscription?.planId === plan.id
+                    ? "Current Plan"
+                    : "Choose Plan"}
+                </Button>
+              </Card>
+            </>
+          ))}
+        </div>
       </div>
     </div>
   );
