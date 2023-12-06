@@ -38,7 +38,7 @@ export const sendResetPasswordLink = async (user: User) => {
       ? `http://${process.env.HOST_URL}/reset-password?code=${code}`
       : `http://localhost:3000/reset-password?code=${code}`;
     resend.emails.send({
-      from: "team@remixkits.com",
+      from: "team@saaskits.dev",
       to: user.email,
       // Todo: drive company name from config
       subject: "Password reset - RemixKits",
