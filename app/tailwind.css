@@ -76,6 +76,7 @@
     @apply bg-background text-foreground;
   }
 
+
   .wrap-balance {
     text-wrap: balance;
   }
