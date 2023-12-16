@@ -1,8 +1,10 @@
 import { Button } from "~/components/ui/button";
+import { SocialProof } from "./social-proof";
+import { Discountbadge } from "./discount-badge";
 
 export function HeroSection() {
   return (
-    <div className="relative flex flex-col justify-center items-center min-h-[70vh] pb-12 sm:pb-24">
+    <div className="relative flex flex-col justify-center items-center min-h-[70vh] pb-12 pt-12 md:pt-0">
       <nav className="h-14 w-full absolute z-20 left-0 top-0 ">
         <div className="flex justify-between h-full mx-auto max-w-7xl px-6 items-center">
           <div className="flex space-x-2 items-center">
@@ -29,7 +31,7 @@ export function HeroSection() {
       <div className="relative isolate overflow-hidden bg-background">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="fixed inset-0 -z-10 h-full w-full [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
+          className="fixed inset-0 -z-10 h-full w-full [mask-image:radial-gradient(100%_100%_at_top_right,black,transparent)] dark:[mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
         >
           <defs>
             <pattern
@@ -45,6 +47,7 @@ export function HeroSection() {
                 stroke="hsla(259, 0%, 100%, 0.08)"
                 strokeWidth={0.1}
                 d="M10 0v20ZM0 10h20Z"
+                className="stroke-current text-border dark:text-[hsla(259, 0%, 100%, 0.08)]"
               />
             </pattern>
           </defs>
@@ -58,10 +61,13 @@ export function HeroSection() {
 
         <div className="mx-auto w-full max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-36 flex justify-start">
           <div className="mx-auto max-w-7xl lg:max-w-3xl lg:pt-8 justify-start">
-            <h1 className="mt-16 text-4xl font-medium tracking-tight sm:text-6xl leading-tight sm:leading-[1.15] text-center wrap-balance bg-gradient-to-br from-white to-[hsla(0,0%,100%,.5)] bg-clip-text text-transparent">
+            <div className="flex justify-center mt-16">
+              <Discountbadge />
+            </div>
+            <h1 className="mt-6 text-4xl font-medium tracking-tight sm:text-6xl leading-tight sm:leading-[1.15] text-center wrap-balance bg-gradient-to-br bg-black dark:from-white dark:to-[hsla(0,0%,100%,.5)] bg-clip-text text-transparent">
               Launch SaaS in Days not in months
             </h1>
-            <p className="mt-6 text-lg leading-7 font-light text-gray-400 text-center wrap-balance">
+            <p className="mt-6 text-lg leading-7 font-light text-gray-700 dark:text-gray-400 text-center wrap-balance">
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum
               quisquam, iusto voluptatem dolore voluptas non laboriosam soluta
               quos quod eos! Sapiente archit
@@ -70,6 +76,9 @@ export function HeroSection() {
               <Button size="lg" className="px-16">
                 Get started
               </Button>
+            </div>
+            <div className="flex justify-center mt-6">
+              <SocialProof />
             </div>
           </div>
         </div>
