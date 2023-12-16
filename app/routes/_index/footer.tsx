@@ -22,7 +22,7 @@ export default function Footer() {
               </svg>
               <span className="font-medium text-lg">RemixKits</span>
             </div>
-            <p className="mt-3 text-sm text-gray-400">
+            <p className="mt-3 text-sm text-gray-700 dark:text-gray-400">
               476 Shantivan Soc. Rajkot, India
             </p>
           </div>
@@ -30,13 +30,22 @@ export default function Footer() {
             <div>
               <div>Links</div>
               <div className="flex flex-col space-y-4 mt-4">
-                <a className="text-sm text-gray-400" href="#">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Media
                 </a>
-                <a className="text-sm text-gray-400" href="">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Brand
                 </a>
-                <a className="text-sm text-gray-400" href="">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Subscribe
                 </a>
               </div>
@@ -44,13 +53,22 @@ export default function Footer() {
             <div>
               <div>Links</div>
               <div className="flex flex-col space-y-4 mt-4">
-                <a className="text-sm text-gray-400" href="#">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Media
                 </a>
-                <a className="text-sm text-gray-400" href="">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Brand
                 </a>
-                <a className="text-sm text-gray-400" href="">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Subscribe
                 </a>
               </div>
@@ -58,13 +76,22 @@ export default function Footer() {
             <div>
               <div>Links</div>
               <div className="flex flex-col space-y-4 mt-4">
-                <a className="text-sm text-gray-400" href="#">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Media
                 </a>
-                <a className="text-sm text-gray-400" href="">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Brand
                 </a>
-                <a className="text-sm text-gray-400" href="">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Subscribe
                 </a>
               </div>
@@ -72,13 +99,22 @@ export default function Footer() {
             <div>
               <div>Links</div>
               <div className="flex flex-col space-y-4 mt-4">
-                <a className="text-sm text-gray-400" href="#">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Media
                 </a>
-                <a className="text-sm text-gray-400" href="">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Brand
                 </a>
-                <a className="text-sm text-gray-400" href="">
+                <a
+                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  href="/#"
+                >
                   Subscribe
                 </a>
               </div>

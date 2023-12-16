@@ -50,9 +50,9 @@ export function FeatureSection() {
               </div>
             </div>
             <div className="relative w-full rounded-3xl">
-              <div className="h-12 w-12 flex justify-center items-center rounded-[7px] p-px bg-gradient-to-br from-purple-400 to-purple-800 dark:from-purple-600 dark:to-purple-300">
+              <div className="h-12 w-12 flex justify-center items-center rounded-[7px] p-px bg-gradient-to-br bg-purple-200 dark:from-purple-600 dark:to-purple-300">
                 <div className="h-full w-full dark:bg-black flex items-center justify-center rounded-md">
-                  <CreditCard className="text-purple-100 dark:text-purple-200" />
+                  <CreditCard className="text-purple-500 dark:text-purple-200" />
                 </div>
               </div>
               <h3 className="mt-4 text-xl font-bold text-gray-700 dark:text-gray-300">
@@ -74,9 +74,9 @@ export function FeatureSection() {
               </div>
             </div>
             <div className="relative w-full rounded-3xl">
-              <div className="h-12 w-12 flex justify-center items-center rounded-[7px] p-px bg-gradient-to-br from-cyan-400 to-cyan-800 dark:from-cyan-600 dark:to-cyan-300">
+              <div className="h-12 w-12 flex justify-center items-center rounded-[7px] p-px bg-gradient-to-br bg-cyan-200 dark:from-cyan-600 dark:to-cyan-300">
                 <div className="h-full w-full  dark:bg-black flex items-center justify-center rounded-md">
-                  <MailIcon className="text-cyan-200 dark:text-cyan-200" />
+                  <MailIcon className="text-cyan-600 dark:text-cyan-200" />
                 </div>
               </div>
               <h3 className="mt-4 text-xl font-bold text-gray-700 dark:text-gray-300">
@@ -98,9 +98,9 @@ export function FeatureSection() {
               </div>
             </div>
             <div className="relative w-full rounded-3xl">
-              <div className="h-12 w-12 flex justify-center items-center rounded-[7px] p-px bg-gradient-to-br from-cyan-400 to-cyan-800 dark:from-cyan-600 dark:to-cyan-300">
+              <div className="h-12 w-12 flex justify-center items-center rounded-[7px] p-px bg-gradient-to-br bg-cyan-200 dark:from-cyan-600 dark:to-cyan-300">
                 <div className="h-full w-full dark:bg-black flex items-center justify-center rounded-md">
-                  <Database className="text-cyan-100 dark:text-cyan-200" />
+                  <Database className="text-cyan-600 dark:text-cyan-200" />
                 </div>
               </div>
               <h3 className="mt-4 text-xl font-bold text-gray-700 dark:text-gray-300">
@@ -122,9 +122,9 @@ export function FeatureSection() {
               </div>
             </div>
             <div className="relative w-full rounded-3xl">
-              <div className="h-12 w-12 flex justify-center items-center rounded-[7px] p-px bg-gradient-to-br from-fuchsia-400 to-fuchsia-800 dark:from-fuchsia-600 dark:to-fuchsia-300">
+              <div className="h-12 w-12 flex justify-center items-center rounded-[7px] p-px bg-gradient-to-br bg-fuchsia-200 dark:from-fuchsia-600 dark:to-fuchsia-300">
                 <div className="h-full w-full dark:bg-black flex items-center justify-center rounded-md">
-                  <SearchIcon className="text-fuchsia-100 dark:text-fuchsia-200" />
+                  <SearchIcon className="text-fuchsia-600 dark:text-fuchsia-200" />
                 </div>
               </div>
               <h3 className="mt-4 text-xl font-bold text-gray-700 dark:text-gray-300">
@@ -146,9 +146,9 @@ export function FeatureSection() {
               </div>
             </div>
             <div className="relative w-full rounded-3xl">
-              <div className="h-12 w-12 flex justify-center items-center rounded-[7px] p-px bg-gradient-to-br from-red-400 to-red-800 dark:from-red-600 dark:to-red-300">
+              <div className="h-12 w-12 flex justify-center items-center rounded-[7px] p-px bg-gradient-to-br bg-red-200 dark:from-red-600 dark:to-red-300">
                 <div className="h-full w-full dark:bg-black flex items-center justify-center rounded-md">
-                  <Layers2Icon className="text-red-100 dark:text-red-200" />
+                  <Layers2Icon className="text-red-500 dark:text-red-200" />
                 </div>
               </div>
               <h3 className="mt-4 text-xl font-bold text-gray-700 dark:text-gray-300">
