@@ -1,7 +1,6 @@
 import { Settings } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
-import { ThemeToggle } from "./theme-toggle";
 import { NavLink } from "@remix-run/react";
 import { useContext } from "react";
 import { SidebarContext } from "./sidebar.context";
@@ -171,7 +170,6 @@ export function Sidebar({ className }: SidebarProps) {
             <Settings height={16} className="mr-2" />
             Settings
           </NavigationLink>
-          <ThemeToggle />
         </div>
       </div>
     </div>

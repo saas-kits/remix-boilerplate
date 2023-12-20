@@ -4,6 +4,7 @@ import { UserNav } from "./user-nav";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { SidebarContext } from "./sidebar.context";
+import { ThemeToggle } from "./theme-toggle";
 
 type Props = {
   children: React.ReactNode;
@@ -39,7 +40,10 @@ export function Shell({ children }: Props) {
               </Sheet>
             </div>
 
-            <UserNav />
+            <div className="flex space-x-2 items-center">
+              <UserNav />
+              <ThemeToggle />
+            </div>
           </div>
 
           {/* content */}
