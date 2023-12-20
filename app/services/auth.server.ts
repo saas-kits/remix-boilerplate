@@ -56,7 +56,7 @@ const formStrategy = new FormStrategy(async ({ form, context }) => {
   const parsedData = payloadSchema.safeParse(context);
 
   if (parsedData.success) {
-    const { email, password, type } = parsedData.data;
+    const { email, password, type, fullName } = parsedData.data;
 
     if (type === "login") {
       // let user = await login(email, password);
@@ -88,7 +88,7 @@ const formStrategy = new FormStrategy(async ({ form, context }) => {
         data: {
           email: email,
           password: hashedPassword,
-          fullName: "test",
+          fullName: fullName || "",
         },
       });
 

@@ -18,10 +18,14 @@ model User {
   isGoogleSignUp     Boolean              @default(false)
   emailVerified      Boolean              @default(false)
   createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
   verificationCodeId String?              @db.ObjectId
+  customerId   String?
   PasswordResetToken PasswordResetToken[]
   VerificationCode   VerificationCode[]
+  Subscription       Subscription[]
+
+  @@index([customerId], name: "customerId")
 }
 
 model PasswordResetToken {
@@ -38,4 +42,68 @@ model VerificationCode {
   expires BigInt
   userId  String @db.ObjectId
   user    User   @relation(fields: [userId], references: [id])
+}
+
+// Prisma schema for stripe plan, price, subscription
+
+model Plan {
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  description    String?
+  prices         Price[]
+  subcriptions   Subscription[]
+  isActive       Boolean
+  stripePlanId   String
+  limits         PlanLimit[]
+  listOfFeatures Json[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PlanLimit {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  plan   Plan   @relation(fields: [planId], references: [id])
+  planId String @db.ObjectId
+
+  allowedUsersCount    Int
+  allowedProjectsCount Int
+  allowedStorageSize   Int
+}
+
+model Price {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  isActive        Boolean
+  currency      String
+  interval      String
+  nickname      String?
+  amount        Int
+  stripePriceId String
+  planId        String         @db.ObjectId
+  plan          Plan           @relation(fields: [planId], references: [id])
+  subscriptions Subscription[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subscription {
+  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
+  isActive             Boolean
+  status               String
+  cancelAtPeriodEnd    Boolean
+  currentPeriodEnd     BigInt
+  currentPeriodStart   BigInt
+  interval             String
+  customerId           String
+  subscriptionId       String
+  planId               String  @db.ObjectId
+  plan                 Plan    @relation(fields: [planId], references: [id])
+  userId               String  @db.ObjectId
+  user                 User    @relation(fields: [userId], references: [id])
+  priceId              String  @db.ObjectId
+  price                Price   @relation(fields: [priceId], references: [id])
+
+  @@index([customerId], name: "customerId")
+  @@index([subscriptionId], name: "subscriptionId")
 }
