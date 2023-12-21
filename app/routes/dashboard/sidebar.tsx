@@ -1,7 +1,5 @@
-import { Settings } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
-import { ThemeToggle } from "./theme-toggle";
 import { NavLink } from "@remix-run/react";
 import { useContext } from "react";
 import { SidebarContext } from "./sidebar.context";
@@ -88,7 +86,6 @@ export function Sidebar({ className }: SidebarProps) {
               </svg>
               Plans
             </NavigationLink>
-            
           </div>
         </div>
         <div className="px-3 py-2">
@@ -182,16 +179,6 @@ export function Sidebar({ className }: SidebarProps) {
               Albums
             </NavigationLink>
           </div>
-        </div>
-      </div>
-      {/* user profile and light dark mode */}
-      <div className="absolute bottom-0 w-full py-2 px-3">
-        <div className="flex justify-between">
-          <NavigationLink to="/settings">
-            <Settings height={16} className="mr-2" />
-            Settings
-          </NavigationLink>
-          <ThemeToggle />
         </div>
       </div>
     </div>

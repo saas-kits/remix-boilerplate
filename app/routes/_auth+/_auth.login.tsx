@@ -63,7 +63,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 
   if (!submission.value || submission.intent !== "submit") {
-    console.log(JSON.stringify(submission));
     return json(submission);
   }
 
