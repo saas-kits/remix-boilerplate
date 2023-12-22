@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0", 
+    "configurations": [
+      {
+        "command": "npm run dev",
+        "name": "Run npm run dev",
+        "request": "launch",
+        "type": "node-terminal",
+        "cwd": "${workspaceFolder}"
+      },
+      {
+        "name": "Attach by Process ID",
+        "processId": "${command:PickProcess}",
+        "request": "attach",
+        "skipFiles": ["<node_internals>/**"],
+        "type": "node"
+      }
+    ]
+  }
