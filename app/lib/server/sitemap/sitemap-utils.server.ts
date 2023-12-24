@@ -59,7 +59,6 @@ async function getSitemapXml(
 
         const manifestEntry = routes[id];
 
-        console.log({ manifestEntry });
         if (!manifestEntry) {
           console.warn(`Could not find a manifest entry for ${id}`);
           return;
