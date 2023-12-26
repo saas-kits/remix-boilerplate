@@ -5,6 +5,7 @@ import {
   json,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
+  MetaFunction,
 } from "@remix-run/node";
 import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
 import { AlertCircle } from "lucide-react";
@@ -15,6 +16,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { validatePasswordResetToken } from "~/lib/server/auth-utils.sever";
+import { mergeMeta } from "~/lib/server/seo/seo-helpers";
 import { authenticator, hash } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
 
@@ -34,6 +36,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     successRedirect: "/",
   });
 }
+
+export const meta: MetaFunction =  mergeMeta(
+  // these will override the parent meta
+  () => {
+    return [{ title: "Reset Password" }];
+  },
+);
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const url = new URL(request.url);

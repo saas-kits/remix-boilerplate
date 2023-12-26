@@ -1,5 +1,5 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -17,11 +17,17 @@ import {
   useTheme,
 } from "remix-themes";
 import clsx from "clsx";
+import buildTags from "./lib/server/seo/seo-utils";
+import { getDefaultSeoTags } from "./lib/server/seo/seo-helpers";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return buildTags(getDefaultSeoTags("http://localhost:3000"));
+};
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { getTheme } = await themeSessionResolver(request);
