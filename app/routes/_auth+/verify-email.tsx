@@ -7,6 +7,7 @@ import {
 } from "@remix-run/node";
 import {
   Form,
+  MetaFunction,
   useActionData,
   useLoaderData,
   useNavigation,
@@ -20,6 +21,7 @@ import {
   isWithinExpiration,
   sendVerificationCode,
 } from "~/lib/server/auth-utils.sever";
+import { mergeMeta } from "~/lib/server/seo/seo-helpers";
 import { authenticator } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
 
@@ -73,6 +75,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return redirect("/login");
 }
+
+export const meta: MetaFunction =  mergeMeta(
+  // these will override the parent meta
+  () => {
+    return [{ title: "Verify Email" }];
+  },
+);
 
 type FormDataType = {
   intent: "requestCode" | "verifyCode";

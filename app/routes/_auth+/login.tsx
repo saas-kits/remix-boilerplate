@@ -7,7 +7,7 @@ import {
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "@remix-run/node";
-import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
+import { Form, MetaFunction, NavLink, useActionData, useNavigation } from "@remix-run/react";
 import { useId } from "react";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -15,6 +15,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import GoogleLogo from "~/lib/assets/logos/google";
 import { sendVerificationCode } from "~/lib/server/auth-utils.sever";
+import { mergeMeta } from "~/lib/server/seo/seo-helpers";
 import { authenticator } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
 import { commitSession, getSession } from "~/services/session.server";
@@ -25,9 +26,6 @@ const schema = z.object({
     .email("Email is invalid"),
   password: z.string().min(8, "min check failed"),
 
-  // tocAccepted: z.string({
-  //   required_error: "You must accept the terms & conditions",
-  // }),
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -36,6 +34,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     successRedirect: "/",
   });
 }
+
+export const meta: MetaFunction =  mergeMeta(
+  // these will override the parent meta
+  () => {
+    return [{ title: "Login" }];
+  },
+);
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const clonedRequest = request.clone();

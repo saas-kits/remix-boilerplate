@@ -7,7 +7,7 @@ import {
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "@remix-run/node";
-import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
+import { Form, MetaFunction, NavLink, useActionData, useNavigation } from "@remix-run/react";
 import { useId, useRef } from "react";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -15,8 +15,10 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import GoogleLogo from "~/lib/assets/logos/google";
+import { mergeMeta } from "~/lib/server/seo/seo-helpers";
 import { authenticator } from "~/services/auth.server";
 import { prisma } from "~/services/db/db.server";
+
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /dashboard directly
@@ -24,6 +26,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     successRedirect: "/",
   });
 }
+
+export const meta: MetaFunction =  mergeMeta(
+  // these will override the parent meta
+  () => {
+    return [{ title: "Sign up" }];
+  },
+);
 
 const schema = z
   .object({
