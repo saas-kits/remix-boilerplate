@@ -1,4 +1,7 @@
 import { useId } from "react"
+import { authenticator } from "@/services/auth.server"
+import { prisma } from "@/services/db/db.server"
+import { commitSession, getSession } from "@/services/session.server"
 import { conform, useForm } from "@conform-to/react"
 import { parse } from "@conform-to/zod"
 import { ReloadIcon } from "@radix-ui/react-icons"
@@ -15,16 +18,14 @@ import {
   useActionData,
   useNavigation,
 } from "@remix-run/react"
-import { Button } from "~/components/ui/button"
-import { Input } from "~/components/ui/input"
-import { Label } from "~/components/ui/label"
-import GoogleLogo from "~/lib/assets/logos/google"
-import { sendVerificationCode } from "~/lib/server/auth-utils.sever"
-import { mergeMeta } from "~/lib/server/seo/seo-helpers"
-import { authenticator } from "~/services/auth.server"
-import { prisma } from "~/services/db/db.server"
-import { commitSession, getSession } from "~/services/session.server"
 import { z } from "zod"
+
+import GoogleLogo from "@/lib/assets/logos/google"
+import { sendVerificationCode } from "@/lib/server/auth-utils.sever"
+import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 const schema = z.object({
   email: z

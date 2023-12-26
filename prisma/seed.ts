@@ -1,10 +1,9 @@
-import { PrismaClient } from "@prisma/client"
-import { DEFAULT_PLANS } from "~/services/stripe/plans.config"
+import { DEFAULT_PLANS } from "@/services/stripe/plans.config"
 import {
   createStripePrice,
   createStripeProduct,
-  setupStripeCustomerPortal,
-} from "~/services/stripe/stripe.server"
+} from "@/services/stripe/stripe.server"
+import { PrismaClient } from "@prisma/client"
 import type { Stripe } from "stripe"
 
 const prisma = new PrismaClient()

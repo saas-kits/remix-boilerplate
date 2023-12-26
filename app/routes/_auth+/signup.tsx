@@ -1,4 +1,6 @@
 import { useId, useRef } from "react"
+import { authenticator } from "@/services/auth.server"
+import { prisma } from "@/services/db/db.server"
 import type { FieldConfig } from "@conform-to/react"
 import { conform, useForm, useInputEvent } from "@conform-to/react"
 import { parse } from "@conform-to/zod"
@@ -15,15 +17,14 @@ import {
   useActionData,
   useNavigation,
 } from "@remix-run/react"
-import { Button } from "~/components/ui/button"
-import { Checkbox } from "~/components/ui/checkbox"
-import { Input } from "~/components/ui/input"
-import { Label } from "~/components/ui/label"
-import GoogleLogo from "~/lib/assets/logos/google"
-import { mergeMeta } from "~/lib/server/seo/seo-helpers"
-import { authenticator } from "~/services/auth.server"
-import { prisma } from "~/services/db/db.server"
 import { z } from "zod"
+
+import GoogleLogo from "@/lib/assets/logos/google"
+import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /dashboard directly

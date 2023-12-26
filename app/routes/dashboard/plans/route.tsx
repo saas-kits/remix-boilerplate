@@ -1,17 +1,18 @@
 import { useState } from "react"
+import { createCheckoutSession } from "@/models/checkout"
+import { getAllPlans, getPlanByIdWithPrices } from "@/models/plan"
+import { getSubscriptionByUserId } from "@/models/subscription"
+import { getUserById } from "@/models/user"
+import { authenticator } from "@/services/auth.server"
+import { getUserCurrencyFromRequest } from "@/utils/currency"
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons"
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node"
 import { Form, useLoaderData } from "@remix-run/react"
-import { Button } from "~/components/ui/button"
-import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { cn } from "~/lib/utils"
-import { createCheckoutSession } from "~/models/checkout"
-import { getAllPlans, getPlanByIdWithPrices } from "~/models/plan"
-import { getSubscriptionByUserId } from "~/models/subscription"
-import { getUserById } from "~/models/user"
-import { authenticator } from "~/services/auth.server"
-import { getUserCurrencyFromRequest } from "~/utils/currency"
 import clsx from "clsx"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // TODO: to be discussed with Keyur
 declare global {

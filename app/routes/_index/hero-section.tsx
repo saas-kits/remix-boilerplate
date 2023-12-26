@@ -1,4 +1,4 @@
-import { Button } from "~/components/ui/button"
+import { Button } from "@/components/ui/button"
 
 import { Discountbadge } from "./discount-badge"
 import { SocialProof } from "./social-proof"

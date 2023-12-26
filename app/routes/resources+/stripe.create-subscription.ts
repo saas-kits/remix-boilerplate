@@ -1,15 +1,15 @@
-import type { LoaderFunctionArgs } from "@remix-run/node"
-import { redirect } from "@remix-run/node"
-import { getFreePlan } from "~/models/plan"
+import { getFreePlan } from "@/models/plan"
 import {
   createSubscription,
   getSubscriptionByUserId,
-} from "~/models/subscription"
-import { getUserById } from "~/models/user"
-import { authenticator } from "~/services/auth.server"
-import { PLAN_INTERVALS } from "~/services/stripe/plans.config"
-import { createStripeSubscription } from "~/services/stripe/stripe.server"
-import { getUserCurrencyFromRequest } from "~/utils/currency"
+} from "@/models/subscription"
+import { getUserById } from "@/models/user"
+import { authenticator } from "@/services/auth.server"
+import { PLAN_INTERVALS } from "@/services/stripe/plans.config"
+import { createStripeSubscription } from "@/services/stripe/stripe.server"
+import { getUserCurrencyFromRequest } from "@/utils/currency"
+import type { LoaderFunctionArgs } from "@remix-run/node"
+import { redirect } from "@remix-run/node"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await authenticator.isAuthenticated(request, {
