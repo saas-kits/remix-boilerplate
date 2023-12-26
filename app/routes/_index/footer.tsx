@@ -1,13 +1,13 @@
-import React from "react";
+import React from "react"
 
 export default function Footer() {
   return (
-    <div className="w-full border-t py-24 relative">
-      <div className="absolute top-[-1px] left-0 right-0 mx-auto h-px w-96 bg-gradient-to-r from-border via-gray-400 to-border opacity-40"></div>
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="relative w-full border-t py-24">
+      <div className="absolute left-0 right-0 top-[-1px] mx-auto h-px w-96 bg-gradient-to-r from-border via-gray-400 to-border opacity-40"></div>
+      <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-wrap">
           <div className="flex w-full flex-col sm:w-2/5">
-            <div className="flex space-x-2 items-center">
+            <div className="flex items-center space-x-2">
               <svg
                 id="logo-36"
                 className="h-6 w-6"
@@ -20,30 +20,30 @@ export default function Footer() {
                   fill="currentColor"
                 ></path>
               </svg>
-              <span className="font-medium text-lg">RemixKits</span>
+              <span className="text-lg font-medium">RemixKits</span>
             </div>
             <p className="mt-3 text-sm text-gray-700 dark:text-gray-400">
               476 Shantivan Soc. Rajkot, India
             </p>
           </div>
-          <div className="mt-6 sm:mt-0 flex-grow grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="mt-6 grid flex-grow grid-cols-3 gap-6 sm:mt-0 sm:grid-cols-3 lg:grid-cols-4">
             <div>
               <div>Links</div>
-              <div className="flex flex-col space-y-4 mt-4">
+              <div className="mt-4 flex flex-col space-y-4">
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Media
                 </a>
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Brand
                 </a>
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Subscribe
@@ -52,21 +52,21 @@ export default function Footer() {
             </div>
             <div>
               <div>Links</div>
-              <div className="flex flex-col space-y-4 mt-4">
+              <div className="mt-4 flex flex-col space-y-4">
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Media
                 </a>
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Brand
                 </a>
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Subscribe
@@ -75,21 +75,21 @@ export default function Footer() {
             </div>
             <div>
               <div>Links</div>
-              <div className="flex flex-col space-y-4 mt-4">
+              <div className="mt-4 flex flex-col space-y-4">
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Media
                 </a>
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Brand
                 </a>
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Subscribe
@@ -98,21 +98,21 @@ export default function Footer() {
             </div>
             <div>
               <div>Links</div>
-              <div className="flex flex-col space-y-4 mt-4">
+              <div className="mt-4 flex flex-col space-y-4">
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Media
                 </a>
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Brand
                 </a>
                 <a
-                  className="text-sm text-gray-700 dark:text-gray-400 hover:underline"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-400"
                   href="/#"
                 >
                   Subscribe
@@ -123,5 +123,5 @@ export default function Footer() {
         </div>
       </div>
     </div>
-  );
+  )
 }

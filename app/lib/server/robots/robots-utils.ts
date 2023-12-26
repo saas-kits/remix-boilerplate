@@ -1,4 +1,4 @@
-import { RobotsPolicy } from "./types";
+import { RobotsPolicy } from "./types"
 
 const typeTextMap = {
   userAgent: "User-agent",
@@ -6,11 +6,11 @@ const typeTextMap = {
   disallow: "Disallow",
   sitemap: "Sitemap",
   crawlDelay: "Crawl-delay",
-};
+}
 
 export function getRobotsText(policies: RobotsPolicy[]): string {
   return policies.reduce((acc, policy) => {
-    const { type, value } = policy;
-    return `${acc}${typeTextMap[type]}: ${value}\n`;
-  }, "");
+    const { type, value } = policy
+    return `${acc}${typeTextMap[type]}: ${value}\n`
+  }, "")
 }

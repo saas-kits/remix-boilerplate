@@ -1,45 +1,56 @@
-import { conform, useForm } from "@conform-to/react";
-import { parse } from "@conform-to/zod";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { useId } from "react"
+import { authenticator } from "@/services/auth.server"
+import { prisma } from "@/services/db/db.server"
+import { commitSession, getSession } from "@/services/session.server"
+import { conform, useForm } from "@conform-to/react"
+import { parse } from "@conform-to/zod"
+import { ReloadIcon } from "@radix-ui/react-icons"
 import {
   json,
   redirect,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
-} from "@remix-run/node";
-import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
-import { useId } from "react";
-import { z } from "zod";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import GoogleLogo from "~/lib/assets/logos/google";
-import { sendVerificationCode } from "~/lib/server/auth-utils.sever";
-import { authenticator } from "~/services/auth.server";
-import { prisma } from "~/services/db/db.server";
-import { commitSession, getSession } from "~/services/session.server";
+} from "@remix-run/node"
+import {
+  Form,
+  MetaFunction,
+  NavLink,
+  useActionData,
+  useNavigation,
+} from "@remix-run/react"
+import { z } from "zod"
+
+import GoogleLogo from "@/lib/assets/logos/google"
+import { sendVerificationCode } from "@/lib/server/auth-utils.sever"
+import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 const schema = z.object({
   email: z
     .string({ required_error: "Email is required" })
     .email("Email is invalid"),
   password: z.string().min(8, "min check failed"),
-
-  // tocAccepted: z.string({
-  //   required_error: "You must accept the terms & conditions",
-  // }),
-});
+})
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /dashboard directly
   return await authenticator.isAuthenticated(request, {
     successRedirect: "/",
-  });
+  })
 }
 
+export const meta: MetaFunction = mergeMeta(
+  // these will override the parent meta
+  () => {
+    return [{ title: "Login" }]
+  }
+)
+
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const clonedRequest = request.clone();
-  const formData = await clonedRequest.formData();
+  const clonedRequest = request.clone()
+  const formData = await clonedRequest.formData()
 
   const submission = await parse(formData, {
     schema: schema.superRefine(async (data, ctx) => {
@@ -48,22 +59,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           email: data.email,
         },
         select: { id: true },
-      });
+      })
 
       if (!existingUser) {
         ctx.addIssue({
           path: ["email"],
           code: z.ZodIssueCode.custom,
           message: "Password and email does not match",
-        });
-        return;
+        })
+        return
       }
     }),
     async: true,
-  });
+  })
 
   if (!submission.value || submission.intent !== "submit") {
-    return json(submission);
+    return json(submission)
   }
 
   try {
@@ -73,31 +84,31 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         ...submission.value,
         type: "login",
       },
-    });
+    })
 
-    let session = await getSession(request.headers.get("cookie"));
+    let session = await getSession(request.headers.get("cookie"))
     // and store the user data
-    session.set(authenticator.sessionKey, user);
+    session.set(authenticator.sessionKey, user)
 
-    let headers = new Headers({ "Set-Cookie": await commitSession(session) });
+    let headers = new Headers({ "Set-Cookie": await commitSession(session) })
 
     // Todo: make redirect config driven e.g add login success route
     if (user.emailVerified) {
-      return redirect("/dashboard", { headers });
+      return redirect("/dashboard", { headers })
     }
-    await sendVerificationCode(user);
-    return redirect("/verify-email", { headers });
+    await sendVerificationCode(user)
+    return redirect("/verify-email", { headers })
   } catch (error) {
     // TODO: fix type here
     // TODO: create constant for message type of auth errors
-    const typedError = error as any;
+    const typedError = error as any
 
     switch (typedError.message) {
       case "INVALID_PASSWORD":
         return {
           ...submission,
           error: { email: ["Email and passwords dont match"] },
-        };
+        }
       case "GOOGLE_SIGNUP":
         return {
           ...submission,
@@ -106,18 +117,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
               "You signed up with google sign in please use same method to login",
             ],
           },
-        };
+        }
       default:
-        return null;
+        return null
     }
   }
-};
+}
 
 export default function Login() {
-  const navigation = useNavigation();
-  const isFormSubmitting = navigation.state === "submitting";
-  const lastSubmission = useActionData<typeof action>();
-  const id = useId();
+  const navigation = useNavigation()
+  const isFormSubmitting = navigation.state === "submitting"
+  const lastSubmission = useActionData<typeof action>()
+  const id = useId()
 
   const [form, { email, password }] = useForm({
     id,
@@ -125,9 +136,9 @@ export default function Login() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
     onValidate({ formData }) {
-      return parse(formData, { schema });
+      return parse(formData, { schema })
     },
-  });
+  })
   return (
     <>
       <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
@@ -182,7 +193,7 @@ export default function Login() {
                 type="submit"
                 variant="outline"
               >
-                <span className="flex space-x-2 items-center">
+                <span className="flex items-center space-x-2">
                   <GoogleLogo height={18} /> <span>Sign in with Google</span>
                 </span>
               </Button>
@@ -191,7 +202,7 @@ export default function Login() {
         </Form>
 
         <div className="mt-5 flex justify-between">
-          <p className="text-sm text-muted-foreground flex-grow">
+          <p className="flex-grow text-sm text-muted-foreground">
             Not a member?{" "}
             <NavLink to="/signup">
               <Button size="sm" variant="link" className="px-1">
@@ -207,5 +218,5 @@ export default function Login() {
         </div>
       </div>
     </>
-  );
+  )
 }

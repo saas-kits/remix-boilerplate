@@ -9,7 +9,8 @@
     "dev": "remix dev --manual",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@conform-to/react": "^0.9.1",
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.4.11",
+    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@remix-run/dev": "^2.3.1",
     "@remix-run/eslint-config": "^2.3.1",
     "@types/lodash": "^4.14.202",
@@ -62,6 +64,10 @@
     "@types/react-dom": "^18.2.7",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.38.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "3.1.1",
+    "prettier-plugin-tailwindcss": "^0.5.9",
     "remix-flat-routes": "^0.6.2",
     "tailwindcss": "^3.3.5",
     "tsx": "^4.6.2",
@@ -69,5 +75,10 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "lint-staged":{
+    "**/*.{js,jsx,ts,tsx}":[
+      "npx prettier --write"
+    ]
   }
 }

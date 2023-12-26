@@ -1,5 +1,5 @@
-import type { Plan, Prisma } from "@prisma/client";
-import { prisma } from "~/services/db/db.server";
+import { prisma } from "@/services/db/db.server"
+import type { Plan, Prisma } from "@prisma/client"
 
 export const getPlanById = async (
   id: Plan["id"],
@@ -7,15 +7,15 @@ export const getPlanById = async (
 ) => {
   return await prisma.plan.findUnique({
     where: { id },
-  });
-};
+  })
+}
 
 export const getAllPlans = async () => {
   return await prisma.plan.findMany({
     where: { isActive: true },
     include: { prices: true },
-  });
-};
+  })
+}
 
 export const getPlanByIdWithPrices = async (id: Plan["id"]) => {
   return await prisma.plan.findUnique({
@@ -23,8 +23,8 @@ export const getPlanByIdWithPrices = async (id: Plan["id"]) => {
     include: {
       prices: true,
     },
-  });
-};
+  })
+}
 
 export const getFreePlan = async () => {
   return await prisma.plan.findFirst({
@@ -32,8 +32,8 @@ export const getFreePlan = async () => {
     include: {
       prices: true,
     },
-  });
-};
+  })
+}
 
 export const getPlanByStripeId = async (stripePlanId: Plan["stripePlanId"]) => {
   return await prisma.plan.findFirst({
@@ -41,5 +41,5 @@ export const getPlanByStripeId = async (stripePlanId: Plan["stripePlanId"]) => {
     include: {
       prices: true,
     },
-  });
-};
+  })
+}

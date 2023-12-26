@@ -1,29 +1,44 @@
-import type { FieldConfig } from "@conform-to/react";
-import { conform, useForm, useInputEvent } from "@conform-to/react";
-import { parse } from "@conform-to/zod";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { useId, useRef } from "react"
+import { authenticator } from "@/services/auth.server"
+import { prisma } from "@/services/db/db.server"
+import type { FieldConfig } from "@conform-to/react"
+import { conform, useForm, useInputEvent } from "@conform-to/react"
+import { parse } from "@conform-to/zod"
+import { ReloadIcon } from "@radix-ui/react-icons"
 import {
   json,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
-} from "@remix-run/node";
-import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
-import { useId, useRef } from "react";
-import { z } from "zod";
-import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import GoogleLogo from "~/lib/assets/logos/google";
-import { authenticator } from "~/services/auth.server";
-import { prisma } from "~/services/db/db.server";
+} from "@remix-run/node"
+import {
+  Form,
+  MetaFunction,
+  NavLink,
+  useActionData,
+  useNavigation,
+} from "@remix-run/react"
+import { z } from "zod"
+
+import GoogleLogo from "@/lib/assets/logos/google"
+import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /dashboard directly
   return await authenticator.isAuthenticated(request, {
     successRedirect: "/",
-  });
+  })
 }
+
+export const meta: MetaFunction = mergeMeta(
+  // these will override the parent meta
+  () => {
+    return [{ title: "Sign up" }]
+  }
+)
 
 const schema = z
   .object({
@@ -43,11 +58,11 @@ const schema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
-  });
+  })
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const clonedRequest = request.clone();
-  const formData = await clonedRequest.formData();
+  const clonedRequest = request.clone()
+  const formData = await clonedRequest.formData()
 
   const submission = await parse(formData, {
     schema: schema.superRefine(async (data, ctx) => {
@@ -56,36 +71,36 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           email: data.email,
         },
         select: { id: true },
-      });
+      })
 
       if (existingUser) {
         ctx.addIssue({
           path: ["email"],
           code: z.ZodIssueCode.custom,
           message: "A user already exists with this email",
-        });
-        return;
+        })
+        return
       }
     }),
     async: true,
-  });
+  })
 
   if (!submission.value || submission.intent !== "submit") {
-    return json(submission);
+    return json(submission)
   }
 
   return authenticator.authenticate("user-pass", request, {
     successRedirect: "/verify-email",
     throwOnError: true,
     context: { ...submission.value, type: "signup", tocAccepted: true },
-  });
-};
+  })
+}
 
 export default function Signup() {
-  const navigation = useNavigation();
-  const isFormSubmitting = navigation.state === "submitting";
-  const lastSubmission = useActionData<typeof action>();
-  const id = useId();
+  const navigation = useNavigation()
+  const isFormSubmitting = navigation.state === "submitting"
+  const lastSubmission = useActionData<typeof action>()
+  const id = useId()
 
   const [form, { email, fullName, password, confirmPassword, tocAccepted }] =
     useForm({
@@ -94,9 +109,9 @@ export default function Signup() {
       shouldValidate: "onBlur",
       shouldRevalidate: "onInput",
       onValidate({ formData }) {
-        return parse(formData, { schema });
+        return parse(formData, { schema })
       },
-    });
+    })
 
   return (
     <>
@@ -178,7 +193,7 @@ export default function Signup() {
                   Accept terms and conditions
                 </label>
               </div>
-              <div className="text-error text-sm mt-1">{tocAccepted.error}</div>
+              <div className="mt-1 text-sm text-error">{tocAccepted.error}</div>
             </div>
 
             <div className="space-y-4">
@@ -199,7 +214,7 @@ export default function Signup() {
                   type="submit"
                   variant="outline"
                 >
-                  <span className="flex space-x-2 items-center">
+                  <span className="flex items-center space-x-2">
                     <GoogleLogo height={18} /> <span>Sign up with Google</span>
                   </span>
                 </Button>
@@ -209,7 +224,7 @@ export default function Signup() {
         </Form>
 
         <div className="mt-5 flex justify-center">
-          <p className="text-sm text-muted-foreground flex-grow text-center">
+          <p className="flex-grow text-center text-sm text-muted-foreground">
             Already a member?{" "}
             <NavLink to="/login">
               <Button size="sm" variant="link" className="px-1">
@@ -220,16 +235,16 @@ export default function Signup() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
 function CustomCheckbox({ ...config }: FieldConfig<string>) {
-  const shadowInputRef = useRef<HTMLInputElement>(null);
+  const shadowInputRef = useRef<HTMLInputElement>(null)
   const control = useInputEvent({
     ref: shadowInputRef,
-  });
+  })
   // The type of the ref might be different depends on the UI library
-  const customInputRef = useRef<HTMLButtonElement>(null);
+  const customInputRef = useRef<HTMLButtonElement>(null)
 
   return (
     <>
@@ -248,5 +263,5 @@ function CustomCheckbox({ ...config }: FieldConfig<string>) {
         onFocus={() => customInputRef.current?.focus()}
       />
     </>
-  );
+  )
 }

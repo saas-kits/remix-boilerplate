@@ -1,64 +1,78 @@
-import { conform, useForm } from "@conform-to/react";
-import { parse } from "@conform-to/zod";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { useId } from "react"
+import { authenticator } from "@/services/auth.server"
+import { prisma } from "@/services/db/db.server"
+import { conform, useForm } from "@conform-to/react"
+import { parse } from "@conform-to/zod"
+import { ReloadIcon } from "@radix-ui/react-icons"
 import {
   json,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
-} from "@remix-run/node";
-import { Form, useActionData, useNavigation } from "@remix-run/react";
-import { useId } from "react";
-import { z } from "zod";
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { sendResetPasswordLink } from "~/lib/server/auth-utils.sever";
-import { authenticator } from "~/services/auth.server";
-import { prisma } from "~/services/db/db.server";
+} from "@remix-run/node"
+import {
+  Form,
+  MetaFunction,
+  useActionData,
+  useNavigation,
+} from "@remix-run/react"
+import { z } from "zod"
+
+import { sendResetPasswordLink } from "@/lib/server/auth-utils.sever"
+import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 const schema = z.object({
   email: z
     .string({ required_error: "Email is required" })
     .email("Email is invalid"),
-});
+})
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /dashboard directly
   return await authenticator.isAuthenticated(request, {
     successRedirect: "/",
-  });
+  })
 }
 
+export const meta: MetaFunction = mergeMeta(
+  // these will override the parent meta
+  () => {
+    return [{ title: "Forgot Password" }]
+  }
+)
+
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
+  const formData = await request.formData()
 
   const submission = await parse(formData, {
     schema,
-  });
+  })
 
   if (!submission.value || submission.intent !== "submit") {
-    console.log(JSON.stringify(submission));
-    return json({ ...submission, emailSent: false });
+    console.log(JSON.stringify(submission))
+    return json({ ...submission, emailSent: false })
   }
 
   const user = await prisma.user.findFirst({
     where: {
       email: submission.value.email,
     },
-  });
+  })
 
   if (user) {
-    await sendResetPasswordLink(user);
-    return json({ ...submission, emailSent: true } as const);
+    await sendResetPasswordLink(user)
+    return json({ ...submission, emailSent: true } as const)
   }
-};
+}
 
 export default function ForgotPassword() {
-  const navigation = useNavigation();
-  const isFormSubmitting = navigation.state === "submitting";
-  const lastSubmission = useActionData<typeof action>();
-  const id = useId();
+  const navigation = useNavigation()
+  const isFormSubmitting = navigation.state === "submitting"
+  const lastSubmission = useActionData<typeof action>()
+  const id = useId()
 
   const [form, { email }] = useForm({
     id,
@@ -66,9 +80,9 @@ export default function ForgotPassword() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
     onValidate({ formData }) {
-      return parse(formData, { schema });
+      return parse(formData, { schema })
     },
-  });
+  })
 
   return (
     <>
@@ -106,7 +120,7 @@ export default function ForgotPassword() {
           </Form>
         </div>
       ) : (
-        <div className="max-w-lg mx-auto mt-6">
+        <div className="mx-auto mt-6 max-w-lg">
           <Alert>
             <AlertTitle>Link sent successfully!</AlertTitle>
             <AlertDescription>
@@ -117,5 +131,5 @@ export default function ForgotPassword() {
         </div>
       )}
     </>
-  );
+  )
 }

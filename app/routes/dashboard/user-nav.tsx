@@ -1,7 +1,7 @@
-import { useFetcher, useRouteLoaderData } from "@remix-run/react";
-import { type loader as dashboardLoader } from "./route";
-import { Avatar, AvatarFallback } from "~/components/ui/avatar";
-import { Button } from "~/components/ui/button";
+import { useFetcher, useRouteLoaderData } from "@remix-run/react"
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,13 +10,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
+
+import { type loader as dashboardLoader } from "./route"
 
 export function UserNav() {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher()
   const data = useRouteLoaderData<typeof dashboardLoader>(
     "routes/dashboard/route"
-  );
+  )
   return (
     <>
       <DropdownMenu>
@@ -58,5 +60,5 @@ export function UserNav() {
         </DropdownMenuContent>
       </DropdownMenu>
     </>
-  );
+  )
 }

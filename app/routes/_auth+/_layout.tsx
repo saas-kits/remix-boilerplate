@@ -1,12 +1,12 @@
-import { Outlet } from "@remix-run/react";
+import { Outlet } from "@remix-run/react"
 
 export default function Layout() {
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm flex justify-center flex-col items-center">
+        <div className="flex flex-col items-center justify-center sm:mx-auto sm:w-full sm:max-w-sm">
           {/* TODO: figure out better way to use light and dark logos */}
-          <div className="flex space-x-2 items-center">
+          <div className="flex items-center space-x-2">
             <svg
               id="logo-36"
               className="h-6 w-6"
@@ -19,12 +19,12 @@ export default function Layout() {
                 fill="currentColor"
               ></path>
             </svg>
-            <span className="font-semibold text-xl">RemixKits</span>
+            <span className="text-xl font-semibold">RemixKits</span>
           </div>
 
           <Outlet />
         </div>
       </div>
     </>
-  );
+  )
 }

@@ -1,17 +1,19 @@
-import type { Stripe } from "stripe";
-import type { Plan, Price, User } from "@prisma/client";
-import { stripe } from "./setup.server";
-import { PLAN_TYPES, type PLAN_INTERVALS } from "./plans.config";
-import { brandConfig } from "~/lib/brand/config";
+import type { Plan, Price, User } from "@prisma/client"
+import type { Stripe } from "stripe"
+
+import { brandConfig } from "@/lib/brand/config"
+
+import { PLAN_TYPES, type PLAN_INTERVALS } from "./plans.config"
+import { stripe } from "./setup.server"
 
 export const createStripeProduct = async (plan: Partial<Plan>) => {
   const product = await stripe.products.create({
     name: plan.name || "",
     description: plan.description || undefined,
-  });
+  })
 
-  return product;
-};
+  return product
+}
 
 export const createStripePrice = async (
   id: Plan["id"],
@@ -26,8 +28,8 @@ export const createStripePrice = async (
     recurring: {
       interval: (price.interval as PLAN_INTERVALS) || "month",
     },
-  });
-};
+  })
+}
 
 export const createStripeCustomer = async (
   { email, fullName }: Partial<User>,
@@ -37,15 +39,15 @@ export const createStripeCustomer = async (
     email,
     name: fullName,
     metadata: metadata,
-  });
-};
+  })
+}
 
 export const createStripeSubscription = async (
   customerId: User["customerId"],
   priceId: Price["id"]
 ) => {
   if (!customerId) {
-    throw new Error("Stripe Customer ID is required");
+    throw new Error("Stripe Customer ID is required")
   }
   return await stripe.subscriptions.create({
     customer: customerId,
@@ -54,8 +56,8 @@ export const createStripeSubscription = async (
         price: priceId,
       },
     ],
-  });
-};
+  })
+}
 
 export const setupStripeCustomerPortal = async (
   products: Stripe.BillingPortal.ConfigurationCreateParams.Features.SubscriptionUpdate.Product[]
@@ -88,10 +90,10 @@ export const setupStripeCustomerPortal = async (
     business_profile: {
       headline: `${brandConfig.name} - Manage your subscription`,
     },
-  });
+  })
 
-  return portal;
-};
+  return portal
+}
 
 export const createStripeCheckoutSession = async (
   customerId: User["customerId"],
@@ -111,10 +113,10 @@ export const createStripeCheckoutSession = async (
     ],
     success_url: successUrl,
     cancel_url: cancelUrl,
-  });
+  })
 
-  return session;
-};
+  return session
+}
 
 export const createStripeCustomerPortalSession = async (
   customerId: User["customerId"],
@@ -123,11 +125,10 @@ export const createStripeCustomerPortalSession = async (
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId as string,
     return_url: returnUrl,
-  });
+  })
 
-  return session;
+  return session
 }
-
 
 export const createSingleStripeCheckoutSession = async (
   customerId: User["customerId"],
@@ -147,7 +148,7 @@ export const createSingleStripeCheckoutSession = async (
     ],
     success_url: successUrl,
     cancel_url: cancelUrl,
-  });
+  })
 
-  return session;
+  return session
 }

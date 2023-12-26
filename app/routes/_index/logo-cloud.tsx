@@ -3,15 +3,15 @@ export function LogoCloud() {
     <>
       <div className="pb-12 sm:pb-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <h1 className="text-center text-xl leading-7 max-w-3xl mx-auto mb-10 wrap-balance text-gray-700 dark:text-gray-400">
+          <h1 className="wrap-balance mx-auto mb-10 max-w-3xl text-center text-xl leading-7 text-gray-700 dark:text-gray-400">
             Tech stack that enables you to ship products
           </h1>
 
-          <div className="mx-auto mt-10 grid max-w-lg grid-cols-2 sm:grid-cols-3 items-center gap-x-8 gap-y-12 sm:max-w-xl lg::grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-6">
-            <div className="flex items-center justify-center brightness-0 opacity-70 invert-0 dark:invert hover:filter-none hover:opacity-100">
+          <div className="lg::grid-cols-6 mx-auto mt-10 grid max-w-lg grid-cols-2 items-center gap-x-8 gap-y-12 sm:max-w-xl sm:grid-cols-3 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-6">
+            <div className="flex items-center justify-center opacity-70 brightness-0 invert-0 hover:opacity-100 hover:filter-none dark:invert">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-10 md:h-12 text-black dark:text-white"
+                className="h-10 text-black dark:text-white md:h-12"
                 viewBox="0 0 800 800"
                 fill="none"
               >
@@ -29,7 +29,7 @@ export function LogoCloud() {
             </div>
 
             {/* Tailwind logo */}
-            <div className="flex items-center justify-center brightness-0 opacity-70 invert-0 dark:invert hover:filter-none hover:opacity-100 transition-all duration-200">
+            <div className="flex items-center justify-center opacity-70 brightness-0 invert-0 transition-all duration-200 hover:opacity-100 hover:filter-none dark:invert">
               <svg
                 className="h-8"
                 xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +53,7 @@ export function LogoCloud() {
             </div>
 
             {/* Mongo logo */}
-            <div className="flex items-center brightness-0 opacity-70 invert-0 dark:invert hover:filter-none hover:opacity-100 justify-center">
+            <div className="flex items-center justify-center opacity-70 brightness-0 invert-0 hover:opacity-100 hover:filter-none dark:invert">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-8"
@@ -100,7 +100,7 @@ export function LogoCloud() {
             </div>
 
             {/* Prisma logo */}
-            <div className="flex items-center justify-center brightness-0 opacity-70 invert-0 dark:invert hover:filter-none hover:opacity-100 transition-all duration-200">
+            <div className="flex items-center justify-center opacity-70 brightness-0 invert-0 transition-all duration-200 hover:opacity-100 hover:filter-none dark:invert">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-8 md:h-9"
@@ -117,7 +117,7 @@ export function LogoCloud() {
             </div>
 
             {/* Stripe logo */}
-            <div className="flex items-center justify-center brightness-0 opacity-70 invert-0 dark:invert hover:filter-none hover:opacity-100 transition-all duration-200">
+            <div className="flex items-center justify-center opacity-70 brightness-0 invert-0 transition-all duration-200 hover:opacity-100 hover:filter-none dark:invert">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 xmlSpace="preserve"
@@ -136,7 +136,7 @@ export function LogoCloud() {
             </div>
 
             {/* Resend Logo */}
-            <div className="flex items-center justify-center brightness-0 opacity-70 invert-0 dark:invert hover:filter-none hover:opacity-100 transition-all duration-200">
+            <div className="flex items-center justify-center opacity-70 brightness-0 invert-0 transition-all duration-200 hover:opacity-100 hover:filter-none dark:invert">
               <svg
                 className="h-5 text-black dark:text-white"
                 viewBox="0 0 65 16"
@@ -173,5 +173,5 @@ export function LogoCloud() {
         </div>
       </div>
     </>
-  );
+  )
 }
