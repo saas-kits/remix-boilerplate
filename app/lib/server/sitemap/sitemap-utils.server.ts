@@ -5,8 +5,6 @@ import isEqual from "lodash-es/isEqual.js"
 
 import type { SEOHandle, SitemapEntry } from "./types.ts"
 
-console.log({ isEqual })
-
 type Options = {
   siteUrl: string
 }
