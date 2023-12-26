@@ -1,6 +1,7 @@
 import type { Plan, Price, User } from "@prisma/client"
-import { brandConfig } from "~/lib/brand/config"
 import type { Stripe } from "stripe"
+
+import { brandConfig } from "@/lib/brand/config"
 
 import { PLAN_TYPES, type PLAN_INTERVALS } from "./plans.config"
 import { stripe } from "./setup.server"

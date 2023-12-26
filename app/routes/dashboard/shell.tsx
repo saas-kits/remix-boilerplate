@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { HamburgerMenuIcon } from "@radix-ui/react-icons"
-import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet"
+
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 import { Sidebar } from "./sidebar"
 import { SidebarContext } from "./sidebar.context"

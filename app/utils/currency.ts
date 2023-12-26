@@ -1,4 +1,4 @@
-import { CURRENCIES } from "~/services/stripe/plans.config"
+import { CURRENCIES } from "@/services/stripe/plans.config"
 import { getClientLocales } from "remix-utils/locales/server"
 
 export const getUserCurrencyFromRequest = (request: Request) => {

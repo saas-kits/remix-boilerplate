@@ -3,8 +3,9 @@ import {
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/node"
-import { mergeMeta } from "~/lib/server/seo/seo-helpers"
-import buildTags from "~/lib/server/seo/seo-utils"
+
+import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import buildTags from "@/lib/server/seo/seo-utils"
 
 import Faqs from "./faq"
 import { FeatureSection } from "./feature-section"

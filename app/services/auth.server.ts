@@ -1,12 +1,13 @@
 // app/services/auth.server.ts
 import { randomBytes, scrypt, timingSafeEqual } from "crypto"
+import { sessionStorage } from "@/services/session.server"
 import type { User } from "@prisma/client"
-import { sendVerificationCode } from "~/lib/server/auth-utils.sever"
-import { sessionStorage } from "~/services/session.server"
 import { Authenticator } from "remix-auth"
 import { FormStrategy } from "remix-auth-form"
 import { GoogleStrategy } from "remix-auth-google"
 import { z } from "zod"
+
+import { sendVerificationCode } from "@/lib/server/auth-utils.sever"
 
 import { prisma } from "./db/db.server"
 

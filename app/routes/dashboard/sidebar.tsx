@@ -1,7 +1,8 @@
 import { useContext } from "react"
 import { NavLink } from "@remix-run/react"
-import { Button } from "~/components/ui/button"
-import { cn } from "~/lib/utils"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
 import { SidebarContext } from "./sidebar.context"
 

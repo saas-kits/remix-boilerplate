@@ -1,5 +1,5 @@
+import { prisma } from "@/services/db/db.server"
 import type { Plan, Prisma } from "@prisma/client"
-import { prisma } from "~/services/db/db.server"
 
 export const getPlanById = async (
   id: Plan["id"],

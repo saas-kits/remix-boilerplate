@@ -1,4 +1,6 @@
 import { useId } from "react"
+import { authenticator, hash } from "@/services/auth.server"
+import { prisma } from "@/services/db/db.server"
 import { conform, useForm } from "@conform-to/react"
 import { parse } from "@conform-to/zod"
 import { ReloadIcon } from "@radix-ui/react-icons"
@@ -9,16 +11,15 @@ import {
   type LoaderFunctionArgs,
 } from "@remix-run/node"
 import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react"
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
-import { Button } from "~/components/ui/button"
-import { Input } from "~/components/ui/input"
-import { Label } from "~/components/ui/label"
-import { validatePasswordResetToken } from "~/lib/server/auth-utils.sever"
-import { mergeMeta } from "~/lib/server/seo/seo-helpers"
-import { authenticator, hash } from "~/services/auth.server"
-import { prisma } from "~/services/db/db.server"
 import { AlertCircle } from "lucide-react"
 import { z } from "zod"
+
+import { validatePasswordResetToken } from "@/lib/server/auth-utils.sever"
+import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 const schema = z
   .object({
