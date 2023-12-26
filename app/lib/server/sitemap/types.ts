@@ -1,6 +1,6 @@
 export type SitemapEntry = {
-  route: string;
-  lastmod?: string;
+  route: string
+  lastmod?: string
   changefreq?:
     | "always"
     | "hourly"
@@ -8,9 +8,9 @@ export type SitemapEntry = {
     | "weekly"
     | "monthly"
     | "yearly"
-    | "never";
-  priority?: 0.0 | 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1.0;
-};
+    | "never"
+  priority?: 0.0 | 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1.0
+}
 
 export type SEOHandle = {
   getSitemapEntries?: (
@@ -18,10 +18,10 @@ export type SEOHandle = {
   ) =>
     | Promise<Array<SitemapEntry | null> | null>
     | Array<SitemapEntry | null>
-    | null;
-};
+    | null
+}
 
 export type SEOOptions = {
-  siteUrl: string;
-  headers?: HeadersInit;
-};
+  siteUrl: string
+  headers?: HeadersInit
+}

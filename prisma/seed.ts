@@ -1,22 +1,24 @@
-import { PrismaClient } from "@prisma/client";
-import { DEFAULT_PLANS } from "~/services/stripe/plans.config";
-import { createStripePrice, createStripeProduct, setupStripeCustomerPortal } from "~/services/stripe/stripe.server";
+import { PrismaClient } from "@prisma/client"
+import { DEFAULT_PLANS } from "~/services/stripe/plans.config"
+import {
+  createStripePrice,
+  createStripeProduct,
+  setupStripeCustomerPortal,
+} from "~/services/stripe/stripe.server"
+import type { Stripe } from "stripe"
 
-import type { Stripe } from 'stripe'
-
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 const seed = async () => {
-  const plans = await prisma.plan.findMany();
+  const plans = await prisma.plan.findMany()
 
   if (plans.length) {
-    console.log("Plans already seeded");
-    return;
+    console.log("Plans already seeded")
+    return
   }
 
-  const planPromises  = Object.values(DEFAULT_PLANS).map(async (plan) => {
-    const { limits, prices, name, description, isActive, listOfFeatures, } =
-      plan;
+  const planPromises = Object.values(DEFAULT_PLANS).map(async (plan) => {
+    const { limits, prices, name, description, isActive, listOfFeatures } = plan
 
     const pricesByInterval = Object.entries(prices).flatMap(
       ([interval, price]) => {
@@ -24,17 +26,16 @@ const seed = async () => {
           interval,
           currency,
           amount,
-        }));
+        }))
       }
-    );
+    )
 
     const stripeProduct = await createStripeProduct({
       name,
       description,
-    });
-    console.log(JSON.stringify(pricesByInterval, null, 2));
+    })
+    console.log(JSON.stringify(pricesByInterval, null, 2))
 
-      
     const stripePrices = await Promise.all(
       pricesByInterval.map((price) =>
         createStripePrice(stripeProduct.id, {
@@ -43,7 +44,7 @@ const seed = async () => {
           nickname: name,
         })
       )
-    );
+    )
 
     await prisma.plan.create({
       data: {
@@ -66,29 +67,28 @@ const seed = async () => {
           })),
         },
       },
-    });
+    })
 
     return {
       product: stripeProduct.id,
       prices: stripePrices.map((price) => price.id),
     }
-  });
+  })
 
-  const products: Stripe.BillingPortal.ConfigurationCreateParams.Features.SubscriptionUpdate.Product[] = await Promise.all(planPromises);
+  const products: Stripe.BillingPortal.ConfigurationCreateParams.Features.SubscriptionUpdate.Product[] =
+    await Promise.all(planPromises)
 
-  console.log(products);
+  console.log(products)
 
   //await setupStripeCustomerPortal(products);
-
-
-};
+}
 
 seed()
   .catch((e) => {
-    console.error(e);
-    process.exit(1);
+    console.error(e)
+    process.exit(1)
   })
   .finally(async () => {
-    console.log("Seeding done");
-    await prisma.$disconnect();
-  });
+    console.log("Seeding done")
+    await prisma.$disconnect()
+  })

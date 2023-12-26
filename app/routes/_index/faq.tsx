@@ -3,12 +3,12 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "~/components/ui/accordion";
+} from "~/components/ui/accordion"
 
 export default function Faqs() {
   return (
-    <div className="max-w-7xl mx-auto py-24 sm:py-32 px-6 lg:px-8">
-      <h1 className="text-4xl font-medium tracking-tight sm:text-5xl text-center wrap-balance">
+    <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+      <h1 className="wrap-balance text-center text-4xl font-medium tracking-tight sm:text-5xl">
         Frequently Asked{" "}
         <span className="bg-gradient-to-br from-white to-[hsla(0,0%,100%,.5)] bg-clip-text text-transparent">
           Questions
@@ -17,7 +17,7 @@ export default function Faqs() {
       <Accordion
         type="single"
         collapsible
-        className="w-full max-w-xl mx-auto mt-10"
+        className="mx-auto mt-10 w-full max-w-xl"
       >
         <AccordionItem value="item-1">
           <AccordionTrigger>Is it accessible?</AccordionTrigger>
@@ -41,5 +41,5 @@ export default function Faqs() {
         </AccordionItem>
       </Accordion>
     </div>
-  );
+  )
 }

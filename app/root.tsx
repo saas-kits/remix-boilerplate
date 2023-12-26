@@ -1,5 +1,9 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { cssBundleHref } from "@remix-run/css-bundle"
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -8,46 +12,43 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-} from "@remix-run/react";
-import styles from "./tailwind.css";
-import { themeSessionResolver } from "./services/session.server";
-import {
-  PreventFlashOnWrongTheme,
-  ThemeProvider,
-  useTheme,
-} from "remix-themes";
-import clsx from "clsx";
-import buildTags from "./lib/server/seo/seo-utils";
-import { getDefaultSeoTags } from "./lib/server/seo/seo-helpers";
+} from "@remix-run/react"
+import clsx from "clsx"
+import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from "remix-themes"
+
+import { getDefaultSeoTags } from "./lib/server/seo/seo-helpers"
+import buildTags from "./lib/server/seo/seo-utils"
+import { themeSessionResolver } from "./services/session.server"
+import styles from "./tailwind.css"
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+]
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return buildTags(getDefaultSeoTags("http://localhost:3000"));
-};
+  return buildTags(getDefaultSeoTags("http://localhost:3000"))
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { getTheme } = await themeSessionResolver(request);
+  const { getTheme } = await themeSessionResolver(request)
   return {
     theme: getTheme(),
-  };
+  }
 }
 
 export default function AppWithProviders() {
-  const data = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>()
   return (
     <ThemeProvider specifiedTheme={data.theme} themeAction="/action/set-theme">
       <App />
     </ThemeProvider>
-  );
+  )
 }
 
 export function App() {
-  const data = useLoaderData<typeof loader>();
-  const [theme] = useTheme();
+  const data = useLoaderData<typeof loader>()
+  const [theme] = useTheme()
   return (
     <html lang="en" className={clsx("h-full", theme)}>
       <head>
@@ -70,5 +71,5 @@ export function App() {
         <LiveReload />
       </body>
     </html>
-  );
+  )
 }

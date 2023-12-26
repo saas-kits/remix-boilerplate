@@ -1,7 +1,4 @@
-import type {
-  MetaDescriptor,
-  MetaFunction,
-} from "@remix-run/node";
+import type { MetaDescriptor, MetaFunction } from "@remix-run/node"
 
 export const getDefaultSeoTags = (baseUrl: string) => {
   return {
@@ -20,9 +17,8 @@ export const getDefaultSeoTags = (baseUrl: string) => {
         },
       ],
     },
-  };
-};
-
+  }
+}
 
 /**
  * How to user mergeMeta function
@@ -37,12 +33,12 @@ export const mergeMeta = (
     // get meta from parent routes
     let mergedMeta = arg.matches.reduceRight((acc, match) => {
       if (match.meta.length > 0 && acc.length == 0)
-        return acc.concat(match.meta || []);
-      return acc;
-    }, [] as MetaDescriptor[]);
+        return acc.concat(match.meta || [])
+      return acc
+    }, [] as MetaDescriptor[])
 
     // replace any parent meta with the same name or property with the override
-    let overrides = overrideFn(arg);
+    let overrides = overrideFn(arg)
     for (let override of overrides) {
       let index = mergedMeta.findIndex(
         (meta) =>
@@ -53,17 +49,17 @@ export const mergeMeta = (
             "property" in override &&
             meta.property === override.property) ||
           ("title" in meta && "title" in override)
-      );
+      )
       if (index !== -1) {
-        mergedMeta.splice(index, 1, override);
+        mergedMeta.splice(index, 1, override)
       }
     }
 
     // append any additional meta
     if (appendFn) {
-      mergedMeta = mergedMeta.concat(appendFn(arg));
+      mergedMeta = mergedMeta.concat(appendFn(arg))
     }
 
-    return mergedMeta;
-  };
-};
+    return mergedMeta
+  }
+}

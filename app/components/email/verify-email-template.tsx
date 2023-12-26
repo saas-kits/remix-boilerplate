@@ -6,10 +6,10 @@ import {
   Hr,
   Html,
   Preview,
-} from "@react-email/components";
+} from "@react-email/components"
 
 interface VerificationEmailProps {
-  validationCode?: string;
+  validationCode?: string
 }
 
 export const VerificationEmailTemplate = ({
@@ -26,21 +26,21 @@ export const VerificationEmailTemplate = ({
       </Container>
     </Body>
   </Html>
-);
+)
 
-export default VerificationEmailTemplate;
+export default VerificationEmailTemplate
 
 const main = {
   backgroundColor: "#ffffff",
   fontFamily:
     '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
-};
+}
 
 const container = {
   margin: "0 auto",
   padding: "20px 0 48px",
   width: "560px",
-};
+}
 
 const heading = {
   fontSize: "24px",
@@ -49,12 +49,12 @@ const heading = {
   fontWeight: "400",
   color: "#484848",
   padding: "17px 0 0",
-};
+}
 
 const hr = {
   borderColor: "#dfe1e4",
   margin: "42px 0 26px",
-};
+}
 
 const code = {
   fontFamily: "monospace",
@@ -65,4 +65,4 @@ const code = {
   fontSize: "21px",
   borderRadius: "4px",
   color: "#3c4149",
-};
+}

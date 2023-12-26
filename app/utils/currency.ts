@@ -1,13 +1,13 @@
-import { getClientLocales } from "remix-utils/locales/server";
-import { CURRENCIES } from "~/services/stripe/plans.config";
+import { CURRENCIES } from "~/services/stripe/plans.config"
+import { getClientLocales } from "remix-utils/locales/server"
 
 export const getUserCurrencyFromRequest = (request: Request) => {
-  const locales = getClientLocales(request);
+  const locales = getClientLocales(request)
 
-  if (!locales) return CURRENCIES.USD;
-  const locale = locales[0] ?? "en-US";
+  if (!locales) return CURRENCIES.USD
+  const locale = locales[0] ?? "en-US"
 
-  const currency = locale == "en-US" ? CURRENCIES.USD : CURRENCIES.EUR;
+  const currency = locale == "en-US" ? CURRENCIES.USD : CURRENCIES.EUR
 
-  return currency;
-};
+  return currency
+}

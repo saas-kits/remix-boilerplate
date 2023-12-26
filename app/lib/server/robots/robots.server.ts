@@ -1,5 +1,5 @@
-import { RobotsPolicy, RobotsConfig } from "./types";
-import { getRobotsText } from "./robots-utils";
+import { getRobotsText } from "./robots-utils"
+import { RobotsConfig, RobotsPolicy } from "./types"
 
 const defaultPolicies: RobotsPolicy[] = [
   {
@@ -10,7 +10,7 @@ const defaultPolicies: RobotsPolicy[] = [
     type: "allow",
     value: "/",
   },
-];
+]
 
 export async function generateRobotsTxt(
   policies: RobotsPolicy[] = [],
@@ -18,15 +18,15 @@ export async function generateRobotsTxt(
 ) {
   const policiesToUse = appendOnDefaultPolicies
     ? [...defaultPolicies, ...policies]
-    : policies;
-  const robotText = await getRobotsText(policiesToUse);
-  const bytes = new TextEncoder().encode(robotText).byteLength;
-  
+    : policies
+  const robotText = await getRobotsText(policiesToUse)
+  const bytes = new TextEncoder().encode(robotText).byteLength
+
   return new Response(robotText, {
     headers: {
       ...headers,
       "Content-Type": "text/plain",
       "Content-Length": String(bytes),
     },
-  });
+  })
 }

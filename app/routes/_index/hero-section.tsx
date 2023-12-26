@@ -1,13 +1,14 @@
-import { Button } from "~/components/ui/button";
-import { SocialProof } from "./social-proof";
-import { Discountbadge } from "./discount-badge";
+import { Button } from "~/components/ui/button"
+
+import { Discountbadge } from "./discount-badge"
+import { SocialProof } from "./social-proof"
 
 export function HeroSection() {
   return (
-    <div className="relative flex flex-col justify-center items-center min-h-[70vh] pb-12 pt-12 md:pt-0">
-      <nav className="h-14 w-full absolute z-20 left-0 top-0 ">
-        <div className="flex justify-between h-full mx-auto max-w-7xl px-6 items-center">
-          <div className="flex space-x-2 items-center">
+    <div className="relative flex min-h-[70vh] flex-col items-center justify-center pb-12 pt-12 md:pt-0">
+      <nav className="absolute left-0 top-0 z-20 h-14 w-full ">
+        <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
+          <div className="flex items-center space-x-2">
             <svg
               id="logo-36"
               className="h-6 w-6"
@@ -20,7 +21,7 @@ export function HeroSection() {
                 fill="currentColor"
               ></path>
             </svg>
-            <span className="font-medium text-lg">RemixKits</span>
+            <span className="text-lg font-medium">RemixKits</span>
           </div>
           <div className="space-x-2">
             <Button variant="link">Pricing</Button>
@@ -47,7 +48,7 @@ export function HeroSection() {
                 stroke="hsla(259, 0%, 100%, 0.08)"
                 strokeWidth={0.1}
                 d="M10 0v20ZM0 10h20Z"
-                className="stroke-current text-border dark:text-[hsla(259, 0%, 100%, 0.08)]"
+                className="dark:text-[hsla(259, 0%, 100%, 0.08)] stroke-current text-border"
               />
             </pattern>
           </defs>
@@ -59,30 +60,30 @@ export function HeroSection() {
           />
         </svg>
 
-        <div className="mx-auto w-full max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-36 flex justify-start">
-          <div className="mx-auto max-w-7xl lg:max-w-3xl lg:pt-8 justify-start">
-            <div className="flex justify-center mt-16">
+        <div className="mx-auto flex w-full max-w-7xl justify-start px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-36">
+          <div className="mx-auto max-w-7xl justify-start lg:max-w-3xl lg:pt-8">
+            <div className="mt-16 flex justify-center">
               <Discountbadge />
             </div>
-            <h1 className="mt-6 text-4xl font-medium tracking-tight sm:text-6xl leading-tight sm:leading-[1.15] text-center wrap-balance bg-gradient-to-br bg-black dark:from-white dark:to-[hsla(0,0%,100%,.5)] bg-clip-text text-transparent">
+            <h1 className="wrap-balance mt-6 bg-black bg-gradient-to-br bg-clip-text text-center text-4xl font-medium leading-tight tracking-tight text-transparent dark:from-white dark:to-[hsla(0,0%,100%,.5)] sm:text-6xl sm:leading-[1.15]">
               Launch SaaS in Days not in months
             </h1>
-            <p className="mt-6 text-lg leading-7 font-light text-gray-700 dark:text-gray-400 text-center wrap-balance">
+            <p className="wrap-balance mt-6 text-center text-lg font-light leading-7 text-gray-700 dark:text-gray-400">
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum
               quisquam, iusto voluptatem dolore voluptas non laboriosam soluta
               quos quod eos! Sapiente archit
             </p>
-            <div className="mt-10 flex items-center gap-x-6 justify-center">
+            <div className="mt-10 flex items-center justify-center gap-x-6">
               <Button size="lg" className="px-16">
                 Get started
               </Button>
             </div>
-            <div className="flex justify-center mt-6">
+            <div className="mt-6 flex justify-center">
               <SocialProof />
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

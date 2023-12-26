@@ -1,4 +1,5 @@
-import * as React from "react";
+import * as React from "react"
+
 const GoogleLogo = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -30,5 +31,5 @@ const GoogleLogo = (props: React.SVGProps<SVGSVGElement>) => (
       </clipPath>
     </defs>
   </svg>
-);
-export default GoogleLogo;
+)
+export default GoogleLogo
