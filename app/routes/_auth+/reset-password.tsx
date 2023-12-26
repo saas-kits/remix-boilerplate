@@ -1,24 +1,24 @@
-import { conform, useForm } from "@conform-to/react";
-import { parse } from "@conform-to/zod";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { useId } from "react"
+import { conform, useForm } from "@conform-to/react"
+import { parse } from "@conform-to/zod"
+import { ReloadIcon } from "@radix-ui/react-icons"
 import {
   json,
+  MetaFunction,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
-  MetaFunction,
-} from "@remix-run/node";
-import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
-import { AlertCircle } from "lucide-react";
-import { useId } from "react";
-import { z } from "zod";
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { validatePasswordResetToken } from "~/lib/server/auth-utils.sever";
-import { mergeMeta } from "~/lib/server/seo/seo-helpers";
-import { authenticator, hash } from "~/services/auth.server";
-import { prisma } from "~/services/db/db.server";
+} from "@remix-run/node"
+import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react"
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
+import { Button } from "~/components/ui/button"
+import { Input } from "~/components/ui/input"
+import { Label } from "~/components/ui/label"
+import { validatePasswordResetToken } from "~/lib/server/auth-utils.sever"
+import { mergeMeta } from "~/lib/server/seo/seo-helpers"
+import { authenticator, hash } from "~/services/auth.server"
+import { prisma } from "~/services/db/db.server"
+import { AlertCircle } from "lucide-react"
+import { z } from "zod"
 
 const schema = z
   .object({
@@ -28,39 +28,39 @@ const schema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
-  });
+  })
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /dashboard directly
   return await authenticator.isAuthenticated(request, {
     successRedirect: "/",
-  });
+  })
 }
 
-export const meta: MetaFunction =  mergeMeta(
+export const meta: MetaFunction = mergeMeta(
   // these will override the parent meta
   () => {
-    return [{ title: "Reset Password" }];
-  },
-);
+    return [{ title: "Reset Password" }]
+  }
+)
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const url = new URL(request.url);
+  const url = new URL(request.url)
 
-  const code = url.searchParams.get("code");
+  const code = url.searchParams.get("code")
 
-  const formData = await request.formData();
+  const formData = await request.formData()
 
   const submission = await parse(formData, {
     schema,
-  });
+  })
 
   if (!code) {
-    return json({ ...submission, isLinkExpired: true, resetSuccess: false });
+    return json({ ...submission, isLinkExpired: true, resetSuccess: false })
   }
 
   if (!submission.value || submission.intent !== "submit") {
-    return json({ ...submission, isLinkExpired: false, resetSuccess: false });
+    return json({ ...submission, isLinkExpired: false, resetSuccess: false })
   }
 
   // TODO: check naming conventions
@@ -69,13 +69,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     where: {
       token: code,
     },
-  });
+  })
 
   if (resetToken) {
     try {
-      const userId = await validatePasswordResetToken(resetToken?.token);
+      const userId = await validatePasswordResetToken(resetToken?.token)
 
-      const hashedPassword = await hash(submission.value.password);
+      const hashedPassword = await hash(submission.value.password)
 
       await prisma.user.update({
         where: {
@@ -84,23 +84,23 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         data: {
           password: hashedPassword,
         },
-      });
+      })
 
-      return json({ ...submission, isLinkExpired: false, resetSuccess: true });
+      return json({ ...submission, isLinkExpired: false, resetSuccess: true })
     } catch (error) {
-      console.log({ error });
-      return json({ ...submission, isLinkExpired: true, resetSuccess: false });
+      console.log({ error })
+      return json({ ...submission, isLinkExpired: true, resetSuccess: false })
     }
   } else {
-    return json({ ...submission, isLinkExpired: true, resetSuccess: false });
+    return json({ ...submission, isLinkExpired: true, resetSuccess: false })
   }
-};
+}
 
 export default function ForgotPassword() {
-  const navigation = useNavigation();
-  const isFormSubmitting = navigation.state === "submitting";
-  const lastSubmission = useActionData<typeof action>();
-  const id = useId();
+  const navigation = useNavigation()
+  const isFormSubmitting = navigation.state === "submitting"
+  const lastSubmission = useActionData<typeof action>()
+  const id = useId()
 
   const [form, { password, confirmPassword }] = useForm({
     id,
@@ -108,9 +108,9 @@ export default function ForgotPassword() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
     onValidate({ formData }) {
-      return parse(formData, { schema });
+      return parse(formData, { schema })
     },
-  });
+  })
 
   if (lastSubmission?.isLinkExpired) {
     return (
@@ -131,7 +131,7 @@ export default function ForgotPassword() {
           </Alert>
         </div>
       </>
-    );
+    )
   }
   if (!lastSubmission?.isLinkExpired && !lastSubmission?.resetSuccess) {
     return (
@@ -178,7 +178,7 @@ export default function ForgotPassword() {
           </Form>
         </div>
       </>
-    );
+    )
   }
 
   if (lastSubmission?.resetSuccess) {
@@ -200,6 +200,6 @@ export default function ForgotPassword() {
           </Alert>
         </div>
       </>
-    );
+    )
   }
 }

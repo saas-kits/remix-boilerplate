@@ -24,9 +24,9 @@ export function SocialProof() {
           alt="Image Description"
         />
       </div>
-      <div className="text-xs text-gray-700 dark:text-gray-400 font-semibold">
+      <div className="text-xs font-semibold text-gray-700 dark:text-gray-400">
         Used by 20+ makers
       </div>
     </div>
-  );
+  )
 }

@@ -1,17 +1,18 @@
-import { Button } from "~/components/ui/button";
-import { cn } from "~/lib/utils";
-import { NavLink } from "@remix-run/react";
-import { useContext } from "react";
-import { SidebarContext } from "./sidebar.context";
+import { useContext } from "react"
+import { NavLink } from "@remix-run/react"
+import { Button } from "~/components/ui/button"
+import { cn } from "~/lib/utils"
+
+import { SidebarContext } from "./sidebar.context"
 
 type SidebarProps = {
-  className?: string;
-};
+  className?: string
+}
 
 export function Sidebar({ className }: SidebarProps) {
   return (
-    <div className={cn("relative pb-12 h-full", className)}>
-      <div className="h-14 flex px-5 space-x-2 items-center">
+    <div className={cn("relative h-full pb-12", className)}>
+      <div className="flex h-14 items-center space-x-2 px-5">
         {/* TODO: drive this logo using brand config */}
         <svg
           id="logo-36"
@@ -25,7 +26,7 @@ export function Sidebar({ className }: SidebarProps) {
             fill="currentColor"
           ></path>
         </svg>
-        <span className="font-medium text-lg">RemixKits</span>
+        <span className="text-lg font-medium">RemixKits</span>
       </div>
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
@@ -182,35 +183,35 @@ export function Sidebar({ className }: SidebarProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 type NavigationLinkProps = {
-  to: string;
-  children: React.ReactNode;
-};
+  to: string
+  children: React.ReactNode
+}
 
 const NavigationLink = ({ to, children }: NavigationLinkProps) => {
-  const { onNavLinkClick } = useContext(SidebarContext);
+  const { onNavLinkClick } = useContext(SidebarContext)
   return (
     <NavLink
       to={to}
       className="block"
       end
       onClick={() => {
-        onNavLinkClick?.();
+        onNavLinkClick?.()
       }}
     >
       {({ isActive }) => (
         <Button
           variant="ghost"
           className={cn("w-full justify-start", {
-            "bg-zinc-100 dark:bg-zinc-900 font-semibold": isActive,
+            "bg-zinc-100 font-semibold dark:bg-zinc-900": isActive,
           })}
         >
           {children}
         </Button>
       )}
     </NavLink>
-  );
-};
+  )
+}

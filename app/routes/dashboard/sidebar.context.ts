@@ -1,9 +1,9 @@
-import { createContext } from "react";
+import { createContext } from "react"
 
 type SidebarContextType = {
-  onNavLinkClick?: () => void;
-};
+  onNavLinkClick?: () => void
+}
 
 export const SidebarContext = createContext<SidebarContextType>({
   onNavLinkClick: () => null,
-});
+})

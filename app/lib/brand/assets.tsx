@@ -11,4 +11,4 @@ export const BRAND_ASSETS = {
       />
     </svg>
   ),
-} as const;
+} as const

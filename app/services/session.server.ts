@@ -1,6 +1,6 @@
 // app/services/session.server.ts
-import { createCookieSessionStorage } from "@remix-run/node";
-import { createThemeSessionResolver } from "remix-themes";
+import { createCookieSessionStorage } from "@remix-run/node"
+import { createThemeSessionResolver } from "remix-themes"
 
 // export the whole sessionStorage object
 export let sessionStorage = createCookieSessionStorage({
@@ -12,9 +12,9 @@ export let sessionStorage = createCookieSessionStorage({
     secrets: [process.env.SESSION_SECRET!], // replace this with an actual secret
     secure: process.env.NODE_ENV === "production", // enable this in prod only
   },
-});
+})
 
 // you can also export the methods individually for your own usage
-export let { getSession, commitSession, destroySession } = sessionStorage;
+export let { getSession, commitSession, destroySession } = sessionStorage
 
-export const themeSessionResolver = createThemeSessionResolver(sessionStorage);
+export const themeSessionResolver = createThemeSessionResolver(sessionStorage)

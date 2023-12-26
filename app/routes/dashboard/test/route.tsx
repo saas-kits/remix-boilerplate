@@ -1,3 +1,3 @@
 export default function TestPage() {
-  return <>Test Page</>;
+  return <>Test Page</>
 }

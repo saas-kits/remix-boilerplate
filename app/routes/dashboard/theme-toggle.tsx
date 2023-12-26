@@ -1,16 +1,15 @@
-import { Moon, Sun } from "lucide-react";
-import { Theme, useTheme } from "remix-themes";
-
+import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import { Button } from "~/components/ui/button";
+} from "~/components/ui/dropdown-menu"
+import { Moon, Sun } from "lucide-react"
+import { Theme, useTheme } from "remix-themes"
 
 export function ThemeToggle() {
-  const [, setTheme] = useTheme();
+  const [, setTheme] = useTheme()
 
   return (
     <DropdownMenu>
@@ -30,5 +29,5 @@ export function ThemeToggle() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

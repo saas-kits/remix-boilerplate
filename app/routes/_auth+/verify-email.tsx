@@ -1,42 +1,42 @@
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { ReloadIcon } from "@radix-ui/react-icons"
 import {
   json,
+  redirect,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
-  redirect,
-} from "@remix-run/node";
+} from "@remix-run/node"
 import {
   Form,
   MetaFunction,
   useActionData,
   useLoaderData,
   useNavigation,
-} from "@remix-run/react";
-import { z } from "zod";
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+} from "@remix-run/react"
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
+import { Button } from "~/components/ui/button"
+import { Input } from "~/components/ui/input"
+import { Label } from "~/components/ui/label"
 import {
   isWithinExpiration,
   sendVerificationCode,
-} from "~/lib/server/auth-utils.sever";
-import { mergeMeta } from "~/lib/server/seo/seo-helpers";
-import { authenticator } from "~/services/auth.server";
-import { prisma } from "~/services/db/db.server";
+} from "~/lib/server/auth-utils.sever"
+import { mergeMeta } from "~/lib/server/seo/seo-helpers"
+import { authenticator } from "~/services/auth.server"
+import { prisma } from "~/services/db/db.server"
+import { z } from "zod"
 
 const requestCodeSchema = z.object({
   email: z
     .string({ required_error: "This field is required" })
     .email("Invalid email"),
-});
+})
 
 const codeVerificationSchema = z.object({
   code: z.string({ required_error: "This field is required" }),
-});
+})
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await authenticator.isAuthenticated(request);
+  const user = await authenticator.isAuthenticated(request)
 
   if (user) {
     const result = await prisma.verificationCode.findFirst({
@@ -46,13 +46,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
       include: {
         user: true,
       },
-    });
+    })
 
     if (!result) {
       return json({
         codeAvailableWithUser: false,
         email: user.email,
-      });
+      })
     }
 
     if (!isWithinExpiration(result.expires)) {
@@ -60,43 +60,43 @@ export async function loader({ request }: LoaderFunctionArgs) {
         where: {
           userId: user.id,
         },
-      });
+      })
       return json({
         codeAvailableWithUser: false,
         email: user.email,
-      });
+      })
     }
 
     return json({
       codeAvailableWithUser: true,
       email: user.email,
-    });
+    })
   }
 
-  return redirect("/login");
+  return redirect("/login")
 }
 
-export const meta: MetaFunction =  mergeMeta(
+export const meta: MetaFunction = mergeMeta(
   // these will override the parent meta
   () => {
-    return [{ title: "Verify Email" }];
-  },
-);
+    return [{ title: "Verify Email" }]
+  }
+)
 
 type FormDataType = {
-  intent: "requestCode" | "verifyCode";
+  intent: "requestCode" | "verifyCode"
 } & z.infer<typeof requestCodeSchema> &
-  z.infer<typeof codeVerificationSchema>;
+  z.infer<typeof codeVerificationSchema>
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const clonedRequest = request.clone();
+  const clonedRequest = request.clone()
   const user = await authenticator.isAuthenticated(request, {
     failureRedirect: "/login",
-  });
+  })
 
   const formData = Object.fromEntries(
     await clonedRequest.formData()
-  ) as unknown as FormDataType;
+  ) as unknown as FormDataType
 
   switch (formData.intent) {
     case "verifyCode":
@@ -106,18 +106,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             where: {
               userId: user.id,
             },
-          });
+          })
 
           if (verificationCode?.code !== formData.code) {
             ctx.addIssue({
               path: ["code"],
               code: z.ZodIssueCode.custom,
               message: "Please enter a valid code",
-            });
-            return;
+            })
+            return
           }
         })
-        .safeParseAsync(formData);
+        .safeParseAsync(formData)
 
       if (requestCodeSubmission.success) {
         const updatedUser = await prisma.user.update({
@@ -127,50 +127,50 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           data: {
             emailVerified: true,
           },
-        });
+        })
 
         await prisma.verificationCode.deleteMany({
           where: {
             userId: user.id,
           },
-        });
+        })
 
-        console.log({ updatedUser });
-        return json({ verified: true });
+        console.log({ updatedUser })
+        return json({ verified: true })
       } else {
-        console.log("test", requestCodeSubmission.error.flatten());
+        console.log("test", requestCodeSubmission.error.flatten())
         return json({
           errors: requestCodeSubmission.error.flatten().fieldErrors,
-        });
+        })
       }
     case "requestCode":
-      const verifyCodeSubmission = requestCodeSchema.safeParse(formData);
+      const verifyCodeSubmission = requestCodeSchema.safeParse(formData)
       if (verifyCodeSubmission.success) {
-        console.log("link works too");
-        await sendVerificationCode(user);
-        return json({ verified: false });
+        console.log("link works too")
+        await sendVerificationCode(user)
+        return json({ verified: false })
       } else {
         return json({
           errors: verifyCodeSubmission.error.flatten().fieldErrors,
-        });
+        })
       }
     default:
-      break;
+      break
   }
-};
+}
 
 export default function VerifyEmail() {
-  const navigation = useNavigation();
-  const data = useLoaderData<typeof loader>();
-  const isFormSubmitting = navigation.state === "submitting";
+  const navigation = useNavigation()
+  const data = useLoaderData<typeof loader>()
+  const isFormSubmitting = navigation.state === "submitting"
   const actionData = useActionData<{
-    errors: { code: Array<string>; email: Array<string> };
-    verified?: boolean;
-  }>();
+    errors: { code: Array<string>; email: Array<string> }
+    verified?: boolean
+  }>()
 
   const isVerifiying =
     navigation.state === "submitting" &&
-    navigation.formData?.get("intent") === "verifyCode";
+    navigation.formData?.get("intent") === "verifyCode"
 
   if (actionData?.verified) {
     return (
@@ -182,7 +182,7 @@ export default function VerifyEmail() {
           </AlertDescription>
         </Alert>
       </div>
-    );
+    )
   }
 
   if (data.codeAvailableWithUser) {
@@ -221,7 +221,7 @@ export default function VerifyEmail() {
             </div>
           </Form>
           <div className="mt-5 flex">
-            <p className="text-sm text-gray-500 flex-grow text-center">
+            <p className="flex-grow text-center text-sm text-gray-500">
               Did not recieve code?
               <Form method="post">
                 <input
@@ -236,7 +236,7 @@ export default function VerifyEmail() {
                   type="email"
                   name="email"
                   readOnly
-                  className="cursor-none pointer-events-none"
+                  className="pointer-events-none cursor-none"
                   hidden
                 />
                 <Button type="submit" size="sm" variant="link" className="px-1">
@@ -247,7 +247,7 @@ export default function VerifyEmail() {
           </div>
         </div>
       </>
-    );
+    )
   }
 
   if (!data.codeAvailableWithUser) {
@@ -270,7 +270,7 @@ export default function VerifyEmail() {
                 name="email"
                 autoComplete="email"
                 readOnly
-                className="cursor-none pointer-events-none"
+                className="pointer-events-none cursor-none"
               />
             </div>
           </div>
@@ -289,6 +289,6 @@ export default function VerifyEmail() {
           </div>
         </Form>
       </div>
-    );
+    )
   }
 }

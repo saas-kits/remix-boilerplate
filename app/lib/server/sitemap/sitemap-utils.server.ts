@@ -1,23 +1,24 @@
 // This is adapted from https://github.com/kentcdodds/kentcdodds.com
 
-import type { ServerBuild } from "@remix-run/server-runtime";
-import type { SEOHandle, SitemapEntry } from "./types.ts";
-import isEqual from "lodash-es/isEqual.js";
+import type { ServerBuild } from "@remix-run/server-runtime"
+import isEqual from "lodash-es/isEqual.js"
 
-console.log({ isEqual });
+import type { SEOHandle, SitemapEntry } from "./types.ts"
+
+console.log({ isEqual })
 
 type Options = {
-  siteUrl: string;
-};
+  siteUrl: string
+}
 
 function typedBoolean<T>(
   value: T
 ): value is Exclude<T, "" | 0 | false | null | undefined> {
-  return Boolean(value);
+  return Boolean(value)
 }
 
 function removeTrailingSlash(s: string) {
-  return s.endsWith("/") ? s.slice(0, -1) : s;
+  return s.endsWith("/") ? s.slice(0, -1) : s
 }
 
 async function getSitemapXml(
@@ -25,7 +26,7 @@ async function getSitemapXml(
   routes: ServerBuild["routes"],
   options: Options
 ) {
-  const { siteUrl } = options;
+  const { siteUrl } = options
 
   function getEntry({
     route,
@@ -40,85 +41,83 @@ async function getSitemapXml(
     ${changefreq ? `<changefreq>${changefreq}</changefreq>` : ""}
     ${typeof priority === "number" ? `<priority>${priority}</priority>` : ""}
   </url>
-    `.trim();
+    `.trim()
   }
 
   const rawSitemapEntries = (
     await Promise.all(
       Object.entries(routes).map(async ([id, { module: mod }]) => {
-        if (id === "root") return;
+        if (id === "root") return
 
-        const handle = mod.handle as SEOHandle | undefined;
+        const handle = mod.handle as SEOHandle | undefined
         if (handle?.getSitemapEntries) {
-          return handle.getSitemapEntries(request);
+          return handle.getSitemapEntries(request)
         }
 
         // exclude resource routes from the sitemap
         // (these are an opt-in via the getSitemapEntries method)
-        if (!("default" in mod)) return;
+        if (!("default" in mod)) return
 
-        const manifestEntry = routes[id];
+        const manifestEntry = routes[id]
 
         if (!manifestEntry) {
-          console.warn(`Could not find a manifest entry for ${id}`);
-          return;
+          console.warn(`Could not find a manifest entry for ${id}`)
+          return
         }
-        let parentId = manifestEntry.parentId;
-        let parent = parentId ? routes[parentId] : null;
+        let parentId = manifestEntry.parentId
+        let parent = parentId ? routes[parentId] : null
 
-        let path;
+        let path
         if (manifestEntry.path) {
-          path = removeTrailingSlash(manifestEntry.path);
+          path = removeTrailingSlash(manifestEntry.path)
         } else if (manifestEntry.index) {
-          path = "";
+          path = ""
         } else {
-          return;
+          return
         }
 
         while (parent) {
           // the root path is '/', so it messes things up if we add another '/'
-          const parentPath = parent.path
-            ? removeTrailingSlash(parent.path)
-            : "";
+          const parentPath = parent.path ? removeTrailingSlash(parent.path) : ""
 
           if (parent.path) {
-            path = `${parentPath}/${path}`;
-            parentId = parent.parentId;
-            parent = parentId ? routes[parentId] : null;
+            path = `${parentPath}/${path}`
+            parentId = parent.parentId
+            parent = parentId ? routes[parentId] : null
           } else {
-            path = `${parentPath}/${path}`;
-            parent = null;
+            path = `${parentPath}/${path}`
+            parent = null
           }
         }
 
         // we can't handle dynamic routes, so if the handle doesn't have a
         // getSitemapEntries function, we just
-        if (path.includes(":")) return;
-        if (id === "root") return;
+        if (path.includes(":")) return
+        if (id === "root") return
 
-        const entry: SitemapEntry = { route: removeTrailingSlash(path) };
-        return entry;
+        const entry: SitemapEntry = { route: removeTrailingSlash(path) }
+        return entry
       })
     )
   )
     .flatMap((z) => z)
-    .filter(typedBoolean);
+    .filter(typedBoolean)
 
-  const sitemapEntries: Array<SitemapEntry> = [];
+  const sitemapEntries: Array<SitemapEntry> = []
   for (const entry of rawSitemapEntries) {
     const existingEntryForRoute = sitemapEntries.find(
       (e) => e.route === entry.route
-    );
+    )
     if (existingEntryForRoute) {
       if (!isEqual(existingEntryForRoute, entry)) {
         // if (false) {
         console.warn(
           `Duplicate route for ${entry.route} with different sitemap data`,
           { entry, existingEntryForRoute }
-        );
+        )
       }
     } else {
-      sitemapEntries.push(entry);
+      sitemapEntries.push(entry)
     }
   }
 
@@ -131,7 +130,7 @@ async function getSitemapXml(
   >
     ${sitemapEntries.map((entry) => getEntry(entry)).join("")}
   </urlset>
-    `.trim();
+    `.trim()
 }
 
-export { getSitemapXml };
+export { getSitemapXml }

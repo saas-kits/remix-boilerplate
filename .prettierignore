@@ -1,0 +1,10 @@
+.vscode/
+.pnpm-lock.yaml
+.DS_Store
+node_modules/
+
+/.cache
+/build
+/server-build
+/public/build
+/coverage

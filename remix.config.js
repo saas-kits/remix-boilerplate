@@ -1,5 +1,5 @@
 /** @type {import('@remix-run/dev').AppConfig} */
-import { flatRoutes } from "remix-flat-routes";
+import { flatRoutes } from "remix-flat-routes"
 
 export default {
   tailwind: true,
@@ -13,10 +13,10 @@ export default {
         "**/*.test.{js,jsx,ts,tsx}",
         "**/__*.*",
       ],
-    });
+    })
   },
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
   // serverBuildPath: "build/index.js",
-};
+}

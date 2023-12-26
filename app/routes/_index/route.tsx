@@ -2,35 +2,34 @@ import {
   json,
   type LoaderFunctionArgs,
   type MetaFunction,
-} from "@remix-run/node";
-import { HeroSection } from "./hero-section";
-import { LogoCloud } from "./logo-cloud";
-import { FeatureSection } from "./feature-section";
-import Faqs from "./faq";
-import FeaturesVariantB from "./features-variant-b";
-import Footer from "./footer";
-import FeatureWithImage from "./feature-with-image";
-import buildTags from "~/lib/server/seo/seo-utils";
-import { mergeMeta } from "~/lib/server/seo/seo-helpers";
+} from "@remix-run/node"
+import { mergeMeta } from "~/lib/server/seo/seo-helpers"
+import buildTags from "~/lib/server/seo/seo-utils"
+
+import Faqs from "./faq"
+import { FeatureSection } from "./feature-section"
+import FeatureWithImage from "./feature-with-image"
+import FeaturesVariantB from "./features-variant-b"
+import Footer from "./footer"
+import { HeroSection } from "./hero-section"
+import { LogoCloud } from "./logo-cloud"
 
 const loginFeatures = [
   "Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.",
   "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
   "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus.",
-];
+]
 
 export const loader = ({}: LoaderFunctionArgs) => {
-  return json({ hostUrl: process.env.HOST_URL });
-};
+  return json({ hostUrl: process.env.HOST_URL })
+}
 
-
-export const meta: MetaFunction =  mergeMeta(
+export const meta: MetaFunction = mergeMeta(
   // these will override the parent meta
   () => {
-    return [{ title: "Home Page" }];
-  },
-);
-
+    return [{ title: "Home Page" }]
+  }
+)
 
 export default function Index() {
   return (
@@ -50,5 +49,5 @@ export default function Index() {
         <Footer />
       </div>
     </div>
-  );
+  )
 }
