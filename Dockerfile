@@ -39,7 +39,7 @@ COPY --link . .
 RUN pnpm run build
 
 # Remove development dependencies
-RUN pnpm prune --prod --ignore-scripts
+RUN pnpm prune --prod --config.ignore-scripts=true
 
 
 # Final stage for app image
