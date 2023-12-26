@@ -8,7 +8,8 @@
     "migrate": "prisma generate && prisma db push",
     "dev": "remix dev --manual",
     "start": "remix-serve ./build/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@conform-to/react": "^0.9.1",
@@ -62,6 +63,8 @@
     "@types/react-dom": "^18.2.7",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.38.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.0",
     "prettier": "3.1.1",
     "prettier-plugin-tailwindcss": "^0.5.9",
     "remix-flat-routes": "^0.6.2",
@@ -74,5 +77,10 @@
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
+  },
+  "lint-staged":{
+    "**/*.{js,jsx,ts,tsx}":[
+      "npx prettier --write"
+    ]
   }
 }
