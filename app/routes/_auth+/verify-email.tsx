@@ -40,6 +40,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request)
 
   if (user) {
+    if (user.emailVerified) {
+      return redirect("/dashboard")
+    }
+    
     const result = await prisma.verificationCode.findFirst({
       where: {
         userId: user.id,

@@ -29,7 +29,7 @@ import { Label } from "@/components/ui/label"
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /dashboard directly
   return await authenticator.isAuthenticated(request, {
-    successRedirect: "/",
+    successRedirect: "/dashboard",
   })
 }
 
