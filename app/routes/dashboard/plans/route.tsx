@@ -5,14 +5,25 @@ import { getSubscriptionByUserId } from "@/models/subscription"
 import { getUserById } from "@/models/user"
 import { authenticator } from "@/services/auth.server"
 import { getUserCurrencyFromRequest } from "@/utils/currency"
-import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons"
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node"
 import { Form, useLoaderData } from "@remix-run/react"
-import clsx from "clsx"
 
-import { cn } from "@/lib/utils"
+import { getformattedCurrency } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  CTAContainer,
+  FeaturedBadgeContainer,
+  FeatureListContainer,
+  PricingCard,
+} from "@/components/pricing/containers"
+import {
+  Feature,
+  FeatureDescription,
+  FeaturePrice,
+  FeatureTitle,
+  FeatureType,
+} from "@/components/pricing/feature"
+import { PricingSwitch } from "@/components/pricing/pricing-switch"
 
 // TODO: to be discussed with Keyur
 declare global {
@@ -23,12 +34,6 @@ declare global {
 
 BigInt.prototype.toJSON = function () {
   return this.toString()
-}
-
-type Feature = {
-  name: string
-  isAvailable: boolean
-  inProgress: boolean
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -107,53 +112,12 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   return redirect(checkout.url as string)
 }
 
-type PricingSwitchProps = {
-  onSwitch: (value: string) => void
-}
-
-const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
-  <Tabs defaultValue="0" className="mx-auto w-40" onValueChange={onSwitch}>
-    <TabsList>
-      <TabsTrigger value="0">Monthly</TabsTrigger>
-      <TabsTrigger value="1">Yearly</TabsTrigger>
-    </TabsList>
-  </Tabs>
-)
-
-const Feature = ({ name, isAvailable, inProgress }: Feature) => (
-  <li
-    className={clsx(
-      inProgress && "text-muted",
-      "flex gap-x-3 text-muted-foreground"
-    )}
-  >
-    {/* If in progress return disabled */}
-    {!isAvailable ? (
-      <Cross2Icon className={"h-6 w-5 flex-none"} aria-hidden="true" />
-    ) : (
-      <CheckIcon className={"h-6 w-5 flex-none"} aria-hidden="true" />
-    )}
-    {name}{" "}
-    {inProgress && (
-      <span className="text-xs font-semibold leading-6 text-muted-foreground">
-        (Coming Soon)
-      </span>
-    )}
-  </li>
-)
-
 export default function PlansPage() {
   const { plans, subscription, defaultCurrency } =
     useLoaderData<typeof loader>()
   const [interval, setInterval] = useState<"month" | "year">("month")
   // render shadcn ui pricing table using Card
 
-  const getformattedCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: defaultCurrency,
-    }).format(amount)
-  }
   return (
     <div>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -163,6 +127,7 @@ export default function PlansPage() {
           </h1>
         </div>
         <p className="wrap-balance mt-6 text-center text-lg font-light leading-7 text-muted-foreground">
+          {/* TODO: add content here @keyur */}
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum
           quisquam, iusto voluptatem dolore voluptas non laboriosam soluta quos
           quod eos! Sapiente archit
@@ -177,83 +142,57 @@ export default function PlansPage() {
             const discount = plan.prices[0].amount * 12 - plan.prices[1].amount
             const showDiscount =
               interval === "year" && plan.prices[0].amount !== 0
+            const planPrice = plan.prices.find(
+              (p) => p.currency === defaultCurrency && p.interval == interval
+            )?.amount as number
+
             return (
-              <>
-                <div
-                  key={plan.id}
-                  className={cn("rounded-[13px] p-px", {
-                    "bg-gradient-to-b from-zinc-400 to-white dark:from-zinc-500 dark:to-black":
-                      showDiscount,
-                    "bg-gradient-to-b from-border to-white dark:to-black":
-                      !showDiscount,
-                  })}
-                >
-                  <div className="relative h-full w-full rounded-xl bg-white p-6 pb-24 dark:bg-background">
-                    {showDiscount && discount > 0 && (
-                      <div className="absolute -top-2 left-0 flex h-4 w-full items-center justify-center text-sm">
-                        <span className="rounded-full bg-black px-4 py-1 text-xs font-semibold text-white dark:bg-white dark:text-black">
-                          Save {getformattedCurrency(discount)}
-                        </span>
-                      </div>
-                    )}
-                    <h3 className="text-base font-semibold leading-8">
-                      {plan.name}
-                    </h3>
-                    <p className="wrap-balance mt-4 text-sm font-light leading-5 text-muted-foreground">
-                      {plan.description}
-                    </p>
-                    <h4 className="mt-6 text-4xl font-bold tracking-tight">
-                      {new Intl.NumberFormat("en-US", {
-                        style: "currency",
-                        currency: defaultCurrency,
-                      }).format(
-                        plan.prices.find(
-                          (p) =>
-                            p.currency === defaultCurrency &&
-                            p.interval == interval
-                        )?.amount as number
-                      )}{" "}
-                      <span className="text-sm font-semibold leading-6 text-muted-foreground">
-                        /{interval}
-                      </span>
-                    </h4>
+              <PricingCard key={plan.id} isFeatured={showDiscount}>
+                {showDiscount && discount > 0 && (
+                  <FeaturedBadgeContainer>
+                    Save {getformattedCurrency(discount, defaultCurrency)}
+                  </FeaturedBadgeContainer>
+                )}
+                <FeatureTitle>{plan.name}</FeatureTitle>
+                <FeatureDescription>{plan.description}</FeatureDescription>
+                <FeaturePrice
+                  interval={interval}
+                  price={getformattedCurrency(planPrice, defaultCurrency)}
+                />
+                <FeatureListContainer>
+                  {(plan.listOfFeatures as FeatureType[]).map(
+                    (feature, index) => (
+                      <Feature
+                        key={index}
+                        name={feature.name}
+                        isAvailable={feature.isAvailable}
+                        inProgress={feature.inProgress}
+                      />
+                    )
+                  )}
+                </FeatureListContainer>
+                <CTAContainer>
+                  <Form method="post">
+                    <input type="hidden" name="planId" value={plan.id} />
+                    <input type="hidden" name="interval" value={interval} />
+                    <input
+                      type="hidden"
+                      name="currency"
+                      value={defaultCurrency}
+                    />
 
-                    <ul className="mt-8 space-y-3 text-sm leading-6 xl:mt-10">
-                      {(plan.listOfFeatures as Feature[]).map(
-                        (feature, index) => (
-                          <Feature
-                            key={index}
-                            name={feature.name}
-                            isAvailable={feature.isAvailable}
-                            inProgress={feature.inProgress}
-                          />
-                        )
-                      )}
-                    </ul>
-                    <div className="absolute bottom-0 left-0 mx-6 mb-6 mt-8 w-[calc(100%-48px)]">
-                      <Form method="post">
-                        <input type="hidden" name="planId" value={plan.id} />
-                        <input type="hidden" name="interval" value={interval} />
-                        <input
-                          type="hidden"
-                          name="currency"
-                          value={defaultCurrency}
-                        />
-
-                        <Button
-                          className="mt-8 w-full"
-                          disabled={subscription?.planId === plan.id}
-                          type="submit"
-                        >
-                          {subscription?.planId === plan.id
-                            ? "Current Plan"
-                            : "Choose Plan"}
-                        </Button>
-                      </Form>
-                    </div>
-                  </div>
-                </div>
-              </>
+                    <Button
+                      className="mt-8 w-full"
+                      disabled={subscription?.planId === plan.id}
+                      type="submit"
+                    >
+                      {subscription?.planId === plan.id
+                        ? "Current Plan"
+                        : "Choose Plan"}
+                    </Button>
+                  </Form>
+                </CTAContainer>
+              </PricingCard>
             )
           })}
         </div>

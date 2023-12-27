@@ -2,21 +2,8 @@ import type { MetaDescriptor, MetaFunction } from "@remix-run/node"
 
 export const getDefaultSeoTags = (baseUrl: string) => {
   return {
-    title: "Root Layout tags",
-    description: "Root Layout tags",
-    openGraph: {
-      url: `${baseUrl}/robots.txt`,
-      title: "Robots.txt",
-      description: "Robots.txt",
-      images: [
-        {
-          url: `${baseUrl}/static/images/seo/seo.png`,
-          alt: "Robots.txt",
-          height: 630,
-          width: 1200,
-        },
-      ],
-    },
+    title: "Remix SaaSkit",
+    description: "Remix SaaSkit description placeholder",
   }
 }
 
