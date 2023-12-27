@@ -2,13 +2,13 @@
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons"
 import clsx from "clsx"
 
-type Feature = {
+export type FeatureType = {
   name: string
   isAvailable: boolean
   inProgress: boolean
 }
 
-export const Feature = ({ name, isAvailable, inProgress }: Feature) => (
+export const Feature = ({ name, isAvailable, inProgress }: FeatureType) => (
   <li
     className={clsx(
       inProgress && "text-muted",
