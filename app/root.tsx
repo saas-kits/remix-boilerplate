@@ -1,8 +1,9 @@
 import { cssBundleHref } from "@remix-run/css-bundle"
-import type {
-  LinksFunction,
-  LoaderFunctionArgs,
-  MetaFunction,
+import {
+  json,
+  type LinksFunction,
+  type LoaderFunctionArgs,
+  type MetaFunction,
 } from "@remix-run/node"
 import {
   Links,
@@ -15,7 +16,9 @@ import {
 } from "@remix-run/react"
 import clsx from "clsx"
 import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from "remix-themes"
+import { AuthenticityTokenProvider } from "remix-utils/csrf/react"
 
+import { csrf } from "./lib/server/csrf.server"
 import { getDefaultSeoTags } from "./lib/server/seo/seo-helpers"
 import buildTags from "./lib/server/seo/seo-utils"
 import { themeSessionResolver } from "./services/session.server"
@@ -32,9 +35,16 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { getTheme } = await themeSessionResolver(request)
-  return {
-    theme: getTheme(),
-  }
+  let [token, cookieHeader] = await csrf.commitToken()
+
+  return json(
+    { token, theme: getTheme() },
+    {
+      headers: {
+        "Set-Cookie": cookieHeader!,
+      },
+    }
+  )
 }
 
 export default function AppWithProviders() {
@@ -65,7 +75,9 @@ export function App() {
         <Links />
       </head>
       <body className="h-full">
-        <Outlet />
+        <AuthenticityTokenProvider token={data.token}>
+          <Outlet />
+        </AuthenticityTokenProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

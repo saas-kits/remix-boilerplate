@@ -12,14 +12,17 @@ import {
 } from "@remix-run/node"
 import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react"
 import { AlertCircle } from "lucide-react"
+import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { z } from "zod"
 
 import { validatePasswordResetToken } from "@/lib/server/auth-utils.sever"
+import { validateCsrfToken } from "@/lib/server/csrf.server"
 import { mergeMeta } from "@/lib/server/seo/seo-helpers"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { CommonErrorBoundary } from "@/components/error-boundry"
 
 const schema = z
   .object({
@@ -46,6 +49,7 @@ export const meta: MetaFunction = mergeMeta(
 )
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  await validateCsrfToken(request)
   const url = new URL(request.url)
 
   const code = url.searchParams.get("code")
@@ -142,6 +146,7 @@ export default function ForgotPassword() {
         </h2>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <Form className="space-y-6" method="post" {...form.props}>
+            <AuthenticityTokenInput />
             <div>
               <Label htmlFor="newPassword">New Password</Label>
               <div className="mt-2">
@@ -203,4 +208,8 @@ export default function ForgotPassword() {
       </>
     )
   }
+}
+
+export function ErrorBoundary() {
+  return <CommonErrorBoundary />
 }

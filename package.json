@@ -33,6 +33,7 @@
     "@remix-run/server-runtime": "^2.4.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "crypto-js": "^4.2.0",
     "intl-parse-accept-language": "^1.0.0",
     "invariant": "^2.2.4",
     "isbot": "^3.6.8",
@@ -76,8 +77,8 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "lint-staged":{
-    "**/*.{js,jsx,ts,tsx}":[
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
       "npx prettier --write"
     ]
   }

@@ -15,14 +15,17 @@ import {
   useActionData,
   useNavigation,
 } from "@remix-run/react"
+import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { z } from "zod"
 
 import { sendResetPasswordLink } from "@/lib/server/auth-utils.sever"
+import { validateCsrfToken } from "@/lib/server/csrf.server"
 import { mergeMeta } from "@/lib/server/seo/seo-helpers"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { CommonErrorBoundary } from "@/components/error-boundry"
 
 const schema = z.object({
   email: z
@@ -45,6 +48,7 @@ export const meta: MetaFunction = mergeMeta(
 )
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  await validateCsrfToken(request)
   const formData = await request.formData()
 
   const submission = await parse(formData, {
@@ -90,8 +94,9 @@ export default function ForgotPassword() {
         Get password reset link
       </h2>
       {!lastSubmission?.emailSent ? (
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-10 w-full sm:mx-auto">
           <Form className="space-y-6" method="post" {...form.props}>
+            <AuthenticityTokenInput />
             <div>
               <Label htmlFor="email">Email address</Label>
               <div className="mt-2">
@@ -132,4 +137,8 @@ export default function ForgotPassword() {
       )}
     </>
   )
+}
+
+export function ErrorBoundary() {
+  return <CommonErrorBoundary />
 }

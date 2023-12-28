@@ -65,6 +65,9 @@ dependencies:
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
+  crypto-js:
+    specifier: ^4.2.0
+    version: 4.2.0
   intl-parse-accept-language:
     specifier: ^1.0.0
     version: 1.0.0
@@ -106,7 +109,7 @@ dependencies:
     version: 1.2.2(@remix-run/react@2.3.1)(@remix-run/server-runtime@2.4.0)
   remix-utils:
     specifier: ^7.3.0
-    version: 7.3.0(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(intl-parse-accept-language@1.0.0)(react@18.2.0)(zod@3.22.4)
+    version: 7.3.0(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(crypto-js@4.2.0)(intl-parse-accept-language@1.0.0)(react@18.2.0)(zod@3.22.4)
   resend:
     specifier: ^2.0.0
     version: 2.0.0
@@ -3827,6 +3830,10 @@ packages:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  /crypto-js@4.2.0:
+    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
+    dev: false
 
   /css-what@6.1.0:
     resolution: {integrity: sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==}
@@ -7860,7 +7867,7 @@ packages:
       '@remix-run/server-runtime': 2.4.0(typescript@5.1.6)
     dev: false
 
-  /remix-utils@7.3.0(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(intl-parse-accept-language@1.0.0)(react@18.2.0)(zod@3.22.4):
+  /remix-utils@7.3.0(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(crypto-js@4.2.0)(intl-parse-accept-language@1.0.0)(react@18.2.0)(zod@3.22.4):
     resolution: {integrity: sha512-Ea5eNL04Ke4YYKI79ZR5doWtULe3ABkYkqhaP7mKiYcNVYAg6pA0PMuFYR2uyJYCGW43+/WlTfr3D4X5A0PsUA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -7898,6 +7905,7 @@ packages:
     dependencies:
       '@remix-run/node': 2.3.1(typescript@5.1.6)
       '@remix-run/react': 2.3.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.1.6)
+      crypto-js: 4.2.0
       intl-parse-accept-language: 1.0.0
       react: 18.2.0
       type-fest: 4.8.2
