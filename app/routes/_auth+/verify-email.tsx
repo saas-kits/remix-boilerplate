@@ -43,7 +43,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     if (user.emailVerified) {
       return redirect("/dashboard")
     }
-    
+
     const result = await prisma.verificationCode.findFirst({
       where: {
         userId: user.id,
@@ -193,15 +193,15 @@ export default function VerifyEmail() {
   if (data.codeAvailableWithUser) {
     return (
       <>
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
           Enter a verification code
         </h2>
         {data.codeAvailableWithUser && (
-          <p className="mt-2">
+          <p className="mt-10 text-muted-foreground">
             You must have recieved and email verification code on {data?.email}
           </p>
         )}
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-4 w-full sm:mx-auto">
           <Form className="space-y-6" method="post">
             <input type="text" name="intent" defaultValue="verifyCode" hidden />
             <div>

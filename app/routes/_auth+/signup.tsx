@@ -17,14 +17,17 @@ import {
   useActionData,
   useNavigation,
 } from "@remix-run/react"
+import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { z } from "zod"
 
 import GoogleLogo from "@/lib/assets/logos/google"
+import { validateCsrfToken } from "@/lib/server/csrf.server"
 import { mergeMeta } from "@/lib/server/seo/seo-helpers"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { CommonErrorBoundary } from "@/components/error-boundry"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /dashboard directly
@@ -61,6 +64,8 @@ const schema = z
   })
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  await validateCsrfToken(request)
+
   const clonedRequest = request.clone()
   const formData = await clonedRequest.formData()
 
@@ -118,9 +123,10 @@ export default function Signup() {
       <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight ">
         Create new account
       </h2>
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <Form className="h-full" {...form.props} method="post">
-          <div className="space-y-6">
+      <div className="mt-10 w-full sm:mx-auto">
+        <Form className="h-full w-full" {...form.props} method="post">
+          <AuthenticityTokenInput />
+          <div className="w-full space-y-6">
             <div>
               <Label htmlFor="fullName">Full Name</Label>
               <div className="mt-2">
@@ -181,11 +187,7 @@ export default function Signup() {
                   id="terms"
                   {...conform.input(tocAccepted, { type: "checkbox" })}
                 />
-                {/* <input
-                  id="terms"
-                  type="checkbox"
-                  {...conform.input(tocAccepted, { type: "checkbox" })}
-                /> */}
+
                 <label
                   htmlFor="terms"
                   className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -196,31 +198,29 @@ export default function Signup() {
               <div className="mt-1 text-sm text-error">{tocAccepted.error}</div>
             </div>
 
-            <div className="space-y-4">
-              <Button
-                disabled={isFormSubmitting}
-                className="w-full"
-                type="submit"
-              >
-                {isFormSubmitting && (
-                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                Sign up
-              </Button>
-              <Form action="/auth/google" method="post">
-                <Button
-                  disabled={isFormSubmitting}
-                  className="w-full"
-                  type="submit"
-                  variant="outline"
-                >
-                  <span className="flex items-center space-x-2">
-                    <GoogleLogo height={18} /> <span>Sign up with Google</span>
-                  </span>
-                </Button>
-              </Form>
-            </div>
+            <Button
+              disabled={isFormSubmitting}
+              className="w-full"
+              type="submit"
+            >
+              {isFormSubmitting && (
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Sign up
+            </Button>
           </div>
+        </Form>
+        <Form action="/auth/google" method="post" className="mt-4">
+          <Button
+            disabled={isFormSubmitting}
+            className="w-full"
+            type="submit"
+            variant="outline"
+          >
+            <span className="flex items-center space-x-2">
+              <GoogleLogo height={18} /> <span>Sign up with Google</span>
+            </span>
+          </Button>
         </Form>
 
         <div className="mt-5 flex justify-center">
@@ -264,4 +264,8 @@ function CustomCheckbox({ ...config }: FieldConfig<string>) {
       />
     </>
   )
+}
+
+export function ErrorBoundary() {
+  return <CommonErrorBoundary />
 }

@@ -18,14 +18,17 @@ import {
   useActionData,
   useNavigation,
 } from "@remix-run/react"
+import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { z } from "zod"
 
 import GoogleLogo from "@/lib/assets/logos/google"
 import { sendVerificationCode } from "@/lib/server/auth-utils.sever"
+import { validateCsrfToken } from "@/lib/server/csrf.server"
 import { mergeMeta } from "@/lib/server/seo/seo-helpers"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { CommonErrorBoundary } from "@/components/error-boundry"
 
 const schema = z.object({
   email: z
@@ -49,6 +52,7 @@ export const meta: MetaFunction = mergeMeta(
 )
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  await validateCsrfToken(request)
   const clonedRequest = request.clone()
   const formData = await clonedRequest.formData()
 
@@ -144,8 +148,9 @@ export default function Login() {
       <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
         Sign in to your account
       </h2>
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div className="mt-10 w-full sm:mx-auto">
         <Form className="space-y-6" method="post" {...form.props}>
+          <AuthenticityTokenInput />
           <div>
             <Label htmlFor="email">Email address</Label>
             <div className="mt-2">
@@ -175,32 +180,25 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <Button
-              disabled={isFormSubmitting}
-              className="w-full"
-              type="submit"
-            >
-              {isFormSubmitting && (
-                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              Sign in
-            </Button>
-            <Form action="/auth/google" method="post">
-              <Button
-                disabled={isFormSubmitting}
-                className="w-full"
-                type="submit"
-                variant="outline"
-              >
-                <span className="flex items-center space-x-2">
-                  <GoogleLogo height={18} /> <span>Sign in with Google</span>
-                </span>
-              </Button>
-            </Form>
-          </div>
+          <Button disabled={isFormSubmitting} className="w-full" type="submit">
+            {isFormSubmitting && (
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Sign in
+          </Button>
         </Form>
-
+        <Form action="/auth/google" method="post" className="mt-4">
+          <Button
+            disabled={isFormSubmitting}
+            className="w-full"
+            type="submit"
+            variant="outline"
+          >
+            <span className="flex items-center space-x-2">
+              <GoogleLogo height={18} /> <span>Sign in with Google</span>
+            </span>
+          </Button>
+        </Form>
         <div className="mt-5 flex justify-between">
           <p className="flex-grow text-sm text-muted-foreground">
             Not a member?{" "}
@@ -219,4 +217,8 @@ export default function Login() {
       </div>
     </>
   )
+}
+
+export function ErrorBoundary() {
+  return <CommonErrorBoundary />
 }
