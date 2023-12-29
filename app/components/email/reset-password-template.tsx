@@ -10,6 +10,8 @@ import {
   Text,
 } from "@react-email/components"
 
+import { siteConfig } from "@/lib/brand/config"
+
 interface ResetpasswordEmailProps {
   resetLink?: string
 }
@@ -20,10 +22,12 @@ export const ResetPasswordEmailTemplate = ({
 }: ResetpasswordEmailProps) => (
   <Html>
     <Head />
-    <Preview>Your verification code for RemixKits</Preview>
+    <Preview>Your verification code for {siteConfig.title}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={heading}>Your verification code for RemixKits</Heading>
+        <Heading style={heading}>
+          Your verification code for {siteConfig.title}
+        </Heading>
         <Text style={paragraph}>
           This link will only be valid for the next 20 minutes.
         </Text>

@@ -1,7 +1,7 @@
 import type { Plan, Price, User } from "@prisma/client"
 import type { Stripe } from "stripe"
 
-import { brandConfig } from "@/lib/brand/config"
+import { siteConfig } from "@/lib/brand/config"
 
 import { PLAN_TYPES, type PLAN_INTERVALS } from "./plans.config"
 import { stripe } from "./setup.server"
@@ -88,7 +88,7 @@ export const setupStripeCustomerPortal = async (
       },
     },
     business_profile: {
-      headline: `${brandConfig.name} - Manage your subscription`,
+      headline: `${siteConfig.title} - Manage your subscription`,
     },
   })
 

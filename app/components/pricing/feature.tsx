@@ -1,4 +1,3 @@
-
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons"
 import clsx from "clsx"
 
@@ -55,10 +54,7 @@ type FeaturePriceProps = {
   price: string
 }
 
-export const FeaturePrice = ({
-  interval,
-  price,
-}: FeaturePriceProps) => {
+export const FeaturePrice = ({ interval, price }: FeaturePriceProps) => {
   return (
     <h4 className="mt-6 text-4xl font-bold tracking-tight">
       {price}

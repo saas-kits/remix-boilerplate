@@ -1,5 +1,9 @@
 // generate action for remix which accepets stripe webhook events
 
+import { json, type ActionFunctionArgs } from "@remix-run/node"
+import type { Subscription } from "@prisma/client"
+
+import { stripe } from "@/services/stripe/setup.server"
 import { getPlanByStripeId } from "@/models/plan"
 import {
   deleteSubscriptionByCustomerId,
@@ -8,9 +12,6 @@ import {
   updateSubscription,
 } from "@/models/subscription"
 import { getUserByStripeCustomerId } from "@/models/user"
-import { stripe } from "@/services/stripe/setup.server"
-import type { Subscription } from "@prisma/client"
-import { json, type ActionFunctionArgs } from "@remix-run/node"
 
 const getStripeWebhookEvent = async (request: Request) => {
   const sig = request.headers.get("stripe-signature")

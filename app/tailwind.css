@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ShadCN theme starts */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -31,7 +32,6 @@
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
-    --error: 0 84.24% 60.2%;
 
     --radius: 0.5rem;
   }
@@ -65,9 +65,10 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
-    --error: 0 84.24% 60.2%;
   }
 }
+
+/* ShadCN theme ends */
 
 @layer base {
   * {
@@ -79,5 +80,16 @@
 
   .wrap-balance {
     text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --error: 0 84.24% 60.2%;
+  }
+
+  .dark,
+  :root[class~="dark"] {
+    --error: 0 84.24% 60.2%;
   }
 }

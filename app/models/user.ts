@@ -1,5 +1,6 @@
-import { prisma } from "@/services/db/db.server"
 import type { User } from "@prisma/client"
+
+import { prisma } from "@/services/db/db.server"
 
 export const getUserById = async (id: User["id"]) => {
   return await prisma.user.findUnique({

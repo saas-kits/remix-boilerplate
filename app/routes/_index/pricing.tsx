@@ -2,7 +2,6 @@ import { useState } from "react"
 import { NavLink, useLoaderData } from "@remix-run/react"
 
 import { getformattedCurrency } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import {
   CTAContainer,
   FeaturedBadgeContainer,
@@ -17,6 +16,7 @@ import {
   FeatureType,
 } from "@/components/pricing/feature"
 import { PricingSwitch } from "@/components/pricing/pricing-switch"
+import { Button } from "@/components/ui/button"
 
 import type { loader } from "./route"
 

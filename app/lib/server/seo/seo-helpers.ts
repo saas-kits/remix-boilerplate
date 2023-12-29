@@ -1,10 +1,9 @@
 import type { MetaDescriptor, MetaFunction } from "@remix-run/node"
 
-export const getDefaultSeoTags = (baseUrl: string) => {
-  return {
-    title: "Remix SaaSkit",
-    description: "Remix SaaSkit description placeholder",
-  }
+import { seoConfig } from "@/lib/brand/config"
+
+export const getDefaultSeoTags = () => {
+  return seoConfig
 }
 
 /**

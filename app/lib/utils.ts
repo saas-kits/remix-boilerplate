@@ -1,6 +1,7 @@
-import { CURRENCIES } from "@/services/stripe/plans.config"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+
+import { CURRENCIES } from "@/services/stripe/plans.config"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

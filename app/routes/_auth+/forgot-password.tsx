@@ -1,31 +1,27 @@
 import { useId } from "react"
-import { authenticator } from "@/services/auth.server"
-import { prisma } from "@/services/db/db.server"
-import { conform, useForm } from "@conform-to/react"
-import { parse } from "@conform-to/zod"
-import { ReloadIcon } from "@radix-ui/react-icons"
 import {
   json,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "@remix-run/node"
-import {
-  Form,
-  MetaFunction,
-  useActionData,
-  useNavigation,
-} from "@remix-run/react"
+import type { MetaFunction } from "@remix-run/react"
+import { Form, useActionData, useNavigation } from "@remix-run/react"
+import { conform, useForm } from "@conform-to/react"
+import { parse } from "@conform-to/zod"
+import { ReloadIcon } from "@radix-ui/react-icons"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { z } from "zod"
 
 import { sendResetPasswordLink } from "@/lib/server/auth-utils.sever"
 import { validateCsrfToken } from "@/lib/server/csrf.server"
 import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { authenticator } from "@/services/auth.server"
+import { prisma } from "@/services/db/db.server"
+import { CommonErrorBoundary } from "@/components/error-boundry"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { CommonErrorBoundary } from "@/components/error-boundry"
 
 const schema = z.object({
   email: z
@@ -104,6 +100,7 @@ export default function ForgotPassword() {
                   id="email"
                   type="email"
                   autoComplete="email"
+                  placeholder="michael@scott.com"
                   error={email.error}
                   {...conform.input(email, { type: "email" })}
                 />

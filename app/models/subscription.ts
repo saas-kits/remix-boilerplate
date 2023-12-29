@@ -1,5 +1,6 @@
-import { prisma } from "@/services/db/db.server"
 import type { Prisma, Subscription, User } from "@prisma/client"
+
+import { prisma } from "@/services/db/db.server"
 
 export const getSubscriptionById = async (
   id: Subscription["id"],

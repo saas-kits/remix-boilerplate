@@ -8,6 +8,8 @@ import {
   Preview,
 } from "@react-email/components"
 
+import { siteConfig } from "@/lib/brand/config"
+
 interface VerificationEmailProps {
   validationCode?: string
 }
@@ -17,10 +19,12 @@ export const VerificationEmailTemplate = ({
 }: VerificationEmailProps) => (
   <Html>
     <Head />
-    <Preview>Your verification code for RemixKits</Preview>
+    <Preview>Your verification code for {siteConfig.title}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={heading}>Your verification code for RemixKits</Heading>
+        <Heading style={heading}>
+          Your verification code for {siteConfig.title}
+        </Heading>
         <code style={code}>{validationCode}</code>
         <Hr style={hr} />
       </Container>

@@ -1,5 +1,6 @@
-import { stripe } from "@/services/stripe/setup.server"
 import type { Price, User } from "@prisma/client"
+
+import { stripe } from "@/services/stripe/setup.server"
 
 export const createCheckoutSession = async (
   customerId: User["customerId"],

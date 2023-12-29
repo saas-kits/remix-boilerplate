@@ -1,33 +1,28 @@
 import { useId, useRef } from "react"
-import { authenticator } from "@/services/auth.server"
-import { prisma } from "@/services/db/db.server"
-import type { FieldConfig } from "@conform-to/react"
-import { conform, useForm, useInputEvent } from "@conform-to/react"
-import { parse } from "@conform-to/zod"
-import { ReloadIcon } from "@radix-ui/react-icons"
 import {
   json,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "@remix-run/node"
-import {
-  Form,
-  MetaFunction,
-  NavLink,
-  useActionData,
-  useNavigation,
-} from "@remix-run/react"
+import type { MetaFunction } from "@remix-run/react"
+import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react"
+import type { FieldConfig } from "@conform-to/react"
+import { conform, useForm, useInputEvent } from "@conform-to/react"
+import { parse } from "@conform-to/zod"
+import { ReloadIcon } from "@radix-ui/react-icons"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { z } from "zod"
 
 import GoogleLogo from "@/lib/assets/logos/google"
 import { validateCsrfToken } from "@/lib/server/csrf.server"
 import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { authenticator } from "@/services/auth.server"
+import { prisma } from "@/services/db/db.server"
+import { CommonErrorBoundary } from "@/components/error-boundry"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { CommonErrorBoundary } from "@/components/error-boundry"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /dashboard directly
@@ -46,11 +41,13 @@ export const meta: MetaFunction = mergeMeta(
 const schema = z
   .object({
     email: z
-      .string({ required_error: "Email is required" })
-      .email("Email is invalid"),
-    fullName: z.string({ required_error: "Full name is required" }),
-    password: z.string().min(8, "min check failed"),
-    confirmPassword: z.string().min(8, "min check failed"),
+      .string({ required_error: "Please enter email to continue" })
+      .email("Please enter a valid email"),
+    fullName: z.string({ required_error: "Please enter name to continue" }),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters"),
     tocAccepted: z.literal("on", {
       errorMap: () => ({ message: "You must accept the terms & conditions" }),
     }),
@@ -59,7 +56,7 @@ const schema = z
     // }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: "Please make sure your passwords match",
     path: ["confirmPassword"],
   })
 
@@ -82,7 +79,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         ctx.addIssue({
           path: ["email"],
           code: z.ZodIssueCode.custom,
-          message: "A user already exists with this email",
+          message: "A user with this email already exists",
         })
         return
       }
@@ -134,6 +131,7 @@ export default function Signup() {
                   error={fullName.error}
                   id="fullName"
                   type="text"
+                  placeholder="Michael Scott"
                   required
                   {...conform.input(fullName, { type: "text" })}
                 />
@@ -146,6 +144,7 @@ export default function Signup() {
                   error={email.error}
                   id="email"
                   type="email"
+                  placeholder="michael@scott.com"
                   autoComplete="email"
                   {...conform.input(email, { type: "email" })}
                 />
@@ -161,7 +160,8 @@ export default function Signup() {
                   error={password.error}
                   id="password"
                   type="password"
-                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  autoComplete="new-password"
                   {...conform.input(password, { type: "password" })}
                 />
               </div>
@@ -176,6 +176,8 @@ export default function Signup() {
                   error={confirmPassword.error}
                   id="confirmPassword"
                   type="password"
+                  placeholder="••••••••"
+                  autoComplete="new-password"
                   {...conform.input(confirmPassword, { type: "password" })}
                 />
               </div>
