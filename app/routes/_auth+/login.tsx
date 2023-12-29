@@ -85,8 +85,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
 
-    let session = await getSession(request.headers.get("cookie"))
     // and store the user data
+    const session = await getSession(request.headers.get("Cookie"))
     session.set(authenticator.sessionKey, user)
 
     let headers = new Headers({ "Set-Cookie": await commitSession(session) })
@@ -101,22 +101,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // TODO: fix type here
     // TODO: create constant for message type of auth errors
     const typedError = error as any
-
     switch (typedError.message) {
       case "INVALID_PASSWORD":
-        return {
+        return json({
           ...submission,
           error: { email: ["Either email or password is incorrect"] },
-        }
+        })
       case "GOOGLE_SIGNUP":
-        return {
+        return json({
           ...submission,
           error: {
             email: [
               "You have already signed up with google. Please use google to login",
             ],
           },
-        }
+        })
       default:
         return null
     }
