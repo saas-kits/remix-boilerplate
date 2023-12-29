@@ -1,6 +1,6 @@
 import * as crypto from "crypto"
 import { prisma } from "@/services/db/db.server"
-import { resend } from "@/services/email/resend.server"
+import { sendEmail } from "@/services/email/resend.server"
 import type { User } from "@prisma/client"
 
 import ResetPasswordEmailTemplate from "@/components/email/reset-password-template"
@@ -38,13 +38,7 @@ export const sendResetPasswordLink = async (user: User) => {
     const url = process.env.HOST_URL
       ? `http://${process.env.HOST_URL}/reset-password?code=${code}`
       : `http://localhost:3000/reset-password?code=${code}`
-    resend.emails.send({
-      from: "team@saaskits.dev",
-      to: user.email,
-      // Todo: drive company name from config
-      subject: "Password reset - RemixKits",
-      react: ResetPasswordEmailTemplate({ resetLink: url }),
-    })
+    await sendEmail(`${user.fullName} <${user.email}>`, "Password reset - RemixKits", ResetPasswordEmailTemplate({ resetLink: url }));
   }
 
   const storedUserTokens = await prisma.passwordResetToken.findMany({
@@ -95,13 +89,7 @@ export const sendVerificationCode = async (user: User) => {
       },
     })
 
-    // TODO: use email service for this
-    await resend.emails.send({
-      from: "team@remixkits.com",
-      to: user.email,
-      subject: "Verification code - RemixKits",
-      react: VerificationEmailTemplate({ validationCode: code }),
-    })
+    await sendEmail(`${user.fullName} <${user.email}>`, "Verification code - RemixKits", VerificationEmailTemplate({ validationCode: code }));
   })
 
   if (process.env.NODE_ENV === "development") {

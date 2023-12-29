@@ -9,7 +9,7 @@ export default function Footer() {
           <div className="flex w-full flex-col sm:w-2/5">
             <div className="flex items-center space-x-2">
               <svg
-                id="logo-36"
+                data-type="logo"
                 className="h-6 w-6"
                 viewBox="0 0 40 40"
                 fill="none"

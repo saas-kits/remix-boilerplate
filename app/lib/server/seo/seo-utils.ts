@@ -1,4 +1,4 @@
-import { BuildTagsParams, OpenGraphMedia } from "./types"
+import type { BuildTagsParams, OpenGraphMedia } from "./types"
 
 const defaults = {
   templateTitle: "",

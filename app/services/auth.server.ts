@@ -94,7 +94,7 @@ const formStrategy = new FormStrategy(async ({ form, context }) => {
         },
       })
 
-      // sendVerificationCode(user)
+      sendVerificationCode(user)
 
       return user
     }

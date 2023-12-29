@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 import { SidebarContext } from "./sidebar.context"
-import { CreditCard, Globe, Globe2Icon, Layers2, Link, LinkIcon } from "lucide-react"
+import { CreditCard, Globe, Layers2 } from "lucide-react"
 
 type SidebarProps = {
   className?: string
@@ -17,7 +17,7 @@ export function Sidebar({ className }: SidebarProps) {
       <div className="flex h-14 items-center space-x-2 px-5 border-b">
         {/* TODO: drive this logo using brand config */}
         <svg
-          id="logo-36"
+          data-type="logo"
           className="h-5 w-5"
           viewBox="0 0 40 40"
           fill="none"
