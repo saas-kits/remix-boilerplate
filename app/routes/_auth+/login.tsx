@@ -4,7 +4,7 @@ import { prisma } from "@/services/db/db.server"
 import { commitSession, getSession } from "@/services/session.server"
 import { conform, useForm } from "@conform-to/react"
 import { parse } from "@conform-to/zod"
-import { ReloadIcon } from "@radix-ui/react-icons"
+import { ExclamationTriangleIcon, ReloadIcon } from "@radix-ui/react-icons"
 import {
   json,
   redirect,
@@ -16,15 +16,20 @@ import {
   MetaFunction,
   NavLink,
   useActionData,
+  useLoaderData,
   useNavigation,
 } from "@remix-run/react"
+import { Ratelimit } from "@upstash/ratelimit"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
+import { getClientIPAddress } from "remix-utils/get-client-ip-address"
 import { z } from "zod"
 
 import GoogleLogo from "@/lib/assets/logos/google"
 import { sendVerificationCode } from "@/lib/server/auth-utils.sever"
 import { validateCsrfToken } from "@/lib/server/csrf.server"
+import { redis } from "@/lib/server/ratelimit.server"
 import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -38,7 +43,20 @@ const schema = z.object({
 })
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  // If the user is already authenticated redirect to /dashboard directly
+  const session = await getSession(request.headers.get("Cookie"))
+  const error = session.get("error:ratelimit")
+
+  if (error) {
+    return json(
+      { ratelimitReached: !!error },
+      {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      }
+    )
+  }
+
   return await authenticator.isAuthenticated(request, {
     successRedirect: "/dashboard",
   })
@@ -52,6 +70,21 @@ export const meta: MetaFunction = mergeMeta(
 )
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const userIp = getClientIPAddress(request)
+  const ratelimit = new Ratelimit({
+    redis,
+    // Maximum 3 requests per 10 seconds
+    limiter: Ratelimit.fixedWindow(1, "20 s"),
+    analytics: true,
+  })
+
+  const { success } = await ratelimit.limit(`${userIp}:login`)
+  const session = await getSession(request.headers.get("Cookie"))
+
+  if (!success) {
+    session.flash("error:ratelimit", "Too many requests")
+  }
+
   await validateCsrfToken(request)
   const clonedRequest = request.clone()
   const formData = await clonedRequest.formData()
@@ -78,7 +111,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   })
 
   if (!submission.value || submission.intent !== "submit") {
-    return json(submission)
+    return json(submission, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    })
   }
 
   try {
@@ -109,19 +146,33 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     switch (typedError.message) {
       case "INVALID_PASSWORD":
-        return {
-          ...submission,
-          error: { email: ["Email and passwords dont match"] },
-        }
-      case "GOOGLE_SIGNUP":
-        return {
-          ...submission,
-          error: {
-            email: [
-              "You signed up with google sign in please use same method to login",
-            ],
+        return json(
+          {
+            ...submission,
+            error: { email: ["Email and passwords dont match"] },
           },
-        }
+          {
+            headers: {
+              "Set-Cookie": await commitSession(session),
+            },
+          }
+        )
+      case "GOOGLE_SIGNUP":
+        return json(
+          {
+            ...submission,
+            error: {
+              email: [
+                "You signed up with google sign in please use same method to login",
+              ],
+            },
+          },
+          {
+            headers: {
+              "Set-Cookie": await commitSession(session),
+            },
+          }
+        )
       default:
         return null
     }
@@ -129,6 +180,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 }
 
 export default function Login() {
+  const data = useLoaderData<typeof loader>()
+  const isRateLimitReached = data ? data.ratelimitReached : false
+
   const navigation = useNavigation()
   const isFormSubmitting = navigation.state === "submitting"
   const lastSubmission = useActionData<typeof action>()
@@ -148,7 +202,17 @@ export default function Login() {
       <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
         Sign in to your account
       </h2>
+
       <div className="mt-10 w-full sm:mx-auto">
+        {isRateLimitReached && (
+          <Alert variant="destructive" className="my-2">
+            <ExclamationTriangleIcon className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+              Too Many Login attempts please try again later
+            </AlertDescription>
+          </Alert>
+        )}
         <Form className="space-y-6" method="post" {...form.props}>
           <AuthenticityTokenInput />
           <div>
@@ -179,7 +243,6 @@ export default function Login() {
               />
             </div>
           </div>
-
           <Button disabled={isFormSubmitting} className="w-full" type="submit">
             {isFormSubmitting && (
               <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
