@@ -1,6 +1,7 @@
-import { authenticator } from "@/services/auth.server"
 import type { ActionFunctionArgs } from "@remix-run/node"
 import { redirect } from "@remix-run/node"
+
+import { authenticator } from "@/services/auth.server"
 
 export let loader = () => redirect("/login")
 

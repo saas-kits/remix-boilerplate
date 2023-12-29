@@ -1,29 +1,30 @@
 import { useState } from "react"
+import { redirect } from "@remix-run/node"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node"
+import { Form, useLoaderData } from "@remix-run/react"
+
+import { getformattedCurrency } from "@/lib/utils"
+import { authenticator } from "@/services/auth.server"
 import { createCheckoutSession } from "@/models/checkout"
 import { getAllPlans, getPlanByIdWithPrices } from "@/models/plan"
 import { getSubscriptionByUserId } from "@/models/subscription"
 import { getUserById } from "@/models/user"
-import { authenticator } from "@/services/auth.server"
 import { getUserCurrencyFromRequest } from "@/utils/currency"
-import { redirect, type LoaderFunctionArgs } from "@remix-run/node"
-import { Form, useLoaderData } from "@remix-run/react"
-
-import { getformattedCurrency } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import {
   CTAContainer,
   FeaturedBadgeContainer,
   FeatureListContainer,
   PricingCard,
 } from "@/components/pricing/containers"
+import type { FeatureType } from "@/components/pricing/feature"
 import {
   Feature,
   FeatureDescription,
   FeaturePrice,
   FeatureTitle,
-  FeatureType,
 } from "@/components/pricing/feature"
 import { PricingSwitch } from "@/components/pricing/pricing-switch"
+import { Button } from "@/components/ui/button"
 
 // TODO: to be discussed with Keyur
 declare global {
@@ -68,7 +69,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 }
 
-export const action = async ({ request }: LoaderFunctionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
   const planId = formData.get("planId")
   const interval = formData.get("interval") as "month" | "year"

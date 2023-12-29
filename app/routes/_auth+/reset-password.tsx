@@ -1,16 +1,14 @@
 import { useId } from "react"
-import { authenticator, hash } from "@/services/auth.server"
-import { prisma } from "@/services/db/db.server"
+import { json } from "@remix-run/node"
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node"
+import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react"
 import { conform, useForm } from "@conform-to/react"
 import { parse } from "@conform-to/zod"
 import { ReloadIcon } from "@radix-ui/react-icons"
-import {
-  json,
-  MetaFunction,
-  type ActionFunctionArgs,
-  type LoaderFunctionArgs,
-} from "@remix-run/node"
-import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react"
 import { AlertCircle } from "lucide-react"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { z } from "zod"
@@ -18,19 +16,23 @@ import { z } from "zod"
 import { validatePasswordResetToken } from "@/lib/server/auth-utils.sever"
 import { validateCsrfToken } from "@/lib/server/csrf.server"
 import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { authenticator, hash } from "@/services/auth.server"
+import { prisma } from "@/services/db/db.server"
+import { CommonErrorBoundary } from "@/components/error-boundry"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { CommonErrorBoundary } from "@/components/error-boundry"
 
 const schema = z
   .object({
-    password: z.string().min(8, "min check failed"),
-    confirmPassword: z.string().min(8, "min check failed"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters"),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: "Please make sure your passwords match",
     path: ["confirmPassword"],
   })
 
@@ -152,6 +154,8 @@ export default function ForgotPassword() {
               <div className="mt-2">
                 <Input
                   id="newPassword"
+                  autoComplete="new-password"
+                  placeholder="••••••••"
                   error={password.error}
                   {...conform.input(password, { type: "password" })}
                 />
@@ -163,6 +167,8 @@ export default function ForgotPassword() {
               <div className="mt-2">
                 <Input
                   id="confirmPassword"
+                  autoComplete="new-password"
+                  placeholder="••••••••"
                   error={confirmPassword.error}
                   {...conform.input(confirmPassword, { type: "password" })}
                 />

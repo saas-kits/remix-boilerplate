@@ -30,7 +30,7 @@ export const links: LinksFunction = () => [
 ]
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return buildTags(getDefaultSeoTags());
+  return buildTags(getDefaultSeoTags())
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {

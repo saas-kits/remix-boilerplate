@@ -483,7 +483,6 @@ export interface NextSeoProps {
   facebook?: { appId: string }
   twitter?: Twitter
   additionalMetaTags?: ReadonlyArray<MetaTag>
-  additionalLinkTags?: ReadonlyArray<LinkTag>
   children?: never
 }
 
@@ -508,7 +507,6 @@ export interface DefaultSeoProps {
   facebook?: { appId: string }
   twitter?: Twitter
   additionalMetaTags?: ReadonlyArray<MetaTag>
-  additionalLinkTags?: ReadonlyArray<LinkTag>
   children?: never
 }
 export interface BuildTagsParams extends DefaultSeoProps, NextSeoProps {}

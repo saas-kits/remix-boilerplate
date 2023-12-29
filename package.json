@@ -6,6 +6,7 @@
   "scripts": {
     "build": "prisma generate && remix build",
     "migrate": "prisma generate && prisma db push",
+    "generate": "prisma generate",
     "dev": "remix dev --manual",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc",

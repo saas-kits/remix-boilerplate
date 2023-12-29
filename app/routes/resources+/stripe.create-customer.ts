@@ -1,8 +1,9 @@
-import { getUserById, updateUserById } from "@/models/user"
-import { authenticator } from "@/services/auth.server"
-import { createStripeCustomer } from "@/services/stripe/stripe.server"
 import type { LoaderFunctionArgs } from "@remix-run/node"
 import { redirect } from "@remix-run/node"
+
+import { authenticator } from "@/services/auth.server"
+import { createStripeCustomer } from "@/services/stripe/stripe.server"
+import { getUserById, updateUserById } from "@/models/user"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await authenticator.isAuthenticated(request, {

@@ -1,8 +1,9 @@
-import { getSubscriptionByUserId } from "@/models/subscription"
-import { getUserById } from "@/models/user"
-import { authenticator } from "@/services/auth.server"
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node"
 import { Outlet } from "@remix-run/react"
+
+import { authenticator } from "@/services/auth.server"
+import { getSubscriptionByUserId } from "@/models/subscription"
+import { getUserById } from "@/models/user"
 
 import { Shell } from "./shell"
 

@@ -44,10 +44,14 @@ type FeaturedBadgeContainerProps = {
   children: React.ReactNode
 }
 
-export const FeaturedBadgeContainer = ({children}: FeaturedBadgeContainerProps) => {
+export const FeaturedBadgeContainer = ({
+  children,
+}: FeaturedBadgeContainerProps) => {
   return (
     <div className="absolute -top-2 left-0 flex h-4 w-full items-center justify-center text-sm">
-      <span className="rounded-full bg-black px-4 py-1 text-xs font-semibold text-white dark:bg-white dark:text-black">{children}</span>
+      <span className="rounded-full bg-black px-4 py-1 text-xs font-semibold text-white dark:bg-white dark:text-black">
+        {children}
+      </span>
     </div>
   )
 }

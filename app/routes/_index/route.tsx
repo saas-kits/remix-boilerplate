@@ -1,10 +1,9 @@
-import {
-  json,
-  type LoaderFunctionArgs,
-  type MetaFunction,
-} from "@remix-run/node"
+import { type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node"
 
 import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { authenticator } from "@/services/auth.server"
+import { getAllPlans } from "@/models/plan"
+import { getUserCurrencyFromRequest } from "@/utils/currency"
 
 import Faqs from "./faq"
 import { FeatureSection } from "./feature-section"
@@ -13,9 +12,6 @@ import FeaturesVariantB from "./features-variant-b"
 import Footer from "./footer"
 import { HeroSection } from "./hero-section"
 import { LogoCloud } from "./logo-cloud"
-import { getAllPlans } from "@/models/plan"
-import { getUserCurrencyFromRequest } from "@/utils/currency"
-import { authenticator } from "@/services/auth.server"
 import { Pricing } from "./pricing"
 
 const loginFeatures = [
@@ -25,7 +21,7 @@ const loginFeatures = [
 ]
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await authenticator.isAuthenticated(request, {
+  await authenticator.isAuthenticated(request, {
     successRedirect: "/dashboard",
   })
 
@@ -74,7 +70,7 @@ export default function Index() {
           lightFeatureImage="/login-light.jpeg"
         />
         <FeaturesVariantB />
-        <Pricing/>
+        <Pricing />
         <Faqs />
         <Footer />
       </div>

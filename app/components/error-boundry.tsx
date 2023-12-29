@@ -1,5 +1,5 @@
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { useRouteError } from "@remix-run/react"
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 

@@ -1,23 +1,15 @@
 import { useId } from "react"
-import { authenticator } from "@/services/auth.server"
-import { prisma } from "@/services/db/db.server"
-import { commitSession, getSession } from "@/services/session.server"
-import { conform, useForm } from "@conform-to/react"
-import { parse } from "@conform-to/zod"
-import { ReloadIcon } from "@radix-ui/react-icons"
 import {
   json,
   redirect,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "@remix-run/node"
-import {
-  Form,
-  MetaFunction,
-  NavLink,
-  useActionData,
-  useNavigation,
-} from "@remix-run/react"
+import type { MetaFunction } from "@remix-run/react"
+import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react"
+import { conform, useForm } from "@conform-to/react"
+import { parse } from "@conform-to/zod"
+import { ReloadIcon } from "@radix-ui/react-icons"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { z } from "zod"
 
@@ -25,16 +17,19 @@ import GoogleLogo from "@/lib/assets/logos/google"
 import { sendVerificationCode } from "@/lib/server/auth-utils.sever"
 import { validateCsrfToken } from "@/lib/server/csrf.server"
 import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import { authenticator } from "@/services/auth.server"
+import { prisma } from "@/services/db/db.server"
+import { commitSession, getSession } from "@/services/session.server"
+import { CommonErrorBoundary } from "@/components/error-boundry"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { CommonErrorBoundary } from "@/components/error-boundry"
 
 const schema = z.object({
   email: z
-    .string({ required_error: "Email is required" })
-    .email("Email is invalid"),
-  password: z.string().min(8, "min check failed"),
+    .string({ required_error: "Please enter email to continue" })
+    .email("Please enter a valid email"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 })
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -69,7 +64,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         ctx.addIssue({
           path: ["email"],
           code: z.ZodIssueCode.custom,
-          message: "Password and email does not match",
+          message: "Either email or password is incorrect",
         })
         return
       }
@@ -111,14 +106,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       case "INVALID_PASSWORD":
         return {
           ...submission,
-          error: { email: ["Email and passwords dont match"] },
+          error: { email: ["Either email or password is incorrect"] },
         }
       case "GOOGLE_SIGNUP":
         return {
           ...submission,
           error: {
             email: [
-              "You signed up with google sign in please use same method to login",
+              "You have already signed up with google. Please use google to login",
             ],
           },
         }
@@ -155,7 +150,7 @@ export default function Login() {
             <Label htmlFor="email">Email address</Label>
             <div className="mt-2">
               <Input
-                placeholder="test@example.com"
+                placeholder="michael@scott.com"
                 id="email"
                 type="email"
                 autoComplete="email"
@@ -173,6 +168,7 @@ export default function Login() {
               <Input
                 id="password"
                 type="password"
+                placeholder="••••••••"
                 autoComplete="current-password"
                 error={password.error}
                 {...conform.input(password, { type: "password" })}

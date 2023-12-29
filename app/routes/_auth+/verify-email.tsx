@@ -1,19 +1,17 @@
-import { authenticator } from "@/services/auth.server"
-import { prisma } from "@/services/db/db.server"
-import { ReloadIcon } from "@radix-ui/react-icons"
 import {
   json,
   redirect,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "@remix-run/node"
+import type { MetaFunction } from "@remix-run/react"
 import {
   Form,
-  MetaFunction,
   useActionData,
   useLoaderData,
   useNavigation,
 } from "@remix-run/react"
+import { ReloadIcon } from "@radix-ui/react-icons"
 import { z } from "zod"
 
 import {
@@ -21,6 +19,9 @@ import {
   sendVerificationCode,
 } from "@/lib/server/auth-utils.sever"
 import { mergeMeta } from "@/lib/server/seo/seo-helpers"
+import buildTags from "@/lib/server/seo/seo-utils"
+import { authenticator } from "@/services/auth.server"
+import { prisma } from "@/services/db/db.server"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -28,12 +29,12 @@ import { Label } from "@/components/ui/label"
 
 const requestCodeSchema = z.object({
   email: z
-    .string({ required_error: "This field is required" })
-    .email("Invalid email"),
+    .string({ required_error: "Please enter email to continue" })
+    .email("Please enter a valid email"),
 })
 
 const codeVerificationSchema = z.object({
-  code: z.string({ required_error: "This field is required" }),
+  code: z.string({ required_error: "Please enter a verification code" }),
 })
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -84,7 +85,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export const meta: MetaFunction = mergeMeta(
   // these will override the parent meta
   () => {
-    return [{ title: "Verify Email" }]
+    return buildTags({
+      title: "Verify Email",
+      description: "Verify your email",
+    })
   }
 )
 
@@ -211,6 +215,7 @@ export default function VerifyEmail() {
                   id="code"
                   type="code"
                   name="code"
+                  placeholder="Enter verification code"
                   error={actionData?.errors?.code?.[0]}
                 />
               </div>

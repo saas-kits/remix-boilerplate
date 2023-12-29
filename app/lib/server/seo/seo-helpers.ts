@@ -1,8 +1,9 @@
 import type { MetaDescriptor, MetaFunction } from "@remix-run/node"
-import { seoConfig } from "@/lib/brand/config";
+
+import { seoConfig } from "@/lib/brand/config"
 
 export const getDefaultSeoTags = () => {
-  return seoConfig;
+  return seoConfig
 }
 
 /**
