@@ -182,18 +182,12 @@ export default function Signup() {
             </div>
 
             <div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center">
                 <CustomCheckbox
+                  label="Accept terms and conditions"
                   id="terms"
                   {...conform.input(tocAccepted, { type: "checkbox" })}
                 />
-
-                <label
-                  htmlFor="terms"
-                  className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Accept terms and conditions
-                </label>
               </div>
               <div className="mt-1 text-sm text-error">{tocAccepted.error}</div>
             </div>
@@ -238,7 +232,10 @@ export default function Signup() {
   )
 }
 
-function CustomCheckbox({ ...config }: FieldConfig<string>) {
+function CustomCheckbox({
+  label,
+  ...config
+}: FieldConfig<string> & { label: string }) {
   const shadowInputRef = useRef<HTMLInputElement>(null)
   const control = useInputEvent({
     ref: shadowInputRef,
@@ -247,8 +244,9 @@ function CustomCheckbox({ ...config }: FieldConfig<string>) {
   const customInputRef = useRef<HTMLButtonElement>(null)
 
   return (
-    <>
+    <div className="flex items-center space-x-2">
       <Checkbox
+        id="terms"
         ref={customInputRef}
         defaultValue={config.defaultValue}
         onCheckedChange={control.change}
@@ -262,7 +260,13 @@ function CustomCheckbox({ ...config }: FieldConfig<string>) {
         })}
         onFocus={() => customInputRef.current?.focus()}
       />
-    </>
+      <label
+        htmlFor="terms"
+        className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        Accept terms and conditions
+      </label>
+    </div>
   )
 }
 
