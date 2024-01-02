@@ -95,7 +95,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
       return json({ ...submission, isLinkExpired: false, resetSuccess: true })
     } catch (error) {
-      console.log({ error })
       return json({ ...submission, isLinkExpired: true, resetSuccess: false })
     }
   } else {

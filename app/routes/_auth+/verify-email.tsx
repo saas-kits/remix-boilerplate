@@ -143,11 +143,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             userId: user.id,
           },
         })
-
-        console.log({ updatedUser })
         return json({ verified: true })
       } else {
-        console.log("test", requestCodeSubmission.error.flatten())
         return json({
           errors: requestCodeSubmission.error.flatten().fieldErrors,
         })
@@ -155,7 +152,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     case "requestCode":
       const verifyCodeSubmission = requestCodeSchema.safeParse(formData)
       if (verifyCodeSubmission.success) {
-        console.log("link works too")
         await sendVerificationCode(user)
         return json({ verified: false })
       } else {
