@@ -85,8 +85,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     })
 
+    let session = await getSession(request.headers.get("cookie"))
     // and store the user data
-    const session = await getSession(request.headers.get("Cookie"))
     session.set(authenticator.sessionKey, user)
 
     let headers = new Headers({ "Set-Cookie": await commitSession(session) })
@@ -101,21 +101,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // TODO: fix type here
     // TODO: create constant for message type of auth errors
     const typedError = error as any
+
     switch (typedError.message) {
       case "INVALID_PASSWORD":
-        return json({
+        return {
           ...submission,
           error: { email: ["Either email or password is incorrect"] },
-        })
+        }
       case "GOOGLE_SIGNUP":
-        return json({
+        return {
           ...submission,
           error: {
             email: [
               "You have already signed up with google. Please use google to login",
             ],
           },
-        })
+        }
       default:
         return null
     }
@@ -125,6 +126,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Login() {
   const navigation = useNavigation()
   const isFormSubmitting = navigation.state === "submitting"
+  const isSigningInWithEmail =
+    isFormSubmitting && navigation.formAction !== "/auth/google"
+  const isSigningInWithGoogle =
+    isFormSubmitting && navigation.formAction === "/auth/google"
   const lastSubmission = useActionData<typeof action>()
   const id = useId()
 
@@ -175,8 +180,12 @@ export default function Login() {
             </div>
           </div>
 
-          <Button disabled={isFormSubmitting} className="w-full" type="submit">
-            {isFormSubmitting && (
+          <Button
+            disabled={isSigningInWithEmail}
+            className="w-full"
+            type="submit"
+          >
+            {isSigningInWithEmail && (
               <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
             )}
             Sign in
@@ -184,7 +193,7 @@ export default function Login() {
         </Form>
         <Form action="/auth/google" method="post" className="mt-4">
           <Button
-            disabled={isFormSubmitting}
+            disabled={isSigningInWithGoogle}
             className="w-full"
             type="submit"
             variant="outline"
