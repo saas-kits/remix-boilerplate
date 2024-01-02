@@ -5,7 +5,7 @@ export const siteConfig = {
   description:
     "Remix SaaSkit is a starter kit for building SaaS applications with Remix.",
   baseUrl: "https://demo.saaskits.dev",
-  ogImage: "https://demo.saaskits.dev/og.jpg",
+  ogImage: "https://demo.saaskits.dev/og-image.png",
 } as const
 
 export const seoConfig: DefaultSeoProps = {
