@@ -37,8 +37,10 @@ const sendPlanEndNotification = async (id: Subscription["id"]) => {
   })
   if (!subscription) return
   if (subscription.status == "trialing") {
+    // TODO: send trial ending soon email
     console.log("Trial ending soon")
   } else {
+    // TODO: send trial ending soon email
     console.log("Plan ending soon")
   }
 }
@@ -57,12 +59,9 @@ export async function action({ request }: ActionFunctionArgs) {
       const stripeSubscription = event.data.object
       const customerId = stripeSubscription.customer
 
-      console.log(stripeSubscription, customerId)
-
       if (!customerId) return new Response("Success", { status: 200 })
 
       const user = await getUserByStripeCustomerId(customerId as string)
-      console.log(user)
 
       if (!user) return new Response("Success", { status: 200 })
 
@@ -81,9 +80,6 @@ export async function action({ request }: ActionFunctionArgs) {
         (price) =>
           price.stripePriceId === stripeSubscription.items.data[0].price.id
       )
-
-      console.log(dbPlan)
-      console.log(dbPrice)
 
       await updateSubscription(subscriptionByStripeId.id, {
         isActive:
@@ -111,8 +107,6 @@ export async function action({ request }: ActionFunctionArgs) {
       )
       break
     default:
-      // Unexpected event type
-      console.log(`Unhandled event type ${event.type}`)
       return json({}, { status: 200 })
   }
 

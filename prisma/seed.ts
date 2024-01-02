@@ -34,7 +34,6 @@ const seed = async () => {
       name,
       description,
     })
-    console.log(JSON.stringify(pricesByInterval, null, 2))
 
     const stripePrices = await Promise.all(
       pricesByInterval.map((price) =>
@@ -77,8 +76,6 @@ const seed = async () => {
 
   const products: Stripe.BillingPortal.ConfigurationCreateParams.Features.SubscriptionUpdate.Product[] =
     await Promise.all(planPromises)
-
-  console.log(products)
 
   //await setupStripeCustomerPortal(products);
 }

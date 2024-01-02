@@ -28,7 +28,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // Get client's currency and Free Plan price ID.
   const currency = getUserCurrencyFromRequest(request)
   const planWithPrices = await getFreePlan()
-  console.log(planWithPrices)
   const freePlanPrice = planWithPrices?.prices.find(
     (price) =>
       price.interval === PLAN_INTERVALS.MONTHLY && price.currency === currency

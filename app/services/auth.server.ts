@@ -99,7 +99,6 @@ const formStrategy = new FormStrategy(async ({ form, context }) => {
       return user
     }
   } else {
-    console.log(parsedData.error.flatten(), "flatten ")
     throw new Error("Parsing Failed", { cause: parsedData.error.flatten() })
   }
 
