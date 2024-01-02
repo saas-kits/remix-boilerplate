@@ -5,7 +5,7 @@ import { Logo } from "@/lib/brand/logo"
 export default function Footer() {
   return (
     <div className="relative w-full border-t py-24">
-      <div className="absolute left-0 right-0 top-[-1px] mx-auto h-px w-96 bg-gradient-to-r from-border via-gray-400 to-border opacity-40"></div>
+      <div className="absolute left-0 right-0 top-[-1px] mx-auto h-px w-48  bg-gradient-to-r from-border via-gray-400 to-border opacity-40 md:w-96"></div>
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-wrap">
           <div className="flex w-full flex-col sm:w-2/5">
