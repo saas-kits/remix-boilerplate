@@ -101,6 +101,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Signup() {
   const navigation = useNavigation()
   const isFormSubmitting = navigation.state === "submitting"
+  const isSigningUpWithEmail =
+    isFormSubmitting && navigation.formAction !== "/auth/google"
+  const isSigningUpWithGoogle =
+    isFormSubmitting && navigation.formAction === "/auth/google"
   const lastSubmission = useActionData<typeof action>()
   const id = useId()
 
@@ -195,11 +199,11 @@ export default function Signup() {
             </div>
 
             <Button
-              disabled={isFormSubmitting}
+              disabled={isSigningUpWithEmail}
               className="w-full"
               type="submit"
             >
-              {isFormSubmitting && (
+              {isSigningUpWithEmail && (
                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
               )}
               Sign up
@@ -208,7 +212,7 @@ export default function Signup() {
         </Form>
         <Form action="/auth/google" method="post" className="mt-4">
           <Button
-            disabled={isFormSubmitting}
+            disabled={isSigningUpWithGoogle}
             className="w-full"
             type="submit"
             variant="outline"
