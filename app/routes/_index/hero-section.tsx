@@ -1,3 +1,5 @@
+import { NavLink } from "@remix-run/react"
+
 import { Logo } from "@/lib/brand/logo"
 import { Button } from "@/components/ui/button"
 
@@ -63,9 +65,11 @@ export function HeroSection() {
               quos quod eos! Sapiente archit
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Button size="lg" className="px-16">
-                Get started
-              </Button>
+              <NavLink to="/signup">
+                <Button size="lg" className="px-16">
+                  Get started
+                </Button>
+              </NavLink>
             </div>
             <div className="mt-6 flex justify-center">
               <SocialProof />
