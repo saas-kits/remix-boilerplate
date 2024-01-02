@@ -94,19 +94,16 @@ export const sendVerificationCode = async (user: User) => {
         expires: Date.now() + 1000 * 60 * 20, // 10 minutes
       },
     })
+  })
 
+  if (process.env.NODE_ENV === "development") {
+    console.log(`verification for ${user.email} code is: ${code}`)
+  } else {
     await sendEmail(
       `${user.fullName} <${user.email}>`,
       `Verification code - ${siteConfig.title}`,
       VerificationEmailTemplate({ validationCode: code })
     )
-  })
-
-  if (process.env.NODE_ENV === "development") {
-    console.log(`verification for ${user.email} code is: ${code}`)
-    // TODO: drive port number using env variable
-  } else {
-    // TODO: add handling for sending mails
   }
 }
 
