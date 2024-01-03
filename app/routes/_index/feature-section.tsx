@@ -15,7 +15,7 @@ export function FeatureSection() {
         <div className="mx-auto max-w-7xl px-6 py-24 md:py-32 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="wrap-balance mt-16 bg-black bg-gradient-to-br bg-clip-text text-left text-4xl font-medium tracking-tight text-transparent dark:from-white dark:to-[hsla(0,0%,100%,.5)] sm:text-5xl sm:leading-snug">
-              SaaS kit with Batteries Included
+              All your features in one place
             </h1>
             <p className="wrap-balance mt-6 text-left text-base font-light leading-7 text-gray-700 dark:text-gray-400 lg:text-lg">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic
@@ -32,20 +32,20 @@ export function FeatureSection() {
                 </div>
               </div>
               <h3 className="mt-4 text-xl font-bold text-gray-700 dark:text-gray-300">
-                Auth that just works
+                Lorem ipsum dolor sit amet.
               </h3>
               <div className="mt-6 space-y-4 text-gray-700 dark:text-gray-400">
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Email Password Auth</div>
+                  <div>Example 1</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Lorem ipsum dolor sit amet.</div>
+                  <div>Example 2</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Lorem ipsum dolor sit.</div>
+                  <div>Example 3</div>
                 </div>
               </div>
             </div>
@@ -56,20 +56,20 @@ export function FeatureSection() {
                 </div>
               </div>
               <h3 className="mt-4 text-xl font-bold text-gray-700 dark:text-gray-300">
-                Stripe Payments
+                Second Feature
               </h3>
               <div className="mt-6 space-y-4 text-gray-700 dark:text-gray-400">
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Checkout and Billing</div>
+                  <div>Example 1</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Webhooks for events</div>
+                  <div>Example 2</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Monhtly and Annual Plans</div>
+                  <div>Example 3</div>
                 </div>
               </div>
             </div>
@@ -80,20 +80,20 @@ export function FeatureSection() {
                 </div>
               </div>
               <h3 className="mt-4 text-xl font-bold text-gray-700 dark:text-gray-300">
-                Emails
+                Third Feature
               </h3>
               <div className="mt-6 space-y-4 text-gray-700 dark:text-gray-400">
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Beautiful Mail Templates</div>
+                  <div>Example 1</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Transactional Mails</div>
+                  <div>Example 2</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>DNS Setup</div>
+                  <div>Example 3</div>
                 </div>
               </div>
             </div>
@@ -104,20 +104,20 @@ export function FeatureSection() {
                 </div>
               </div>
               <h3 className="mt-4 text-xl font-bold text-gray-700 dark:text-gray-300">
-                Database
+                Fourth Feature
               </h3>
               <div className="mt-6 space-y-4 text-gray-700 dark:text-gray-400">
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Mongo Database</div>
+                  <div>Example 1</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Prisma ORM</div>
+                  <div>Example 2</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Postgres Database</div>
+                  <div>Example 3</div>
                 </div>
               </div>
             </div>
@@ -128,20 +128,20 @@ export function FeatureSection() {
                 </div>
               </div>
               <h3 className="mt-4 text-xl font-bold text-gray-700 dark:text-gray-300">
-                SEO
+                Fifth Feature
               </h3>
               <div className="mt-6 space-y-4 text-gray-700 dark:text-gray-400">
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Meta Tags</div>
+                  <div>Example 1</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Og tags for social media</div>
+                  <div>Example 2</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Sitemap generation</div>
+                  <div>Example 3</div>
                 </div>
               </div>
             </div>
@@ -152,20 +152,20 @@ export function FeatureSection() {
                 </div>
               </div>
               <h3 className="mt-4 text-xl font-bold text-gray-700 dark:text-gray-300">
-                Styles
+                Sixth Feature
               </h3>
               <div className="mt-6 space-y-4 text-gray-700 dark:text-gray-400">
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Carefully crafted components</div>
+                  <div>Example 1</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Dark mode support</div>
+                  <div>Example 2</div>
                 </div>
                 <div className="flex space-x-2">
                   <CheckIcon />
-                  <div>Responsibe by default</div>
+                  <div>Example 3</div>
                 </div>
               </div>
             </div>

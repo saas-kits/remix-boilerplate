@@ -65,7 +65,7 @@ export default function Index() {
         <FeatureSection />
         <FeatureWithImage
           features={loginFeatures}
-          title="Social and Email Password Login"
+          title="Make your life easier"
           darkFeatureImage="/login-dark.jpeg"
           lightFeatureImage="/login-light.jpeg"
         />

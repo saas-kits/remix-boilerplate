@@ -15,8 +15,12 @@ export function HeroSection() {
             <Logo className="h-5" />
           </div>
           <div className="space-x-2">
-            <Button variant="link">Pricing</Button>
-            <Button variant="link">Demo</Button>
+            <NavLink to="/signup">
+              <Button variant="link">SignUp</Button>
+            </NavLink>
+            <NavLink to="/login">
+              <Button variant="link">Login</Button>
+            </NavLink>
           </div>
         </div>
       </nav>
@@ -57,7 +61,7 @@ export function HeroSection() {
               <Discountbadge />
             </div>
             <h1 className="wrap-balance mt-6 bg-black bg-gradient-to-br bg-clip-text text-center text-4xl font-medium leading-tight tracking-tight text-transparent dark:from-white dark:to-[hsla(0,0%,100%,.5)] sm:text-6xl sm:leading-[1.15]">
-              Launch SaaS in Days not in months
+              Your tagline goes here
             </h1>
             <p className="wrap-balance mt-6 text-center text-lg font-light leading-7 text-gray-700 dark:text-gray-400">
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum
