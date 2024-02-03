@@ -38,7 +38,7 @@ export const sendResetPasswordLink = async (user: User) => {
   async function emailResetLink(code: string) {
     // TODO: user env variable for url of reset link
     const url = process.env.HOST_URL
-      ? `http://${process.env.HOST_URL}/reset-password?code=${code}`
+      ? `${process.env.HOST_URL}/reset-password?code=${code}`
       : `http://localhost:3000/reset-password?code=${code}`
     await sendEmail(
       `${user.fullName} <${user.email}>`,
