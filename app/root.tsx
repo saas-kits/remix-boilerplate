@@ -1,4 +1,3 @@
-import { cssBundleHref } from "@remix-run/css-bundle"
 import {
   json,
   type LinksFunction,
@@ -7,7 +6,6 @@ import {
 } from "@remix-run/node"
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -22,12 +20,14 @@ import { csrf } from "./lib/server/csrf.server"
 import { getDefaultSeoTags } from "./lib/server/seo/seo-helpers"
 import buildTags from "./lib/server/seo/seo-utils"
 import { themeSessionResolver } from "./services/session.server"
-import styles from "./tailwind.css"
+import styles from "./tailwind.css?url"
 
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles },
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-]
+
+export const links = () => {
+  return [
+    { rel: "stylesheet", href: styles }
+  ];
+}
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return buildTags(getDefaultSeoTags())
@@ -80,7 +80,6 @@ export function App() {
         </AuthenticityTokenProvider>
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   )
