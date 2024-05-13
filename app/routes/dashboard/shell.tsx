@@ -1,3 +1,5 @@
+import type { loader } from "./route"
+
 import { useState } from "react"
 import { HamburgerMenuIcon } from "@radix-ui/react-icons"
 
@@ -14,13 +16,20 @@ type Props = {
 
 export function Shell({ children }: Props) {
   const [hamMenuOpen, setHamMenuOpen] = useState(false)
-
+  const loaderData = useLoaderData<typeof loader>()
+  const user = loaderData?.user
+  
   const closeHamMenu = () => {
     setHamMenuOpen(false)
   }
 
   return (
     <div className="h-full">
+      {!user?.emailVerified ? (
+        <div className="w-full bg-red-500 p-2 text-center text-white">
+          <p>Verify your email to access all features</p>
+        </div>
+      ) : null}
       <div className="flex h-full">
         <div className="hidden w-72 border-r bg-background md:block">
           <Sidebar />
