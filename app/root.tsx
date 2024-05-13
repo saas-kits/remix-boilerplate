@@ -23,7 +23,7 @@ import { themeSessionResolver } from "./services/session.server"
 import styles from "./tailwind.css?url"
 
 
-export const links = () => {
+export const links:LinksFunction = () => {
   return [
     { rel: "stylesheet", href: styles }
   ];
