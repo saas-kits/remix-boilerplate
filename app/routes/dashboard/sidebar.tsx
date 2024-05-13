@@ -51,7 +51,7 @@ const NavigationLink = ({ to, children }: NavigationLinkProps) => {
   return (
     <NavLink
       to={to}
-      className="block"
+      className="block cursor-pointer"
       end
       onClick={() => {
         onNavLinkClick?.()
