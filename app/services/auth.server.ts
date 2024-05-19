@@ -1,5 +1,5 @@
 // app/services/auth.server.ts
-import { randomBytes, scrypt, timingSafeEqual } from "crypto"
+import { randomBytes, scrypt, timingSafeEqual } from "node:crypto"
 import type { User } from "@prisma/client"
 import { Authenticator } from "remix-auth"
 import { FormStrategy } from "remix-auth-form"
@@ -65,7 +65,7 @@ const formStrategy = new FormStrategy(async ({ form, context }) => {
       // the type of this user must match the type you pass to the Authenticator
       // the strategy will automatically inherit the type if you instantiate
       // directly inside the `use` method
-      const user = await prisma.user.findFirst({
+      const user = await prisma.user.findUnique({
         where: {
           email,
         },
@@ -79,10 +79,10 @@ const formStrategy = new FormStrategy(async ({ form, context }) => {
         const isPasswordCorrect = await compare(password, user?.password || "")
         if (isPasswordCorrect) {
           return user
-        } else {
+        } 
           // TODO: type errors well
           throw new Error("INVALID_PASSWORD")
-        }
+        
       }
     } else {
       const hashedPassword = await hash(password)

@@ -1,4 +1,4 @@
-import { useFetcher, useRouteLoaderData } from "@remix-run/react"
+import {Link, useFetcher, useRouteLoaderData } from "@remix-run/react"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -51,11 +51,11 @@ export function UserNav() {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
-            onClick={() =>
-              fetcher.submit({}, { method: "post", action: "/auth/logout" })
-            }
+           // onClick={() =>
+           //   fetcher.submit({}, { method: "post", action: "/auth/logout" })
+           // }
           >
-            Log out
+                        <Link to="/auth/logout">Log out</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
